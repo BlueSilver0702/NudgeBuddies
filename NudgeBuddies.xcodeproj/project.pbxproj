@@ -33,7 +33,7 @@
 		CFF136731C1D208E0001D351 /* UIImage+KIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF1366D1C1D208E0001D351 /* UIImage+KIAdditions.m */; };
 		CFF136741C1D208E0001D351 /* UIImageCropper.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF1366F1C1D208E0001D351 /* UIImageCropper.m */; };
 		CFF136751C1D208E0001D351 /* UIImagePickerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136711C1D208E0001D351 /* UIImagePickerHelper.m */; };
-		CFF136781C1D74E50001D351 /* MenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136771C1D74E50001D351 /* MenuController.m */; };
+		CFF1367B1C1D7D110001D351 /* MenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF1367A1C1D7D110001D351 /* MenuController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,8 +81,8 @@
 		CFF1366F1C1D208E0001D351 /* UIImageCropper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageCropper.m; path = View/Helper/UIImageCropper.m; sourceTree = "<group>"; };
 		CFF136701C1D208E0001D351 /* UIImagePickerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImagePickerHelper.h; path = View/Helper/UIImagePickerHelper.h; sourceTree = "<group>"; };
 		CFF136711C1D208E0001D351 /* UIImagePickerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImagePickerHelper.m; path = View/Helper/UIImagePickerHelper.m; sourceTree = "<group>"; };
-		CFF136761C1D74E50001D351 /* MenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuController.h; path = View/MenuController.h; sourceTree = "<group>"; };
-		CFF136771C1D74E50001D351 /* MenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuController.m; path = View/MenuController.m; sourceTree = "<group>"; };
+		CFF136791C1D7D110001D351 /* MenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuController.h; path = View/MenuController.h; sourceTree = "<group>"; };
+		CFF1367A1C1D7D110001D351 /* MenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuController.m; path = View/MenuController.m; sourceTree = "<group>"; };
 		FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NudgeBuddies.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -206,8 +206,8 @@
 				290C02991C1321440093D12A /* SettingController.m */,
 				290C02A31C136EE40093D12A /* SearchController.h */,
 				290C02A41C136EE40093D12A /* SearchController.m */,
-				CFF136761C1D74E50001D351 /* MenuController.h */,
-				CFF136771C1D74E50001D351 /* MenuController.m */,
+				CFF136791C1D7D110001D351 /* MenuController.h */,
+				CFF1367A1C1D7D110001D351 /* MenuController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -364,7 +364,7 @@
 				CFF136751C1D208E0001D351 /* UIImagePickerHelper.m in Sources */,
 				290C02A51C136EE40093D12A /* SearchController.m in Sources */,
 				CFF136551C1D1BEE0001D351 /* Group.m in Sources */,
-				CFF136781C1D74E50001D351 /* MenuController.m in Sources */,
+				CFF1367B1C1D7D110001D351 /* MenuController.m in Sources */,
 				294891C71C0F87300086D1BE /* AppDelegate.m in Sources */,
 				CFF136581C1D1E2C0001D351 /* NotificationCenter.m in Sources */,
 				CFF136661C1D20300001D351 /* ViewController.m in Sources */,
