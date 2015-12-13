@@ -1,0 +1,28 @@
+//
+//  PrefixHeader.pch
+//  Xpandu
+//
+//  Created by User on 7/23/15.
+//  Copyright (c) 2015 Philip. All rights reserved.
+//
+
+#ifndef Xpandu_PrefixHeader_pch
+#define Xpandu_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <Quickblox/Quickblox.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import "MBProgressHUD.h"
+#import "AppDelegate.h"
+#import "Global.h"
+#import "Group.h"
+#import "Nudger.h"
+
+#define appDelegate (AppDelegate *)[[UIApplication sharedApplication] delegate]
+
+#endif

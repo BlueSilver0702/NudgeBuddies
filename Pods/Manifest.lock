@@ -1,0 +1,16 @@
+PODS:
+  - MBProgressHUD (0.9.1)
+  - QuickBlox (2.6)
+  - TPKeyboardAvoiding (1.2.11)
+
+DEPENDENCIES:
+  - MBProgressHUD
+  - QuickBlox
+  - TPKeyboardAvoiding
+
+SPEC CHECKSUMS:
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
+  QuickBlox: b5569f2b7bdb23269d399f8f2a3563da7c75d099
+  TPKeyboardAvoiding: e5ce146b313de063957bfa75a13f1e9b0ff18ab7
+
+COCOAPODS: 0.39.0
