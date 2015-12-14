@@ -8,13 +8,14 @@
 
 #import "ViewController.h"
 #import "SettingController.h"
+#import "MenuController.h"
 #import "SearchController.h"
 #import <iAd/iAd.h>
 #import <CoreMotion/CoreMotion.h>
 #import "UIImagePickerHelper.h"
 #import "NotificationCenter.h"
 
-@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, QBChatDelegate>
+@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, QBChatDelegate, MenuControllerDelegate>
 {
     // general
     QBUUser *currentUser;
@@ -63,6 +64,7 @@
     IBOutlet UIView *addView;
     
     // menus module
+    MenuController *menuCtrl;
     IBOutlet UIView *menuView;
 }
 @end
@@ -144,6 +146,14 @@
     } else {
         [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, tableSize)];
     }
+    
+    // **********  menu module  ************
+    menuView.hidden = YES;
+    menuCtrl = (MenuController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"menuCtrl"];
+    [self addChildViewController:menuCtrl];
+    [menuView addSubview:menuCtrl.view];
+    menuCtrl.delegate = self;
+
     // **********  group module  ************
     groupView.hidden = YES;
     profileView.hidden = YES;
@@ -194,6 +204,13 @@
 
 #pragma mark - Menu
 ///// --------- Menu Views ----------- /////////////////////////////////////////////////////////////////////////
+- (IBAction)onMenuOpen:(id)sender {
+
+}
+
+- (void)onMenuClose {
+    
+}
 
 #pragma mark - profile
 ///// --------- edit profile ----------- /////////////////////////////////////////////////////////////////////////
@@ -369,6 +386,26 @@
     } completion:nil];
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    searchView.hidden = NO;
+    int size = [searchCtrl searchResult:textField.text];
+    [self hideSetting];
+    [self onGroupClose:nil];
+    [self onAutoClose:nil];
+    [self onProfileClose:nil];
+    [self onAddClose:nil];
+    [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
+    [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
+        [searchCtrl.view setFrame:CGRectMake(0, 0, searchCtrl.view.frame.size.width, size)];
+    } completion:nil];
+    [UIView transitionWithView:searchDoneButton duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        searchDoneButton.hidden = NO;
+    } completion:nil];
+    NSLog(@"started");
+    return YES;
+}
+
 #pragma mark - Add Friend
 ///// --------- Add Friend ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onAddOpen:(id)sender {
@@ -442,31 +479,8 @@
     } completion:nil];
 }
 
-#pragma mark - Delegates
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    searchView.hidden = NO;
-    int size = [searchCtrl searchResult:textField.text];
-    [self hideSetting];
-    [self onGroupClose:nil];
-    [self onAutoClose:nil];
-    [self onProfileClose:nil];
-    [self onAddClose:nil];
-    [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
-    [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
-        [searchCtrl.view setFrame:CGRectMake(0, 0, searchCtrl.view.frame.size.width, size)];
-    } completion:nil];
-    [UIView transitionWithView:searchDoneButton duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        searchDoneButton.hidden = NO;
-    } completion:nil];
-    NSLog(@"started");
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    NSLog(@"edited");
-}
-
+#pragma mark - iAd
+///// --------- iAd ----------- /////////////////////////////////////////////////////////////////////////
 -(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
     NSLog(@"Error loading");
 }

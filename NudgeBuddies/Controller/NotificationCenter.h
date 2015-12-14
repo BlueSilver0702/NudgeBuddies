@@ -12,6 +12,6 @@
 
 @property (nonatomic) int notifyCount;
 @property (nonatomic, retain) NSMutableArray *contactArray;
-@property (nonatomic, retain) NSMutableArray *otherGroupArray;
+@property (nonatomic, retain) NSMutableArray *favArray;
 
 @end

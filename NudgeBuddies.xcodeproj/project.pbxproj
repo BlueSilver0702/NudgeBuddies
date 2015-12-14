@@ -21,6 +21,8 @@
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
+		CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */; };
+		CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */; };
 		CFD8EEF21C161BCE00F47D45 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */; };
 		CFF136511C1D1AC50001D351 /* Nudger.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136501C1D1AC50001D351 /* Nudger.m */; };
 		CFF136551C1D1BEE0001D351 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136541C1D1BEE0001D351 /* Group.m */; };
@@ -57,6 +59,9 @@
 		29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
+		CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NudgeButton.h; path = View/NudgeButton.h; sourceTree = "<group>"; };
+		CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NudgeButton.m; path = View/NudgeButton.m; sourceTree = "<group>"; };
+		CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NudgeButton.xib; path = View/NudgeButton.xib; sourceTree = "<group>"; };
 		CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		CFECA96D1C190EE000846593 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		CFF1364F1C1D1AC50001D351 /* Nudger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Nudger.h; path = Model/Nudger.h; sourceTree = "<group>"; };
@@ -208,6 +213,9 @@
 				290C02A41C136EE40093D12A /* SearchController.m */,
 				CFF136791C1D7D110001D351 /* MenuController.h */,
 				CFF1367A1C1D7D110001D351 /* MenuController.m */,
+				CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */,
+				CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */,
+				CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -302,6 +310,7 @@
 				290F90121C1205B900F345D8 /* Default@2x.png in Resources */,
 				290F90101C1205B900F345D8 /* Default-568h@2x.png in Resources */,
 				290F90111C1205B900F345D8 /* Default.png in Resources */,
+				CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */,
 				CFF136641C1D20300001D351 /* SigninController.m in Sources */,
 				CFF136751C1D208E0001D351 /* UIImagePickerHelper.m in Sources */,
 				290C02A51C136EE40093D12A /* SearchController.m in Sources */,

@@ -2102,7 +2102,7 @@ in the search box above.</string>
         <!--Menu Controller-->
         <scene sceneID="h3u-7K-9tE">
             <objects>
-                <tableViewController id="xX9-Tw-DkU" customClass="MenuController" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="menuCtrl" id="xX9-Tw-DkU" customClass="MenuController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="36" sectionHeaderHeight="28" sectionFooterHeight="28" id="zhF-9B-X7D">
                         <rect key="frame" x="0.0" y="0.0" width="212" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

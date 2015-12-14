@@ -22,6 +22,7 @@
 #import "Global.h"
 #import "Group.h"
 #import "Nudger.h"
+#import "NudgeButton.h"
 
 #define appDelegate (AppDelegate *)[[UIApplication sharedApplication] delegate]
 
