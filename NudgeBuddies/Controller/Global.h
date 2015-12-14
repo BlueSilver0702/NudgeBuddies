@@ -21,6 +21,37 @@ typedef NS_ENUM(NSInteger, NudgerStatus) {
     NSRejected = 4
 };
 
+typedef NS_ENUM(NSInteger, ResponseType) {
+    RTNudge = 0,
+    RTRumble = 1,
+    RTSilent = 2,
+    RTAnnoy = 3
+};
+
+typedef NS_ENUM(NSInteger, MenuType) {
+    MTBuddy = 0,
+    MTBuddyStream = 1,
+    MTGroup = 2,
+    MTGroupStream = 3,
+    MTAdd = 4
+};
+
+typedef NS_ENUM(NSInteger, MenuReturn) {
+    MRNudge = 0,
+    MRRumble = 1,
+    MRRumbleSilent = 2,
+    MRAnnoy = 3,
+    MRStreamGroup = 4,
+    MRStream = 5,
+    MRAddGroup = 6,
+    MRViewGroup = 7,
+    MRBlock = 8,
+    MRSilent = 9,
+    MRAuto = 10,
+    MREdit = 11,
+    MREditGroup = 12
+};
+
 @interface Global : NSObject
 
 @property (nonatomic, retain) NSData *profileImg;

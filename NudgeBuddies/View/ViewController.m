@@ -192,6 +192,11 @@
     }];
 }
 
+#pragma mark - Menu
+///// --------- Menu Views ----------- /////////////////////////////////////////////////////////////////////////
+
+#pragma mark - profile
+///// --------- edit profile ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onPhoto:(id)sender {
     iPH = [[UIImagePickerHelper alloc] init];
     [iPH imagePickerInView:self WithSuccess:^(UIImage *image) {
@@ -249,6 +254,14 @@
     }
 }
 
+- (IBAction)onProfileClose:(id)sender {
+    [UIView transitionWithView:profileView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        profileView.hidden = YES;
+    } completion:nil];
+}
+
+#pragma mark - favorite
+///// --------- favorite views ----------- /////////////////////////////////////////////////////////////////////////
 - (void)outputAccelerometer:(CMAcceleration)acceleration {
 
     [UIView transitionWithView:user1 duration:.2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -268,6 +281,8 @@
     } completion:nil];
 }
 
+#pragma mark - setting
+///// --------- setting Views ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onSettingOpen:(id)sender {
     [self onGroupClose:nil];
     [self onAutoClose:nil];
@@ -313,6 +328,8 @@
     }
 }
 
+#pragma mark - Search
+///// --------- search view ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onSearchClose:(id)sender {
     [searchBox resignFirstResponder];
     [UIView transitionWithView:searchDoneButton duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -352,6 +369,8 @@
     } completion:nil];
 }
 
+#pragma mark - Add Friend
+///// --------- Add Friend ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onAddOpen:(id)sender {
     [self hideSetting];
     [self onGroupClose:nil];
@@ -377,12 +396,8 @@
     }
 }
 
-- (IBAction)onProfileClose:(id)sender {
-    [UIView transitionWithView:profileView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        profileView.hidden = YES;
-    } completion:nil];
-}
-
+#pragma mark - Auto Group
+///// --------- Auto Group view ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onAutoOpen:(id)sender {
     [self hideSetting];
     [self onGroupClose:nil];
@@ -404,6 +419,8 @@
     } completion:nil];
 }
 
+#pragma mark - Add Group
+///// --------- Add Group View ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onGropOpen:(id)sender {
     [self hideSetting];
     [self onAutoClose:nil];
