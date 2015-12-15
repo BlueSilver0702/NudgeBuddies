@@ -59,7 +59,7 @@
         [HUD hide:YES];
         if (g_var.profileImg) {
             [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.png" contentType:@"image/png" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-                [g_var saveFile:g_var.profileImg uid:g_var.currentUser.ID];
+                [g_var saveFile:g_var.profileImg uid:blob.ID];
                 QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
                 updateParameters.blobID = blob.ID;
                 [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {

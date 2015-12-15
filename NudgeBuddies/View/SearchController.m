@@ -166,9 +166,14 @@
     }
     [becomeLab setTag:userInfo.ID];
     if (userInfo.blobID > 0) {
-        [QBRequest downloadFileWithID:userInfo.blobID successBlock:^(QBResponse *response, NSData *fileData) {
-            [profileImg setImage:[UIImage imageWithData:fileData]];
-        } statusBlock:nil errorBlock:nil];
+        NSData *imgData = [g_var loadFile:userInfo.blobID];
+        if (imgData) {
+            [profileImg setImage:[UIImage imageWithData:imgData]];
+        } else {
+            [QBRequest downloadFileWithID:userInfo.blobID successBlock:^(QBResponse *response, NSData *fileData) {
+                [profileImg setImage:[UIImage imageWithData:fileData]];
+            } statusBlock:nil errorBlock:nil];
+        }
     } else {
         [profileImg setImage:[UIImage imageNamed:@"empty"]];
     }

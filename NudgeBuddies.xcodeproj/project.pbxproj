@@ -166,8 +166,8 @@
 		294891C11C0F87300086D1BE /* NudgeBuddies */ = {
 			isa = PBXGroup;
 			children = (
-				290C02931C131E4A0093D12A /* Controller */,
 				290C02941C131E610093D12A /* Model */,
+				290C02931C131E4A0093D12A /* Controller */,
 				CFF136521C1D1ADA0001D351 /* View */,
 				294891C51C0F87300086D1BE /* AppDelegate.h */,
 				294891C61C0F87300086D1BE /* AppDelegate.m */,

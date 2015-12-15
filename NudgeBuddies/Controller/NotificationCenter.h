@@ -18,7 +18,7 @@
 
 - (void)initCenter;
 - (Menu *)getMenu:(int)index;
-- (void)update:(NSUInteger)userID;
+- (void)update:(Nudger *)user;
 - (void)sort;
 
 @end

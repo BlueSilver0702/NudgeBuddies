@@ -152,7 +152,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
                                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="nDH-BP-ctN">
-                                                <rect key="frame" x="0.0" y="470" width="320" height="50"/>
+                                                <rect key="frame" x="0.0" y="445" width="320" height="96"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </scrollView>
                                             <view contentMode="scaleToFill" id="pV9-8e-Yxe">
@@ -1335,6 +1335,7 @@ in the search box above.</string>
                         <outlet property="email" destination="vJf-pI-3jK" id="HM5-V0-9m3"/>
                         <outlet property="groupView" destination="2zF-6a-WjD" id="zfa-lc-Xy7"/>
                         <outlet property="menuView" destination="Bs4-mq-OrH" id="KL2-sj-Ndz"/>
+                        <outlet property="notificationView" destination="bLi-EM-5zs" id="VWP-O0-Cdd"/>
                         <outlet property="nudgebuddiesBar" destination="nDH-BP-ctN" id="Rfz-YR-QKm"/>
                         <outlet property="passwd" destination="tXE-Dc-h8M" id="oPx-5s-Xza"/>
                         <outlet property="profileBtn" destination="Ghn-hQ-WfP" id="Muf-Z3-yCE"/>

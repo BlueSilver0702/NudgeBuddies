@@ -23,6 +23,7 @@
     
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
+    IBOutlet UIView *notificationView;
     
     // group pages
     IBOutlet UIView *autoView;
@@ -66,6 +67,7 @@
     // menus module
     MenuController *menuCtrl;
     IBOutlet UIView *menuView;
+    NSMutableArray *nudgeButtonArr;
 }
 @end
 
@@ -74,46 +76,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     currentUser = g_var.currentUser;
-    // **********  nudgebuddies horizontal scroll  ************
-    [nudgebuddiesBar setContentSize: CGSizeMake(nudgebuddiesBar.frame.size.width*1.3, nudgebuddiesBar.frame.size.height)];
-    int width = nudgebuddiesBar.frame.size.height;
-    UIButton *button1 = [[UIButton alloc] initWithFrame:CGRectMake(14, 0, width, width)];
-    button1.backgroundColor = [UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0];
-    button1.layer.cornerRadius = width/2.0;
-    button1.layer.masksToBounds = YES;
-    [button1 setImage:[UIImage imageNamed:@"user-5"] forState:UIControlStateNormal];
-    
-    UIButton *button2 = [[UIButton alloc] initWithFrame:CGRectMake(button1.frame.origin.x+70, 0, width, width)];
-    button2.backgroundColor = [UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0];
-    button2.layer.cornerRadius = width/2.0;
-    button2.layer.masksToBounds = YES;
-    [button2 setImage:[UIImage imageNamed:@"user-4"] forState:UIControlStateNormal];
-
-    UIButton *button3 = [[UIButton alloc] initWithFrame:CGRectMake(button2.frame.origin.x+70, 0, width, width)];
-    button3.backgroundColor = [UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0];
-    button3.layer.cornerRadius = width/2.0;
-    button3.layer.masksToBounds = YES;
-    [button3 setTitle:@"WP" forState:UIControlStateNormal];
-    [button3 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-
-    UIButton *button4 = [[UIButton alloc] initWithFrame:CGRectMake(button3.frame.origin.x+70, 0, width, width)];
-    button4.backgroundColor = [UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0];
-    button4.layer.cornerRadius = width/2.0;
-    button4.layer.masksToBounds = YES;
-    [button4 setImage:[UIImage imageNamed:@"user-3"] forState:UIControlStateNormal];
-
-    UIButton *button5 = [[UIButton alloc] initWithFrame:CGRectMake(button4.frame.origin.x+70, 0, width, width)];
-    button5.backgroundColor = [UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0];
-    button5.layer.cornerRadius = width/2.0;
-    button5.layer.masksToBounds = YES;
-    [button5 setTitle:@"WP" forState:UIControlStateNormal];
-    [button5 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    
-    [nudgebuddiesBar addSubview:button1];
-    [nudgebuddiesBar addSubview:button2];
-    [nudgebuddiesBar addSubview:button3];
-    [nudgebuddiesBar addSubview:button4];
-    [nudgebuddiesBar addSubview:button5];
     
     // **********  setting page  ************
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -184,26 +146,67 @@
     if (profileData) {
         [profileBtn setBackgroundImage:[UIImage imageWithData:profileData] forState:UIControlStateNormal];
     } else {
-        [QBRequest downloadFileWithID:g_var.currentUser.blobID successBlock:^(QBResponse *response, NSData *fileData) {
-            UIImage *img = [UIImage imageWithData:fileData];
-            [profileBtn setBackgroundImage:img forState:UIControlStateNormal];
-            NSLog(@"profile loaded");
-        } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
-            // handle progress
-        } errorBlock:^(QBResponse *response) {
-            NSLog(@"error: %@", response.error);
-        }];
+        NSData *imgData = [g_var loadFile:g_var.currentUser.blobID];
+        if (imgData) {
+            [profileBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
+        } else {
+            [QBRequest downloadFileWithID:g_var.currentUser.blobID successBlock:^(QBResponse *response, NSData *fileData) {
+                UIImage *img = [UIImage imageWithData:fileData];
+                [profileBtn setBackgroundImage:img forState:UIControlStateNormal];
+                NSLog(@"profile loaded");
+            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+                // handle progress
+            } errorBlock:^(QBResponse *response) {
+                NSLog(@"error: %@", response.error);
+            }];
+        }
     }
     
     // **********  chat module  ************
+    nudgeButtonArr = [NSMutableArray new];
     center = [NotificationCenter new];
     [center initCenter];
     [self refreshUI];
-    //
 }
 
 - (void) refreshUI {
-    
+    int lastIndex = 0;
+    int barWidth = 20;
+    int width = nudgebuddiesBar.frame.size.height;
+    for (int i=(int)center.notificationArray.count-1; i>=0; i--) {
+        Nudger *nudger = [center.notificationArray objectAtIndex:i];
+        lastIndex ++;
+        NudgeButton *nudgeBtn = [NudgeButton new];
+        [self addChildViewController:nudgeBtn];
+        if (nudger.isNew) {
+            
+            if (nudgeButtonArr.count == 0) {
+                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+                [nudgeBtn initNudge:nudger notify:NO];
+                nudgeBtn.index = 1;
+                [nudgeButtonArr addObject:nudgeBtn];
+            } else if (nudgeButtonArr.count == 1) {
+                NudgeButton *oldBtn = [nudgeButtonArr objectAtIndex:0];
+                if (oldBtn.) {
+                    <#statements#>
+                }
+                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+                [nudgeBtn initNudge:nudger notify:NO];
+                nudgeBtn.index = 0;
+                [nudgeButtonArr addObject:nudgeBtn];
+            } else if (nudgeButtonArr.count == 2) {
+                
+            } else if (nudgeButtonArr.count == 3) {
+                
+            }
+        } else {
+            [nudgebuddiesBar addSubview:nudgeBtn.view];
+            [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
+            barWidth += (width + 70);
+            [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
+            [nudgeBtn initNudge:nudger notify:NO];
+        }
+    }
 }
 
 #pragma mark - Chat Module
@@ -314,7 +317,7 @@
     [[MBProgressHUD showHUDAddedTo:self.view animated:YES] show:YES];
     if (profilePictureUpdate) {
         [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.png" contentType:@"image/png" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-            [g_var saveFile:g_var.profileImg uid:g_var.currentUser.ID];
+            [g_var saveFile:g_var.profileImg uid:blob.ID];
             QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
             updateParameters.blobID = blob.ID;
             updateParameters.oldPassword = currentUser.password;

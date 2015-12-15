@@ -39,25 +39,25 @@
                 }];
             }
             [self sort];
+            [self update:nil];
         }
     }];
 }
 
-- (void)update:(NSUInteger)userID {
-    BOOL isExist = NO;
-    NSMutableArray *newNotificationArray = [NSMutableArray new];
-    for (Nudger *nudger in self.notificationArray) {
-        if (nudger.user.ID == userID) {
-            isExist = YES;
-        } else {
-            newNotificationArray = nudger;
+- (void)update:(Nudger *)user {
+    if (user == nil) {
+        [self.notificationArray addObjectsFromArray:self.contactArray];
+        [self.notificationArray addObjectsFromArray:self.pendingArray];
+    } else {
+        for (int i=0; i<self.notificationArray.count; i++) {
+            Nudger *nudger = [self.notificationArray objectAtIndex:i];
+            if (nudger.user.ID == user.user.ID || [nudger.group.gName isEqualToString:user.group.gName]) {
+                [self.notificationArray removeObjectAtIndex:i];
+                [self.notificationArray addObject:nudger];
+                break;  
+            }
         }
     }
-    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
-        
-    } errorBlock:^(QBResponse *response) {
-        NSLog(@"Err: adding users");
-    }];
 }
 
 - (void)sort {

@@ -14,12 +14,12 @@
     IBOutlet UIButton *badgeBtn;
     IBOutlet UIImageView *noti1Img;
     IBOutlet UIImageView *noti2Img;
-    Nudger *userInfo;
 }
 @end
 
 @implementation NudgeButton
 
+@synthesize userInfo;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [badgeBtn setHidden:YES];
@@ -29,16 +29,22 @@
 }
 
 - (void)initNudge:(Nudger *)user notify:(BOOL)isNotify {
-    userInfo = user;
+    if (user) userInfo = user;
     if (userInfo.stream.count > 0) {
         [badgeBtn setHidden:NO];
         [badgeBtn setTitle:[NSString stringWithFormat:@"%lu", userInfo.stream.count] forState:UIControlStateNormal];
     }
     [imgBtn setTitle:[userInfo getName] forState:UIControlStateNormal];
     if (userInfo.user.blobID > 0) {
-        [QBRequest downloadFileWithID:userInfo.user.blobID successBlock:^(QBResponse *response, NSData *fileData) {
-            [imgBtn setImage:[UIImage imageWithData:fileData] forState:UIControlStateNormal];
-        } statusBlock:nil errorBlock:nil];
+        NSData *imgData = [g_var loadFile:userInfo.user.blobID];
+        if (imgData) {
+            [imgBtn setImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
+        } else {
+            [QBRequest downloadFileWithID:userInfo.user.blobID successBlock:^(QBResponse *response, NSData *fileData) {
+                [g_var saveFile:fileData uid:userInfo.user.blobID];
+                [imgBtn setImage:[UIImage imageWithData:fileData] forState:UIControlStateNormal];
+            } statusBlock:nil errorBlock:nil];
+        }
     }
     if (isNotify) [self notify];
 }

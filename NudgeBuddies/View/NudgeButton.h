@@ -20,6 +20,7 @@
 
 @property(weak) id <NudgeButtonDelegate> delegate;
 @property (nonatomic) int index;
+@property (nonatomic, retain) Nudger *userInfo;
 
 - (void)initNudge:(Nudger *)user notify:(BOOL)isNotify;
 - (void)notify;
