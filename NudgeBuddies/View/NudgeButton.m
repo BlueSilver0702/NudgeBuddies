@@ -28,7 +28,7 @@
     [imgBtn setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];
 }
 
-- (void)initNudge:(Nudger *)user {
+- (void)initNudge:(Nudger *)user notify:(BOOL)isNotify {
     userInfo = user;
     if (userInfo.stream.count > 0) {
         [badgeBtn setHidden:NO];
@@ -40,17 +40,29 @@
             [imgBtn setImage:[UIImage imageWithData:fileData] forState:UIControlStateNormal];
         } statusBlock:nil errorBlock:nil];
     }
-    [self notify];
+    if (isNotify) [self notify];
 }
 
 - (IBAction)onNudgeSelected:(id)sender {
-    [self.delegate onNudgeClicked:userInfo];
+    [self.delegate onNudgeClicked:userInfo index:self.index];
     [noti1Img setHidden:YES];
     [noti2Img setHidden:YES];
 }
 
 - (void)notify {
-    
+    [noti1Img setHidden:NO];
+    [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse) animations:^(){
+        [noti2Img setHidden:NO];
+    } completion:^(BOOL success) {
+        [self performSelector:@selector(stop) withObject:self afterDelay:5];
+    }];
+}
+
+- (void)stop {
+    [UIView animateWithDuration:0.5 animations:^(void){
+        [noti1Img setHidden:YES];
+        [noti2Img setHidden:YES];
+    }];
 }
 
 @end

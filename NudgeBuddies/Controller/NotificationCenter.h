@@ -10,8 +10,15 @@
 
 @interface NotificationCenter : NSObject
 
-@property (nonatomic) int notifyCount;
+//@property (nonatomic) int notifyCount;
 @property (nonatomic, retain) NSMutableArray *contactArray;
+@property (nonatomic, retain) NSMutableArray *pendingArray;
 @property (nonatomic, retain) NSMutableArray *favArray;
+@property (nonatomic, retain) NSMutableArray *notificationArray;
+
+- (void)initCenter;
+- (Menu *)getMenu:(int)index;
+- (void)update:(NSUInteger)userID;
+- (void)sort;
 
 @end

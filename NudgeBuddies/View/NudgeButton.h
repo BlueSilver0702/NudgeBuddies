@@ -12,7 +12,7 @@
 
 @optional
 
-- (void)onNudgeClicked:(Nudger *)nudger;
+- (void)onNudgeClicked:(Nudger *)nudger index:(int)index;
 
 @end
 
@@ -21,7 +21,7 @@
 @property(weak) id <NudgeButtonDelegate> delegate;
 @property (nonatomic) int index;
 
-- (void)initNudge:(Nudger *)user;
+- (void)initNudge:(Nudger *)user notify:(BOOL)isNotify;
 - (void)notify;
 
 @end

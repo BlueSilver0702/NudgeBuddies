@@ -9,47 +9,52 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, NudgerType) {
-    NTIndividual = 0,
-    NTGroup = 1
+    NTNil = 0,
+    NTIndividual,
+    NTGroup
 };
 
 typedef NS_ENUM(NSInteger, NudgerStatus) {
-    NSFriend = 0,
-    NSInvite = 1,
-    NSInvited = 2,
-    NSReject = 3,
-    NSRejected = 4
+    NSNil = 0,
+    NSFriend,
+    NSInvite,
+    NSInvited,
+    NSReject,
+    NSRejected
 };
 
 typedef NS_ENUM(NSInteger, ResponseType) {
-    RTNudge = 0,
-    RTRumble = 1,
-    RTSilent = 2,
-    RTAnnoy = 3
+    RTNil = 0,
+    RTNudge,
+    RTRumble,
+    RTSilent,
+    RTAnnoy
 };
 
 typedef NS_ENUM(NSInteger, MenuType) {
-    MTBuddy = 0,
-    MTBuddyStream = 1,
-    MTGroup = 2,
-    MTGroupStream = 3,
-    MTAdd = 4
+    MTNil = 0,
+    MTBuddy,
+    MTBuddyStream,
+    MTGroup,
+    MTGroupStream,
+    MTAdd
 };
 
 typedef NS_ENUM(NSInteger, MenuReturn) {
-    MRNudge = 0,
-    MRRumble = 1,
-    MRRumbleSilent = 2,
-    MRAnnoy = 3,
-    MRStreamGroup = 4,
-    MRStream = 5,
-    MRAddGroup = 6,
-    MRViewGroup = 7,
-    MRBlock = 8,
-    MRSilent = 9,
-    MRAuto = 10,
-    MREdit = 11,
-    MREditGroup = 12
+    MRNil = 0,
+    MRNudge,
+    MRRumble,
+    MRRumbleSilent,
+    MRAnnoy,
+    MRStreamGroup,
+    MRStream,
+    MRAddGroup,
+    MRViewGroup,
+    MRBlock,
+    MRSilent,
+    MRAuto,
+    MREdit,
+    MREditGroup
 };
 
 @interface Global : NSObject

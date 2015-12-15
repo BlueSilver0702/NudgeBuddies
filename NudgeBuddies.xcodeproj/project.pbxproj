@@ -23,6 +23,7 @@
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
 		CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */; };
 		CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */; };
+		CF7D9A0E1C1F3EE30084D555 /* Menu.m in Sources */ = {isa = PBXBuildFile; fileRef = CF7D9A0D1C1F3EE30084D555 /* Menu.m */; };
 		CFD8EEF21C161BCE00F47D45 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */; };
 		CFF136511C1D1AC50001D351 /* Nudger.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136501C1D1AC50001D351 /* Nudger.m */; };
 		CFF136551C1D1BEE0001D351 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136541C1D1BEE0001D351 /* Group.m */; };
@@ -62,6 +63,8 @@
 		CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NudgeButton.h; path = View/NudgeButton.h; sourceTree = "<group>"; };
 		CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NudgeButton.m; path = View/NudgeButton.m; sourceTree = "<group>"; };
 		CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NudgeButton.xib; path = View/NudgeButton.xib; sourceTree = "<group>"; };
+		CF7D9A0C1C1F3EE30084D555 /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = Model/Menu.h; sourceTree = "<group>"; };
+		CF7D9A0D1C1F3EE30084D555 /* Menu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Menu.m; path = Model/Menu.m; sourceTree = "<group>"; };
 		CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		CFECA96D1C190EE000846593 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		CFF1364F1C1D1AC50001D351 /* Nudger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Nudger.h; path = Model/Nudger.h; sourceTree = "<group>"; };
@@ -126,6 +129,8 @@
 				CFF136501C1D1AC50001D351 /* Nudger.m */,
 				CFF136531C1D1BEE0001D351 /* Group.h */,
 				CFF136541C1D1BEE0001D351 /* Group.m */,
+				CF7D9A0C1C1F3EE30084D555 /* Menu.h */,
+				CF7D9A0D1C1F3EE30084D555 /* Menu.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -377,6 +382,7 @@
 				CFF1367B1C1D7D110001D351 /* MenuController.m in Sources */,
 				294891C71C0F87300086D1BE /* AppDelegate.m in Sources */,
 				CFF136581C1D1E2C0001D351 /* NotificationCenter.m in Sources */,
+				CF7D9A0E1C1F3EE30084D555 /* Menu.m in Sources */,
 				CFF136661C1D20300001D351 /* ViewController.m in Sources */,
 				CFF136731C1D208E0001D351 /* UIImage+KIAdditions.m in Sources */,
 				CFF136741C1D208E0001D351 /* UIImageCropper.m in Sources */,

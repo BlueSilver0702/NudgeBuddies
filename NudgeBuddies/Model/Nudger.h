@@ -22,7 +22,10 @@
 @property (nonatomic) BOOL block;
 @property (nonatomic) BOOL silent;
 @property (nonatomic) BOOL autoNudge;
+@property (nonatomic) BOOL isNew;
 
+- (id)initWithUser:(QBUUser *)userInfo;
+- (id)initWithGroup:(Group *)groupInfo;
 - (NSString *) getName;
 
 @end

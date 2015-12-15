@@ -15,7 +15,7 @@
 #import "UIImagePickerHelper.h"
 #import "NotificationCenter.h"
 
-@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, QBChatDelegate, MenuControllerDelegate>
+@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, QBChatDelegate, MenuControllerDelegate, NudgeButtonDelegate>
 {
     // general
     QBUUser *currentUser;
@@ -158,6 +158,7 @@
     groupView.hidden = YES;
     profileView.hidden = YES;
     autoView.hidden = YES;
+    
     // **********  favorite module  ************
     rectFav1 = user1.frame;
     rectFav2 = user2.frame;
@@ -195,21 +196,98 @@
     }
     
     // **********  chat module  ************
-    [[QBChat instance] connectWithUser:g_var.currentUser  completion:^(NSError *error) {
-        if (error) {
-            [[[UIAlertView alloc] initWithTitle:@"Couldn't connect to chat" message:[NSString stringWithFormat:@"%@", error.description] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        }
-    }];
+    center = [NotificationCenter new];
+    [center initCenter];
+    [self refreshUI];
+    //
+}
+
+- (void) refreshUI {
+    
+}
+
+#pragma mark - Chat Module
+///// --------- msg list ----------- /////////////////////////////////////////////////////////////////////////
+- (void)chatRoomDidReceiveMessage:(QB_NONNULL QBChatMessage *)message fromDialogID:(QB_NONNULL NSString *)dialogID {
+    
+}
+///// --------- contact list ----------- /////////////////////////////////////////////////////////////////////////
+- (void)chatDidReceiveContactAddRequestFromUser:(NSUInteger)userID {
+    
+}
+
+- (void)chatContactListDidChange:(QB_NONNULL QBContactList *)contactList {
+    
+}
+
+- (void)chatDidReceiveContactItemActivity:(NSUInteger)userID isOnline:(BOOL)isOnline status:(QB_NULLABLE NSString *)status {
+    
+}
+
+- (void)chatDidReceiveAcceptContactRequestFromUser:(NSUInteger)userID {
+    
+}
+
+- (void)chatDidReceiveRejectContactRequestFromUser:(NSUInteger)userID {
+    
 }
 
 #pragma mark - Menu
 ///// --------- Menu Views ----------- /////////////////////////////////////////////////////////////////////////
-- (IBAction)onMenuOpen:(id)sender {
-
+- (void)onMenuClose {
+    [UIView animateWithDuration:0.5 animations:^(void){
+        [menuView setHidden:NO];
+    }];
 }
 
-- (void)onMenuClose {
-    
+- (void)onNudgeClicked:(Nudger *)nudger index:(int)index {
+    [self hideSetting];
+    [self onGroupClose:nil];
+    [self onProfileClose:nil];
+    [self onSearchDone];
+    [self onAutoClose:nil];
+    [self onAddClose:nil];
+    CGSize size = [menuCtrl createMenu:nudger];
+    Menu *menu = [center getMenu:index];
+    [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height)];
+    UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
+    [triImg setFrame:CGRectMake(menu.triPoint.x, menu.triPoint.y, triImg.frame.size.width, triImg.frame.size.height)];
+    if (menu.triDirection) [triImg setImage:[UIImage imageNamed:@"menu-tri"]];
+    else [triImg setImage:[UIImage imageNamed:@"menu-tri-down"]];
+    [UIView animateWithDuration:0.5 animations:^(void){
+        [menuView setHidden:NO];
+    }];
+}
+
+- (void)onMenuClicked:(MenuReturn)menuReturn {
+    [self onMenuClose];
+    if (menuReturn == MRNudge) {
+        
+    } else if (menuReturn == MRRumble) {
+        
+    } else if (menuReturn == MRRumbleSilent) {
+        
+    } else if (menuReturn == MRAnnoy) {
+        
+    } else if (menuReturn == MRAddGroup) {
+        
+    } else if (menuReturn == MRAuto) {
+        
+    } else if (menuReturn == MRBlock) {
+        
+    } else if (menuReturn == MREdit) {
+        
+    } else if (menuReturn == MREditGroup) {
+        
+    } else if (menuReturn == MRSilent) {
+        
+    } else if (menuReturn == MRStream) {
+        
+    } else if (menuReturn == MRStreamGroup) {
+        
+    } else if (menuReturn == MRViewGroup) {
+        
+    }
 }
 
 #pragma mark - profile
@@ -306,6 +384,7 @@
     [self onProfileClose:nil];
     [self onSearchDone];
     [self onAddClose:nil];
+    [self onMenuClose];
     UIButton *senderBtn = (UIButton *)sender;
     if (senderBtn.tag == 2) {
         [settingCtrl initView:YES];
@@ -336,6 +415,7 @@
         [self onAutoClose:nil];
         [self onSearchDone];
         [self onAddClose:nil];
+        [self onMenuClose];
         if (profileView.hidden == NO) {
             [self onProfileClose:nil];
         }
@@ -375,6 +455,7 @@
     [self onAutoClose:nil];
     [self onProfileClose:nil];
     [self onAddClose:nil];
+    [self onMenuClose];
     int size = [searchCtrl searchResult:textField.text];
     [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
     [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -394,6 +475,7 @@
     [self onAutoClose:nil];
     [self onProfileClose:nil];
     [self onAddClose:nil];
+    [self onMenuClose];
     [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
     [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
@@ -414,6 +496,7 @@
     [self onProfileClose:nil];
     [self onSearchDone];
     [self onAutoClose:nil];
+    [self onMenuClose];
     if (addView.hidden == NO) {
         [self onAddClose:nil];
         return;
@@ -441,6 +524,7 @@
     [self onProfileClose:nil];
     [self onSearchDone];
     [self onAddClose:nil];
+    [self onMenuClose];
     if (autoView.hidden == NO) {
         [self onAutoClose:nil];
         return;
@@ -464,6 +548,7 @@
     [self onProfileClose:nil];
     [self onSearchDone];
     [self onAddClose:nil];
+    [self onMenuClose];
     if (groupView.hidden == NO) {
         [self onGroupClose:nil];
         return;

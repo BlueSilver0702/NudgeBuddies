@@ -1312,6 +1312,12 @@ in the search box above.</string>
                                     <view contentMode="scaleToFill" id="Bs4-mq-OrH">
                                         <rect key="frame" x="0.0" y="119" width="101" height="102"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" tag="100" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="9XF-EC-MEV">
+                                                <rect key="frame" x="0.0" y="0.0" width="18" height="15"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
