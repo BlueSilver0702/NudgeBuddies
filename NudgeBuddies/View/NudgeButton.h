@@ -12,7 +12,7 @@
 
 @optional
 
-- (void)onNudgeClicked:(Nudger *)nudger index:(int)index;
+- (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect;
 
 @end
 

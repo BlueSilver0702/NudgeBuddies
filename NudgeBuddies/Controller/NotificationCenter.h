@@ -17,7 +17,8 @@
 @property (nonatomic, retain) NSMutableArray *notificationArray;
 
 - (void)initCenter;
-- (Menu *)getMenu:(int)index;
+- (Menu *)getMenu:(CGRect)frame menuSize:(CGSize)size;
+- (void)refresh;
 - (void)update:(Nudger *)user;
 - (void)sort;
 

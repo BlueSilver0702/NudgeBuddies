@@ -46,7 +46,7 @@
         
         [profileBtn setBackgroundImage:newImage forState:UIControlStateNormal];
         
-        profileImgData = UIImagePNGRepresentation(newImage);
+        profileImgData = UIImageJPEGRepresentation(newImage, 1.0f);
         g_var.profileImg = profileImgData;
     } failure:^(NSError *error) {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -146,7 +146,7 @@
                                  g_var.currentUser = user;
                                  g_var.currentUser.password = COMMON_PWD;
                                 
-                                 [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.png" contentType:@"image/png" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+                                 [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
                                      [g_var saveFile:g_var.profileImg uid:blob.ID];
                                      QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
                                      updateParameters.blobID = blob.ID;

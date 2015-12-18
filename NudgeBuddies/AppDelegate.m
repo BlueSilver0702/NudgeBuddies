@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "SigninController.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -26,7 +28,15 @@ Global *g_var;
     [QBSettings setAuthKey:      kQBRegisterServiceKey];
     [QBSettings setAuthSecret:   kQBRegisterServiceSecret];
     [QBSettings setAccountKey:   kQBAccountKey];
-
+    
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    ViewController *viewCtrl = (ViewController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"viewCtrl"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults boolForKey:@"remember"]) {
+        self.window.rootViewController = viewCtrl;
+        [self.window makeKeyAndVisible];
+    }
+    
     return YES;
 }
 

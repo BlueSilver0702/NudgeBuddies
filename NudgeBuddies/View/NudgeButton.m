@@ -23,8 +23,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [badgeBtn setHidden:YES];
-    [noti1Img setHidden:YES];
-    [noti2Img setHidden:YES];
+//    [noti1Img setHidden:YES];
+//    [noti2Img setHidden:YES];
+    noti1Img.alpha = 1.0;
+    noti2Img.alpha = 0.0;
     [imgBtn setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];
 }
 
@@ -50,24 +52,31 @@
 }
 
 - (IBAction)onNudgeSelected:(id)sender {
-    [self.delegate onNudgeClicked:userInfo index:self.index];
-    [noti1Img setHidden:YES];
-    [noti2Img setHidden:YES];
+    [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
+    [noti1Img.layer removeAllAnimations];
+    [noti2Img.layer removeAllAnimations];
+        noti1Img.alpha = 0.0f;
+        noti2Img.alpha = 0.0f;
 }
 
 - (void)notify {
     [noti1Img setHidden:NO];
-    [UIView animateWithDuration:0.5 delay:0 options:(UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse) animations:^(){
-        [noti2Img setHidden:NO];
+    [noti2Img setHidden:NO];
+    noti2Img.alpha = 0.0f;
+    [UIView animateWithDuration:1.5 delay:0 options:(UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse) animations:^(){
+        [UIView setAnimationRepeatCount:6];
+        noti2Img.alpha = 1.0f;
     } completion:^(BOOL success) {
-        [self performSelector:@selector(stop) withObject:self afterDelay:5];
+        noti2Img.alpha = 0.0f;
+        [self performSelector:@selector(removeNoti) withObject:nil afterDelay:20];
     }];
+    
 }
 
-- (void)stop {
-    [UIView animateWithDuration:0.5 animations:^(void){
-        [noti1Img setHidden:YES];
-        [noti2Img setHidden:YES];
+- (void)removeNoti {
+    [UIView animateWithDuration:1.0 animations:^(){
+        noti1Img.alpha = 0.0f;
+        noti2Img.alpha = 0.0f;
     }];
 }
 

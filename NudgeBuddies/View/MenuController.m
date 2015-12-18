@@ -42,6 +42,7 @@
             menuType = MTAdd;
         }
     }
+    [self.tableView setFrame:CGRectMake(0, 0, 212, self.tableView.frame.size.height)];
     [self.tableView reloadData];
     return self.tableView.contentSize;
 }
@@ -82,7 +83,14 @@
     UIButton *rumbleBtn = (UIButton *)[cell viewWithTag:4];
     UIButton *silentBtn = (UIButton *)[cell viewWithTag:5];
     UIButton *annoyBtn = (UIButton *)[cell viewWithTag:6];
+    UIButton *addBtn = (UIButton *)[cell viewWithTag:7];
+    UIButton *rejectBtn = (UIButton *)[cell viewWithTag:8];
     [nudgeBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
+    [rumbleBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
+    [silentBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
+    [annoyBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
+    [addBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
+    [rejectBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
     if (indexPath.row == 0 && menuType == MTAdd) {
         nameLabel.text = tUser.user.fullName;
     } else if (indexPath.row == 0 && menuType != MTAdd) {
@@ -133,6 +141,11 @@
 - (void)onResponseType:(id)sender {
     UIButton *senderBtn = (UIButton *)sender;
     if (menuType == MTAdd) {
+        if (senderBtn.tag == 7) {
+            [self.delegate onMenuClicked:MRAdd nudger:tUser];
+        } else {
+            [self.delegate onMenuClicked:MRReject nudger:tUser];
+        }
         return;
     }
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
@@ -146,28 +159,28 @@
         [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
         [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent"] forState:UIControlStateNormal];
         [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy"] forState:UIControlStateNormal];
-        [self.delegate onMenuClicked:MRNudge];
+        [self.delegate onMenuClicked:MRNudge nudger:tUser];
     } else if (senderBtn.tag == 4) {
         tUser.response = RTRumble;
         [nudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
         [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-active"] forState:UIControlStateNormal];
         [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent"] forState:UIControlStateNormal];
         [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy"] forState:UIControlStateNormal];
-        [self.delegate onMenuClicked:MRRumble];
+        [self.delegate onMenuClicked:MRRumble nudger:tUser];
     } else if (senderBtn.tag == 5) {
         tUser.response = RTSilent;
         [nudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
         [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
         [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent-active"] forState:UIControlStateNormal];
         [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy"] forState:UIControlStateNormal];
-        [self.delegate onMenuClicked:MRSilent];
+        [self.delegate onMenuClicked:MRSilent nudger:tUser];
     } else if (senderBtn.tag == 6) {
         tUser.response = RTAnnoy;
         [nudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
         [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
         [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent"] forState:UIControlStateNormal];
         [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy-active"] forState:UIControlStateNormal];
-        [self.delegate onMenuClicked:MRAnnoy];
+        [self.delegate onMenuClicked:MRAnnoy nudger:tUser];
     } else {
         [nudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
         [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
@@ -182,13 +195,13 @@
     UIImageView *checkView = (UIImageView *)[cell viewWithTag:2];
 
     if (tUser.type == NTIndividual && indexPath.row == 1 && tUser.stream > 0) {
-        [self.delegate onMenuClicked:MRStream];
+        [self.delegate onMenuClicked:MRStream nudger:tUser];
     } else if (tUser.type == NTGroup && indexPath.row == 1 && tUser.stream > 0) {
-        [self.delegate onMenuClicked:MRStreamGroup];
+        [self.delegate onMenuClicked:MRStreamGroup nudger:tUser];
     } else if (tUser.type == NTGroup && ((indexPath.row == 2 && tUser.stream > 0) || (indexPath.row == 1 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MRViewGroup];
+        [self.delegate onMenuClicked:MRViewGroup nudger:tUser];
     } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream > 0) || (indexPath.row == 2 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MRBlock];
+        [self.delegate onMenuClicked:MRBlock nudger:tUser];
         if (tUser.block) {
             tUser.block = NO;
             checkView.hidden = YES;
@@ -197,7 +210,7 @@
             checkView.hidden = NO;
         }
     } else if ((indexPath.row == 4 && tUser.stream > 0) || (indexPath.row == 3 && tUser.stream == 0)) {
-        [self.delegate onMenuClicked:MRSilent];
+        [self.delegate onMenuClicked:MRSilent nudger:tUser];
         if (tUser.silent) {
             tUser.silent = NO;
             checkView.hidden = YES;
@@ -206,11 +219,11 @@
             checkView.hidden = NO;
         }
     } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream > 0) || (indexPath.row == 4 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MREditGroup];
+        [self.delegate onMenuClicked:MREditGroup nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 2 && tUser.stream > 0) || (indexPath.row == 1 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MRAddGroup];
+        [self.delegate onMenuClicked:MRAddGroup nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream > 0) || (indexPath.row == 2 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MRBlock];
+        [self.delegate onMenuClicked:MRBlock nudger:tUser];
         if (tUser.block) {
             tUser.block = NO;
             checkView.hidden = YES;
@@ -219,7 +232,7 @@
             checkView.hidden = NO;
         }
     } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream > 0) || (indexPath.row == 4 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MRAuto];
+        [self.delegate onMenuClicked:MRAuto nudger:tUser];
         if (tUser.autoNudge) {
             tUser.autoNudge = NO;
             checkView.hidden = YES;
@@ -228,7 +241,7 @@
             checkView.hidden = NO;
         }
     } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.stream > 0) || (indexPath.row == 5 && tUser.stream == 0))) {
-        [self.delegate onMenuClicked:MREdit];
+        [self.delegate onMenuClicked:MREdit nudger:tUser];
     }
 }
 

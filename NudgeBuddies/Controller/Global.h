@@ -54,7 +54,9 @@ typedef NS_ENUM(NSInteger, MenuReturn) {
     MRSilent,
     MRAuto,
     MREdit,
-    MREditGroup
+    MREditGroup,
+    MRAdd,
+    MRReject
 };
 
 @interface Global : NSObject

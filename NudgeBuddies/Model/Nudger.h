@@ -23,6 +23,7 @@
 @property (nonatomic) BOOL silent;
 @property (nonatomic) BOOL autoNudge;
 @property (nonatomic) BOOL isNew;
+@property (nonatomic) int menuPos;
 
 - (id)initWithUser:(QBUUser *)userInfo;
 - (id)initWithGroup:(Group *)groupInfo;

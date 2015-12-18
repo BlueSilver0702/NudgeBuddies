@@ -12,7 +12,7 @@
 
 @optional
 
-- (void)onMenuClicked:(MenuReturn)menuReturn;
+- (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger;
 
 @end
 

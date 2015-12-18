@@ -285,6 +285,7 @@
     } completion:nil];
     [[QBChat instance] addUserToContactListRequest:button.tag completion:^(NSError *error) {
         [self.tableView reloadData];
+        NSLog(@"Successfully added ------------>");
     }];
 }
 

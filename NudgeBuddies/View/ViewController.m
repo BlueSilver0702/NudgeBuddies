@@ -24,6 +24,9 @@
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
     IBOutlet UIView *notificationView;
+    IBOutlet UIView *initSearchView;
+    IBOutlet UIView *initFavView;
+    IBOutlet UIView *initControlView;
     
     // group pages
     IBOutlet UIView *autoView;
@@ -75,7 +78,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    currentUser = g_var.currentUser;
     
     // **********  setting page  ************
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
@@ -121,6 +123,52 @@
     profileView.hidden = YES;
     autoView.hidden = YES;
     
+    currentUser = g_var.currentUser;
+    if (currentUser == nil) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *loginEmail = (NSString *)[userDefaults objectForKey:@"email"];
+        NSString *loginPwd = (NSString *)[userDefaults objectForKey:@"pwd"];
+        
+        nudgebuddiesBar.hidden = YES;
+        notificationView.hidden = YES;
+        initFavView.hidden = YES;
+        [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y - initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
+        [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y + initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
+        
+        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [HUD setMode:MBProgressHUDModeIndeterminate];
+        [HUD setDetailsLabelText:@"Logging in..."];
+        [HUD show:YES];
+        
+        [QBRequest logInWithUserEmail:loginEmail password:loginPwd successBlock:^(QBResponse *response, QBUUser *user) {
+            // Success, do something
+            g_var.currentUser = user;
+            g_var.currentUser.password = loginPwd;
+            [self initNudge];
+            [[QBChat instance] addDelegate:self];
+            [HUD hide:YES];
+            [UIView animateWithDuration:0.5 animations:^(){
+                nudgebuddiesBar.hidden = NO;
+                notificationView.hidden = NO;
+                initFavView.hidden = NO;
+                [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y + initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
+                [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y - initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
+                
+            }];
+        } errorBlock:^(QBResponse *response) {
+            // error handling
+            NSLog(@"error: %@", response.error);
+            [HUD hide:YES];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alertView show];
+        }];
+    } else {
+        [self initNudge];
+        [[QBChat instance] addDelegate:self];
+    }
+}
+
+- (void) initNudge {
     // **********  favorite module  ************
     rectFav1 = user1.frame;
     rectFav2 = user2.frame;
@@ -173,33 +221,138 @@
     int lastIndex = 0;
     int barWidth = 20;
     int width = nudgebuddiesBar.frame.size.height;
+    int notificationTmp = 0;
+    
     for (int i=(int)center.notificationArray.count-1; i>=0; i--) {
         Nudger *nudger = [center.notificationArray objectAtIndex:i];
         lastIndex ++;
         NudgeButton *nudgeBtn = [NudgeButton new];
         [self addChildViewController:nudgeBtn];
+        nudgeBtn.delegate = self;
         if (nudger.isNew) {
-            
-            if (nudgeButtonArr.count == 0) {
-                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+            notificationTmp ++;
+            if (notificationTmp > 3) {
+                [nudgebuddiesBar addSubview:nudgeBtn.view];
+                nudger.menuPos = 1;
+                [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
+                barWidth += (width + 70);
+                [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
                 [nudgeBtn initNudge:nudger notify:NO];
-                nudgeBtn.index = 1;
-                [nudgeButtonArr addObject:nudgeBtn];
-            } else if (nudgeButtonArr.count == 1) {
-                NudgeButton *oldBtn = [nudgeButtonArr objectAtIndex:0];
-                if (oldBtn.) {
-                    <#statements#>
+            } else {
+                nudger.menuPos = 0;
+                if (nudgeButtonArr.count == 0) {
+                    [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+                    [notificationView addSubview:nudgeBtn.view];
+                    [nudgeBtn initNudge:nudger notify:YES];
+                    nudgeBtn.index = 0;
+                    [nudgeButtonArr addObject:nudgeBtn];
+                } else if (nudgeButtonArr.count == 1) {
+                    NudgeButton *oldBtn = [nudgeButtonArr objectAtIndex:0];
+                    if (oldBtn.userInfo.user.ID == nudger.user.ID || [oldBtn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
+                        [oldBtn initNudge:nudger notify:YES];
+                    } else {
+                        [notificationView addSubview:nudgeBtn.view];
+                        [nudgeBtn.view setHidden:YES];
+                        [nudgeButtonArr addObject:nudgeBtn];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [oldBtn.view setFrame:CGRectMake(15, 0, width, width)];
+                        } completion:^(BOOL complete) {
+                            [UIView animateWithDuration:0.3 animations:^(void){
+                                [nudgeBtn initNudge:nudger notify:YES];
+                                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+                                [nudgeBtn.view setHidden:NO];
+                            }];
+                        }];
+                    }
+                } else if (nudgeButtonArr.count == 2) {
+                    NudgeButton *old1Btn = [nudgeButtonArr objectAtIndex:0];
+                    NudgeButton *old2Btn = [nudgeButtonArr objectAtIndex:1];
+                    if (old1Btn.userInfo.user.ID == nudger.user.ID || [old1Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
+                        nudgeButtonArr = [NSMutableArray arrayWithObjects:old2Btn, old1Btn, nil];
+                        [old1Btn initNudge:nudger notify:YES];
+                        [old1Btn.view setFrame:CGRectMake(112, 0, width, width)];
+                        [old1Btn.view setHidden:YES];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old2Btn.view setFrame:CGRectMake(15, 0, width, width)];
+                        } completion:^(BOOL complete) {
+                            [UIView animateWithDuration:0.3 animations:^(void){
+                                [old1Btn.view setHidden:NO];
+                            }];
+                        }];
+                    } else if (old2Btn.userInfo.user.ID == nudger.user.ID || [old2Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
+                        [old2Btn initNudge:nudger notify:YES];
+                    } else {
+                        [notificationView addSubview:nudgeBtn.view];
+                        [nudgeBtn.view setHidden:YES];
+                        [nudgeButtonArr addObject:nudgeBtn];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old2Btn.view setFrame:CGRectMake(211, 0, width, width)];
+                        } completion:^(BOOL complete) {
+                            [UIView animateWithDuration:0.3 animations:^(void){
+                                [nudgeBtn initNudge:nudger notify:YES];
+                                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+                                [nudgeBtn.view setHidden:NO];
+                            }];
+                        }];
+                    }
+                } else if (nudgeButtonArr.count == 3) {
+                    NudgeButton *old1Btn = [nudgeButtonArr objectAtIndex:0];
+                    NudgeButton *old2Btn = [nudgeButtonArr objectAtIndex:1];
+                    NudgeButton *old3Btn = [nudgeButtonArr objectAtIndex:2];
+                    if (old1Btn.userInfo.user.ID == nudger.user.ID || [old1Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
+                        nudgeButtonArr = [NSMutableArray arrayWithObjects:old2Btn, old3Btn, old1Btn, nil];
+                        [old1Btn initNudge:nudger notify:YES];
+                        [old1Btn.view setFrame:CGRectMake(112, 0, width, width)];
+                        [old1Btn.view setHidden:YES];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old2Btn.view setFrame:CGRectMake(15, 0, width, width)];
+                        } completion:^(BOOL complete) {
+                            [UIView animateWithDuration:0.3 animations:^(void){
+                                [old1Btn.view setHidden:NO];
+                            }];
+                        }];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old3Btn.view setFrame:CGRectMake(211, 0, width, width)];
+                        } completion:nil];
+                    } else if (old2Btn.userInfo.user.ID == nudger.user.ID || [old2Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
+                        nudgeButtonArr = [NSMutableArray arrayWithObjects:old1Btn, old3Btn, old2Btn, nil];
+                        [old2Btn initNudge:nudger notify:YES];
+                        [old2Btn.view setFrame:CGRectMake(112, 0, width, width)];
+                        [old2Btn.view setHidden:YES];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old3Btn.view setFrame:CGRectMake(211, 0, width, width)];
+                        } completion:^(BOOL complete) {
+                            [UIView animateWithDuration:0.3 animations:^(void){
+                                [old2Btn.view setHidden:NO];
+                            }];
+                        }];
+                    } else if (old3Btn.userInfo.user.ID == nudger.user.ID || [old3Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
+                        [old3Btn initNudge:nudger notify:YES];
+                    } else {
+                        NudgeButton *old1Btn = [nudgeButtonArr objectAtIndex:0];
+                        NudgeButton *old2Btn = [nudgeButtonArr objectAtIndex:1];
+                        NudgeButton *old3Btn = [nudgeButtonArr objectAtIndex:2];
+                        [notificationView addSubview:nudgeBtn.view];
+                        [nudgeBtn.view setHidden:YES];
+                        nudgeButtonArr = [NSMutableArray arrayWithObjects:old2Btn, old3Btn, nudgeBtn, nil];
+                        [old1Btn.view removeFromSuperview];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old2Btn.view setFrame:CGRectMake(15, 0, width, width)];
+                        } completion:^(BOOL complete) {
+                            [UIView animateWithDuration:0.3 animations:^(void){
+                                [nudgeBtn initNudge:nudger notify:YES];
+                                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
+                                [nudgeBtn.view setHidden:NO];
+                            }];
+                        }];
+                        [UIView animateWithDuration:0.3 animations:^(){
+                            [old3Btn.view setFrame:CGRectMake(211, 0, width, width)];
+                        } completion:nil];
+                    }
                 }
-                [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
-                [nudgeBtn initNudge:nudger notify:NO];
-                nudgeBtn.index = 0;
-                [nudgeButtonArr addObject:nudgeBtn];
-            } else if (nudgeButtonArr.count == 2) {
-                
-            } else if (nudgeButtonArr.count == 3) {
-                
             }
         } else {
+            nudger.menuPos = 1;
             [nudgebuddiesBar addSubview:nudgeBtn.view];
             [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
             barWidth += (width + 70);
@@ -216,53 +369,81 @@
 }
 ///// --------- contact list ----------- /////////////////////////////////////////////////////////////////////////
 - (void)chatDidReceiveContactAddRequestFromUser:(NSUInteger)userID {
-    
+    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
+        NSLog(@"--------Got add contact request from   %lu ---------", userID);
+        Nudger *newUser = [[Nudger alloc] initWithUser:user];
+        newUser.isNew = YES;
+        newUser.status = NSInvited;
+//        [center.contactArray addObject:newUser];
+        [center.notificationArray addObject:newUser];
+        [center sort];
+        [self refreshUI];
+    } errorBlock:^(QBResponse *response) {
+        NSLog(@"Err: loading pending users");
+    }];
 }
 
 - (void)chatContactListDidChange:(QB_NONNULL QBContactList *)contactList {
-    
+    NSLog(@"--------chatContactListDidChange--------- %@", contactList);
 }
 
 - (void)chatDidReceiveContactItemActivity:(NSUInteger)userID isOnline:(BOOL)isOnline status:(QB_NULLABLE NSString *)status {
-    
+    NSLog(@"--------chatDidReceiveContactItemActivity--------- %lu", userID);
 }
 
 - (void)chatDidReceiveAcceptContactRequestFromUser:(NSUInteger)userID {
-    
+    NSLog(@"--------chatDidReceiveAcceptContactRequestFromUser--------- %lu", userID);
+    [[[UIAlertView alloc] initWithTitle:@"Alert" message:[NSString stringWithFormat:@"Your add contact request (ID:%lu is accepted!", userID] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+    [center refresh];
+    [self refreshUI];
 }
 
 - (void)chatDidReceiveRejectContactRequestFromUser:(NSUInteger)userID {
-    
+    NSLog(@"--------chatDidReceiveRejectContactRequestFromUser--------- %lu", userID);
+    [[[UIAlertView alloc] initWithTitle:@"Alert" message:[NSString stringWithFormat:@"Your add contact request (ID:%lu is rejected!", userID] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
 }
 
 #pragma mark - Menu
 ///// --------- Menu Views ----------- /////////////////////////////////////////////////////////////////////////
 - (void)onMenuClose {
-    [UIView animateWithDuration:0.5 animations:^(void){
-        [menuView setHidden:NO];
-    }];
+    [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [menuView setHidden:YES];
+    } completion:nil];
 }
 
-- (void)onNudgeClicked:(Nudger *)nudger index:(int)index {
+- (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect {
     [self hideSetting];
     [self onGroupClose:nil];
     [self onProfileClose:nil];
     [self onSearchDone];
     [self onAutoClose:nil];
     [self onAddClose:nil];
+
     CGSize size = [menuCtrl createMenu:nudger];
-    Menu *menu = [center getMenu:index];
-    [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height)];
+    Menu *menu = [center getMenu:rect menuSize:size];
+    if (nudger.menuPos == 0) {
+        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y + notificationView.frame.origin.y, size.width, size.height+15)];
+    } else if (nudger.menuPos == 1) {
+        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y + nudgebuddiesBar.frame.origin.y, size.width, size.height+15)];
+    } else {
+        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
+    }
     UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
-    [triImg setFrame:CGRectMake(menu.triPoint.x, menu.triPoint.y, triImg.frame.size.width, triImg.frame.size.height)];
-    if (menu.triDirection) [triImg setImage:[UIImage imageNamed:@"menu-tri"]];
-    else [triImg setImage:[UIImage imageNamed:@"menu-tri-down"]];
-    [UIView animateWithDuration:0.5 animations:^(void){
+    if (menu.triDirection) {
+        [triImg setImage:[UIImage imageNamed:@"menu-tri"]];
+        [menuCtrl.view setFrame:CGRectMake(0, triImg.frame.size.height, size.width, size.height)];
+        [triImg setFrame:CGRectMake(menu.triPoint.x, 0, triImg.frame.size.width, triImg.frame.size.height)];
+    } else {
+        [triImg setImage:[UIImage imageNamed:@"menu-tri-down"]];
+        [menuCtrl.view setFrame:CGRectMake(0, 0, size.width, size.height)];
+        [triImg setFrame:CGRectMake(menu.triPoint.x, size.height, triImg.frame.size.width, triImg.frame.size.height)];
+    }
+    [UIView transitionWithView:self.view duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [menuView setHidden:NO];
-    }];
+    } completion:nil];
 }
 
-- (void)onMenuClicked:(MenuReturn)menuReturn {
+- (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger{
     [self onMenuClose];
     if (menuReturn == MRNudge) {
         
@@ -290,6 +471,16 @@
         
     } else if (menuReturn == MRViewGroup) {
         
+    } else if (menuReturn == MRAdd) {
+        [[QBChat instance] confirmAddContactRequest:nudger.user.ID completion:^(NSError * _Nullable error) {
+            [center refresh];
+            [self refreshUI];
+        }];
+    } else if (menuReturn == MRReject) {
+        [[QBChat instance] rejectAddContactRequest:nudger.user.ID completion:^(NSError * _Nullable error) {
+            [center refresh];
+            [self refreshUI];
+        }];
     }
 }
 
@@ -304,7 +495,7 @@
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         [profileBtn setBackgroundImage:newImage forState:UIControlStateNormal];
-        profileImgData = UIImagePNGRepresentation(newImage);
+        profileImgData = UIImageJPEGRepresentation(newImage, 1.0f);
         g_var.profileImg = profileImgData;
         profilePictureUpdate = YES;
     } failure:^(NSError *error) {
@@ -316,7 +507,7 @@
 - (IBAction)onProfileSave:(id)sender {
     [[MBProgressHUD showHUDAddedTo:self.view animated:YES] show:YES];
     if (profilePictureUpdate) {
-        [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.png" contentType:@"image/png" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+        [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
             [g_var saveFile:g_var.profileImg uid:blob.ID];
             QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
             updateParameters.blobID = blob.ID;

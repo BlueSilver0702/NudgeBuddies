@@ -58,7 +58,7 @@
         g_var.currentUser.password = passwd.text;
         [HUD hide:YES];
         if (g_var.profileImg) {
-            [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.png" contentType:@"image/png" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+            [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
                 [g_var saveFile:g_var.profileImg uid:blob.ID];
                 QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
                 updateParameters.blobID = blob.ID;
