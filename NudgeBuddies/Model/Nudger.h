@@ -13,6 +13,8 @@
 @property (nonatomic) NudgerType type;
 @property (nonatomic) NudgerStatus status;
 @property (nonatomic) ResponseType response;
+@property (nonatomic, retain) NSString *defaultNudge;
+@property (nonatomic, retain) NSString *defaultReply;
 @property (nonatomic, retain) QBUUser *user;
 @property (nonatomic) BOOL isFavorite;
 @property (nonatomic) int favCount;

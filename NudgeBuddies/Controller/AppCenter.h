@@ -26,6 +26,7 @@
 @property (nonatomic, retain) NSMutableArray *contactsArray;
 
 @property (nonatomic, retain) QBUUser *currentUser;
+@property (nonatomic, retain) Nudger *currentNudger;
 
 @property(weak) id <AppCenterDelegate> delegate;
 

@@ -28,8 +28,22 @@
     IBOutlet UIView *initControlView;
     
     // group pages
-    IBOutlet UIView *autoView;
+    IBOutlet UIView *groupSelectView;
     IBOutlet UIView *groupView;
+    IBOutlet UITextField *groupNudgeTxt;
+    IBOutlet UITextField *groupAcknowledgeTxt;
+    IBOutlet UITextField *groupNameTxt;
+    IBOutlet UIButton *groupPicBtn;
+    IBOutlet UILabel *groupNameLab;
+    IBOutlet UIButton *groupNudgeBtn;
+    IBOutlet UIButton *groupRumbleBtn;
+    IBOutlet UIButton *groupSilentBtn;
+    IBOutlet UIButton *groupAnnoyBtn;
+    IBOutlet UIScrollView *groupContactScr;
+    IBOutlet UIButton *groupFavBtn;
+    Nudger *openGroup;
+    NSData *groupPicData;
+    BOOL groupPicUpdate;
     
     // favorite page
     CGRect rectFav1, rectFav2, rectFav3, rectFav4, rectFav5;
@@ -67,6 +81,15 @@
     // add nudgers page
     IBOutlet UIView *addView;
     
+    // start page
+    IBOutlet UIView *startView;
+    IBOutlet UIButton *startNudgeBtn;
+    IBOutlet UIButton *startRumbleBtn;
+    IBOutlet UIButton *startSilentBtn;
+    IBOutlet UITextField *startNudgeTxt;
+    IBOutlet UITextField *startAcknowledgeTxt;
+    NSInteger startTag;
+    
     // menus module
     MenuController *menuCtrl;
     IBOutlet UIView *menuView;
@@ -78,7 +101,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+   
+    iPH = [[UIImagePickerHelper alloc] init];
     // **********  setting page  ************
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     settingCtrl = (SettingController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"settingCtrl"];
@@ -122,7 +146,10 @@
     // **********  group module  ************
     groupView.hidden = YES;
     profileView.hidden = YES;
-    autoView.hidden = YES;
+    groupSelectView.hidden = YES;
+    
+    // **********  start module  ************
+    startView.hidden = YES;
     
     // **********  init module  ************
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -199,6 +226,9 @@
     }];
     if ([QBChat instance].contactList.contacts.count == 0) {
         [HUD hide:YES];
+    }
+    if (currentUser.customData == nil) {
+        [self onStartOpen];
     }
 }
 
@@ -403,12 +433,7 @@
 }
 
 - (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect {
-    [self hideSetting];
-    [self onGroupClose:nil];
-    [self onProfileClose:nil];
-    [self onSearchDone];
-    [self onAutoClose:nil];
-    [self onAddClose:nil];
+    [self hide:VTMenu];
 
     if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
         [self onMenuClose];
@@ -511,7 +536,6 @@
 #pragma mark - profile
 ///// --------- edit profile ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onPhoto:(id)sender {
-    iPH = [[UIImagePickerHelper alloc] init];
     [iPH imagePickerInView:self WithSuccess:^(UIImage *image) {
         CGSize newSize = CGSizeMake(RESIZE_WIDTH, RESIZE_HEIGHT);
         UIGraphicsBeginImageContext(newSize);
@@ -597,12 +621,7 @@
 #pragma mark - setting
 ///// --------- setting Views ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onSettingOpen:(id)sender {
-    [self onGroupClose:nil];
-    [self onAutoClose:nil];
-    [self onProfileClose:nil];
-    [self onSearchDone];
-    [self onAddClose:nil];
-    [self onMenuClose];
+    [self hide:VTSetting];
     UIButton *senderBtn = (UIButton *)sender;
     if (senderBtn.tag == 2) {
         [settingCtrl initView:YES];
@@ -633,11 +652,7 @@
         [settingCoverView setHidden:YES];
     }];
     if (status == 1) {
-        [self onGroupClose:nil];
-        [self onAutoClose:nil];
-        [self onSearchDone];
-        [self onAddClose:nil];
-        [self onMenuClose];
+        [self hide:VTProfile];
         if (profileView.hidden == NO) {
             [self onProfileClose:nil];
         }
@@ -672,12 +687,7 @@
 - (void)textFieldDidChange:(UITextField *)textField {
     NSLog(@"changed");
     searchView.hidden = NO;
-    [self hideSetting];
-    [self onGroupClose:nil];
-    [self onAutoClose:nil];
-    [self onProfileClose:nil];
-    [self onAddClose:nil];
-    [self onMenuClose];
+    [self hide:VTSearch];
     int size = [searchCtrl searchResult:textField.text];
     [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
     [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -692,12 +702,7 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     searchView.hidden = NO;
     int size = [searchCtrl searchResult:textField.text];
-    [self hideSetting];
-    [self onGroupClose:nil];
-    [self onAutoClose:nil];
-    [self onProfileClose:nil];
-    [self onAddClose:nil];
-    [self onMenuClose];
+    [self hide:VTSearch];
     [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
     [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
@@ -713,12 +718,7 @@
 #pragma mark - Add Friend
 ///// --------- Add Friend ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onAddOpen:(id)sender {
-    [self hideSetting];
-    [self onGroupClose:nil];
-    [self onProfileClose:nil];
-    [self onSearchDone];
-    [self onAutoClose:nil];
-    [self onMenuClose];
+    [self hide:VTAdd];
     if (addView.hidden == NO) {
         [self onAddClose:nil];
         return;
@@ -738,43 +738,39 @@
     }
 }
 
-#pragma mark - Auto Group
+#pragma mark - Select Group Group
 ///// --------- Auto Group view ----------- /////////////////////////////////////////////////////////////////////////
-- (IBAction)onAutoOpen:(id)sender {
-    [self hideSetting];
-    [self onGroupClose:nil];
-    [self onProfileClose:nil];
-    [self onSearchDone];
-    [self onAddClose:nil];
-    [self onMenuClose];
-    if (autoView.hidden == NO) {
-        [self onAutoClose:nil];
+- (IBAction)onGroupSelectOpen:(id)sender {
+    [self hide:VTAuto];
+    if (groupSelectView.hidden == NO) {
+        [self onGroupSelectClose:nil];
         return;
     }
-    [UIView transitionWithView:autoView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        autoView.hidden = NO;
+    [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        groupSelectView.hidden = NO;
     } completion:nil];
 }
 
-- (IBAction)onAutoClose:(id)sender {
-    [UIView transitionWithView:autoView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        autoView.hidden = YES;
+- (IBAction)onGroupSelectClose:(id)sender {
+    [UIView transitionWithView:self.view duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        groupSelectView.hidden = YES;
     } completion:nil];
+}
+
+- (IBAction)onGroupSelectSave:(id)sender {
+    
 }
 
 #pragma mark - Add Group
 ///// --------- Add Group View ----------- /////////////////////////////////////////////////////////////////////////
 - (IBAction)onGropOpen:(id)sender {
-    [self hideSetting];
-    [self onAutoClose:nil];
-    [self onProfileClose:nil];
-    [self onSearchDone];
-    [self onAddClose:nil];
-    [self onMenuClose];
+    [self hide:VTGroup];
     if (groupView.hidden == NO) {
         [self onGroupClose:nil];
         return;
     }
+    openGroup = [[Nudger alloc] initWithGroup:nil];
+    groupFavBtn.hidden = YES;
     [UIView transitionWithView:groupView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         groupView.hidden = NO;
     } completion:nil];
@@ -784,6 +780,123 @@
     [UIView transitionWithView:groupView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         groupView.hidden = YES;
     } completion:nil];
+}
+
+- (IBAction)onGroupDelete:(id)sender {
+    
+    [self onGroupSelectClose:nil];
+}
+
+- (IBAction)onGroupSave:(id)sender {
+    
+    [self onGroupSelectClose:nil];
+}
+
+- (IBAction)onGroupPic:(id)sender {
+    [iPH imagePickerInView:self WithSuccess:^(UIImage *image) {
+        CGSize newSize = CGSizeMake(RESIZE_WIDTH, RESIZE_HEIGHT);
+        UIGraphicsBeginImageContext(newSize);
+        [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+        UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [groupPicBtn setImage:newImage forState:UIControlStateNormal];
+        groupPicData = UIImageJPEGRepresentation(newImage, 1.0f);
+        groupPicUpdate = YES;
+    } failure:^(NSError *error) {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+    }];
+}
+
+- (IBAction)onGroupFav:(id)sender {
+    groupFavBtn.hidden = YES;
+    openGroup.isFavorite = NO;
+}
+
+- (IBAction)onGroupFavEmp:(id)sender {
+    groupFavBtn.hidden = NO;
+    openGroup.isFavorite = YES;
+}
+
+- (IBAction)onGroupNudge:(id)sender {
+    UIButton *senderBtn = (UIButton *)sender;
+    [groupNudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
+    [groupRumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
+    [groupSilentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent"] forState:UIControlStateNormal];
+    [groupAnnoyBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-annoy"] forState:UIControlStateNormal];
+    if (senderBtn.tag == 4) {
+        [groupAnnoyBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-annoy-active"] forState:UIControlStateNormal];
+        openGroup.response = RTAnnoy;
+    } else if (senderBtn.tag == 3) {
+        [groupSilentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent-active"] forState:UIControlStateNormal];
+        openGroup.response = RTSilent;
+    } else if (senderBtn.tag == 2) {
+        [groupRumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-active"] forState:UIControlStateNormal];
+        openGroup.response = RTRumble;
+    } else {
+        [groupNudgeBtn setImage:[UIImage imageNamed:@"icon-nudge-active"] forState:UIControlStateNormal];
+        openGroup.response = RTNudge;
+    }
+}
+
+#pragma mark - Add Start
+///// --------- Add Start View ----------- /////////////////////////////////////////////////////////////////////////
+- (void)onStartOpen {
+    [UIView transitionWithView:self.view duration:1.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        startView.hidden = NO;
+    } completion:nil];
+}
+
+- (IBAction)onStartClose:(id)sender {
+    [UIView transitionWithView:self.view duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        startView.hidden = YES;
+    } completion:nil];
+}
+
+- (IBAction)onStartSave:(id)sender {
+    [UIView transitionWithView:self.view duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        startView.hidden = YES;
+    } completion:nil];
+    if (startTag == 1) {
+        g_center.currentNudger.response = RTNudge;
+    } else if (startTag == 2) {
+        g_center.currentNudger.response = RTRumble;
+    } else if (startTag == 3) {
+        g_center.currentNudger.response = RTSilent;
+    }
+    g_center.currentNudger.defaultNudge = startNudgeTxt.text;
+    g_center.currentNudger.defaultReply = startAcknowledgeTxt.text;
+    
+    [g_var saveLocalVal:g_center.currentNudger.response key:USER_RESPONSE];
+    [g_var saveLocalStr:g_center.currentNudger.defaultNudge key:USER_NUDGE];
+    [g_var saveLocalStr:g_center.currentNudger.defaultReply key:USER_ACKNOWLEDGE];
+}
+
+- (IBAction)onStartNudge:(id)sender {
+    UIButton *senderBtn = (UIButton *)sender;
+    startTag = senderBtn.tag;
+    [startNudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
+    [startRumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
+    [startSilentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent"] forState:UIControlStateNormal];
+    if (senderBtn.tag == 3) {
+        [startSilentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent-active"] forState:UIControlStateNormal];
+    } else if (senderBtn.tag == 2) {
+        [startRumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-active"] forState:UIControlStateNormal];
+    } else {
+        [startNudgeBtn setImage:[UIImage imageNamed:@"icon-nudge-active"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)hide:(ViewTag)viewTag {
+    if (viewTag != VTSetting) [self hideSetting];
+//    if (viewTag != VTAuto) [self on];
+    if (viewTag != VTProfile) [self onProfileClose:nil];
+    if (viewTag != VTSearch) [self onSearchClose:nil];
+    if (viewTag != VTAdd) [self onAddClose:nil];
+    if (viewTag != VTMenu) [self onMenuClose];
+    if (viewTag != VTStart) [self onStartClose:nil];
+    if (viewTag != VTGroup) [self onGroupClose:nil];
+    if (viewTag != VTGroupSelect) [self onGroupSelectClose:nil];
 }
 
 #pragma mark - iAd

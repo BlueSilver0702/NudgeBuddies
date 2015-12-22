@@ -12,7 +12,7 @@
     NSUInteger loadCount;
 }
 
-@synthesize pendingArray, contactsArray, notificationArray, favArray, currentUser;
+@synthesize pendingArray, contactsArray, notificationArray, favArray, currentUser, currentNudger;
 
 - (void)initCenter:(QBUUser *)user {
     pendingArray = [NSMutableArray new];
@@ -21,6 +21,10 @@
     favArray = [NSMutableArray new];
     
     currentUser = user;
+    currentNudger = [[Nudger alloc] initWithUser:user];
+    currentNudger.response = [g_var loadLocalVal:USER_RESPONSE];
+    currentNudger.defaultNudge = [g_var loadLocalStr:USER_NUDGE];
+    currentNudger.defaultReply = [g_var loadLocalStr:USER_ACKNOWLEDGE];
 
     [[QBChat instance] addDelegate:self];
     [[QBChat instance] connectWithUser:user  completion:^(NSError *error) {

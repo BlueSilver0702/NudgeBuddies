@@ -23,6 +23,7 @@ AppCenter *g_center;
     // Override point for customization after application launch.
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     g_var = [Global new];
+    [g_var initSet];
     g_center = [AppCenter new];
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
