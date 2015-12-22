@@ -13,13 +13,12 @@
 #import <iAd/iAd.h>
 #import <CoreMotion/CoreMotion.h>
 #import "UIImagePickerHelper.h"
-#import "NotificationCenter.h"
 
-@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, QBChatDelegate, MenuControllerDelegate, NudgeButtonDelegate>
+@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate>
 {
     // general
     QBUUser *currentUser;
-    NotificationCenter *center;
+    MBProgressHUD *HUD;
     
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
@@ -44,6 +43,7 @@
     // setting page
     SettingController *settingCtrl;
     IBOutlet UIView *settingView;
+    IBOutlet UIView *settingCoverView;
     
     // iAD page
     ADBannerView *bannerView;
@@ -85,6 +85,7 @@
     [self addChildViewController:settingCtrl];
     [settingView addSubview:settingCtrl.view];
     [settingView setFrame:CGRectMake(0, settingView.frame.size.height*(-1), settingView.frame.size.width, settingView.frame.size.height)];
+    [settingCoverView setHidden:YES];
     settingCtrl.delegate = self;
     
     // **********  iAD module  ************
@@ -123,82 +124,52 @@
     profileView.hidden = YES;
     autoView.hidden = YES;
     
-    currentUser = g_var.currentUser;
-    if (currentUser == nil) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *loginEmail = (NSString *)[userDefaults objectForKey:@"email"];
-        NSString *loginPwd = (NSString *)[userDefaults objectForKey:@"pwd"];
-        
-        nudgebuddiesBar.hidden = YES;
-        notificationView.hidden = YES;
-        initFavView.hidden = YES;
-        [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y - initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
-        [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y + initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
-        
-        MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [HUD setMode:MBProgressHUDModeIndeterminate];
-        [HUD setDetailsLabelText:@"Logging in..."];
-        [HUD show:YES];
-        
-        [QBRequest logInWithUserEmail:loginEmail password:loginPwd successBlock:^(QBResponse *response, QBUUser *user) {
-            // Success, do something
-            g_var.currentUser = user;
-            g_var.currentUser.password = loginPwd;
-            [self initNudge];
-            [[QBChat instance] addDelegate:self];
-            [HUD hide:YES];
-            [UIView animateWithDuration:0.5 animations:^(){
-                nudgebuddiesBar.hidden = NO;
-                notificationView.hidden = NO;
-                initFavView.hidden = NO;
-                [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y + initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
-                [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y - initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
-                
-            }];
-        } errorBlock:^(QBResponse *response) {
-            // error handling
-            NSLog(@"error: %@", response.error);
-            [HUD hide:YES];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertView show];
-        }];
-    } else {
-        [self initNudge];
-        [[QBChat instance] addDelegate:self];
-    }
+    // **********  init module  ************
+    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [HUD setMode:MBProgressHUDModeIndeterminate];
+    [HUD show:YES];
+    
+    [g_center setDelegate:self];
+    nudgebuddiesBar.hidden = YES;
+    notificationView.hidden = YES;
+    initFavView.hidden = YES;
+    [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y - initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
+    [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y + initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
+    
+    nudgeButtonArr = [NSMutableArray new];
 }
 
-- (void) initNudge {
+- (void) initLogger {
     // **********  favorite module  ************
-    rectFav1 = user1.frame;
-    rectFav2 = user2.frame;
-    rectFav3 = user3.frame;
-    rectFav4 = user4.frame;
-    rectFav5 = user5.frame;
-    motionManager = [CMMotionManager new];
-    motionManager.accelerometerUpdateInterval = .05;
-    motionManager.gyroUpdateInterval = .05;
-    [motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
-        [self outputAccelerometer:accelerometerData.acceleration];
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }];
+//    rectFav1 = user1.frame;
+//    rectFav2 = user2.frame;
+//    rectFav3 = user3.frame;
+//    rectFav4 = user4.frame;
+//    rectFav5 = user5.frame;
+//    motionManager = [CMMotionManager new];
+//    motionManager.accelerometerUpdateInterval = .05;
+//    motionManager.gyroUpdateInterval = .05;
+//    [motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
+//        [self outputAccelerometer:accelerometerData.acceleration];
+//        if (error) {
+//            NSLog(@"%@", error);
+//        }
+//    }];
     
     // **********  profile module  ************
-    NSData *profileData = [g_var loadFile:g_var.currentUser.ID];
-    uname.text = g_var.currentUser.fullName;
-    email.text = g_var.currentUser.email;
+    NSData *profileData = [g_var loadFile:currentUser.ID];
+    uname.text = currentUser.fullName;
+    email.text = currentUser.email;
     [email setEnabled:NO];
-    passwd.text = g_var.currentUser.password;
+    passwd.text = currentUser.password;
     if (profileData) {
         [profileBtn setBackgroundImage:[UIImage imageWithData:profileData] forState:UIControlStateNormal];
     } else {
-        NSData *imgData = [g_var loadFile:g_var.currentUser.blobID];
+        NSData *imgData = [g_var loadFile:currentUser.blobID];
         if (imgData) {
             [profileBtn setBackgroundImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
         } else {
-            [QBRequest downloadFileWithID:g_var.currentUser.blobID successBlock:^(QBResponse *response, NSData *fileData) {
+            [QBRequest downloadFileWithID:g_center.currentUser.blobID successBlock:^(QBResponse *response, NSData *fileData) {
                 UIImage *img = [UIImage imageWithData:fileData];
                 [profileBtn setBackgroundImage:img forState:UIControlStateNormal];
                 NSLog(@"profile loaded");
@@ -209,22 +180,81 @@
             }];
         }
     }
-    
-    // **********  chat module  ************
-    nudgeButtonArr = [NSMutableArray new];
-    center = [NotificationCenter new];
-    [center initCenter];
-    [self refreshUI];
 }
 
-- (void) refreshUI {
+#pragma mark - App Center
+- (void)onceConnect {
+    currentUser = g_center.currentUser;
+    __weak typeof(self) weakSelf = self;
+    if (currentUser != nil) {
+        [self initLogger];
+        [weakSelf registerForRemoteNotifications];
+    }
+    [UIView animateWithDuration:0.5 animations:^(){
+        nudgebuddiesBar.hidden = NO;
+        notificationView.hidden = NO;
+        initFavView.hidden = NO;
+        [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y + initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
+        [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y - initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
+    }];
+    if ([QBChat instance].contactList.contacts.count == 0) {
+        [HUD hide:YES];
+    }
+}
+
+- (void)startLoadContactList {
+    [HUD show:YES];
+    [HUD setMode:MBProgressHUDModeIndeterminate];
+    [HUD setDetailsLabelText:@"Loading contacts..."];
+}
+
+- (void)onceLoadedContactList {
+    [HUD hide:YES];
+    [self display];
+}
+
+- (void)onceAddedContact:(Nudger *)nudger {
+    [self display];
+}
+
+- (void)onceRemovedContact:(Nudger *)nudger {
+    [self display];
+}
+
+- (void)onceAccepted:(NSUInteger)fromID {
+    [self display];
+}
+
+- (void)onceRejected:(NSUInteger)fromID {
+    NSLog(@"You're rejected.");
+}
+
+- (void)registerForRemoteNotifications{
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+    else{
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+    }
+#else
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+#endif
+}
+
+- (void) display {
     int lastIndex = 0;
-    int barWidth = 20;
+    int barWidth = 0;
     int width = nudgebuddiesBar.frame.size.height;
     int notificationTmp = 0;
     
-    for (int i=(int)center.notificationArray.count-1; i>=0; i--) {
-        Nudger *nudger = [center.notificationArray objectAtIndex:i];
+    [[nudgebuddiesBar subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    for (int i=(int)g_center.notificationArray.count-1; i>=0; i--) {
+        Nudger *nudger = [g_center.notificationArray objectAtIndex:i];
         lastIndex ++;
         NudgeButton *nudgeBtn = [NudgeButton new];
         [self addChildViewController:nudgeBtn];
@@ -355,57 +385,18 @@
             nudger.menuPos = 1;
             [nudgebuddiesBar addSubview:nudgeBtn.view];
             [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
-            barWidth += (width + 70);
+            barWidth += 70;
             [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
             [nudgeBtn initNudge:nudger notify:NO];
         }
     }
 }
 
-#pragma mark - Chat Module
-///// --------- msg list ----------- /////////////////////////////////////////////////////////////////////////
-- (void)chatRoomDidReceiveMessage:(QB_NONNULL QBChatMessage *)message fromDialogID:(QB_NONNULL NSString *)dialogID {
-    
-}
-///// --------- contact list ----------- /////////////////////////////////////////////////////////////////////////
-- (void)chatDidReceiveContactAddRequestFromUser:(NSUInteger)userID {
-    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
-        NSLog(@"--------Got add contact request from   %lu ---------", userID);
-        Nudger *newUser = [[Nudger alloc] initWithUser:user];
-        newUser.isNew = YES;
-        newUser.status = NSInvited;
-//        [center.contactArray addObject:newUser];
-        [center.notificationArray addObject:newUser];
-        [center sort];
-        [self refreshUI];
-    } errorBlock:^(QBResponse *response) {
-        NSLog(@"Err: loading pending users");
-    }];
-}
-
-- (void)chatContactListDidChange:(QB_NONNULL QBContactList *)contactList {
-    NSLog(@"--------chatContactListDidChange--------- %@", contactList);
-}
-
-- (void)chatDidReceiveContactItemActivity:(NSUInteger)userID isOnline:(BOOL)isOnline status:(QB_NULLABLE NSString *)status {
-    NSLog(@"--------chatDidReceiveContactItemActivity--------- %lu", userID);
-}
-
-- (void)chatDidReceiveAcceptContactRequestFromUser:(NSUInteger)userID {
-    NSLog(@"--------chatDidReceiveAcceptContactRequestFromUser--------- %lu", userID);
-    [[[UIAlertView alloc] initWithTitle:@"Alert" message:[NSString stringWithFormat:@"Your add contact request (ID:%lu is accepted!", userID] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-    [center refresh];
-    [self refreshUI];
-}
-
-- (void)chatDidReceiveRejectContactRequestFromUser:(NSUInteger)userID {
-    NSLog(@"--------chatDidReceiveRejectContactRequestFromUser--------- %lu", userID);
-    [[[UIAlertView alloc] initWithTitle:@"Alert" message:[NSString stringWithFormat:@"Your add contact request (ID:%lu is rejected!", userID] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-}
-
 #pragma mark - Menu
 ///// --------- Menu Views ----------- /////////////////////////////////////////////////////////////////////////
 - (void)onMenuClose {
+    [nudgebuddiesBar setScrollEnabled:YES];
+    menuCtrl.isOpen = NO;
     [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [menuView setHidden:YES];
     } completion:nil];
@@ -419,14 +410,24 @@
     [self onAutoClose:nil];
     [self onAddClose:nil];
 
+    if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
+        [self onMenuClose];
+        return;
+    }
+    menuCtrl.isOpen = YES;
+    [nudgebuddiesBar setScrollEnabled:NO];
     CGSize size = [menuCtrl createMenu:nudger];
-    Menu *menu = [center getMenu:rect menuSize:size];
+    CGRect newRect;
     if (nudger.menuPos == 0) {
-        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y + notificationView.frame.origin.y, size.width, size.height+15)];
-    } else if (nudger.menuPos == 1) {
-        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y + nudgebuddiesBar.frame.origin.y, size.width, size.height+15)];
+        newRect = CGRectMake(rect.origin.x, rect.origin.y+notificationView.frame.origin.y, rect.size.width, rect.size.height);
     } else {
+        newRect = CGRectMake(rect.origin.x, rect.origin.y+nudgebuddiesBar.frame.origin.y, rect.size.width, rect.size.height);
+    }
+    Menu *menu = [self getMenu:newRect menuSize:size];
+    if (nudger.menuPos == 0) {
         [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
+    } else {
+        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y-15, size.width, size.height+15)];
     }
     UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
     if (menu.triDirection) {
@@ -445,6 +446,7 @@
 
 - (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger{
     [self onMenuClose];
+    menuCtrl.isOpen = NO;
     if (menuReturn == MRNudge) {
         
     } else if (menuReturn == MRRumble) {
@@ -473,15 +475,37 @@
         
     } else if (menuReturn == MRAdd) {
         [[QBChat instance] confirmAddContactRequest:nudger.user.ID completion:^(NSError * _Nullable error) {
-            [center refresh];
-            [self refreshUI];
+            [g_center add:nudger];
         }];
     } else if (menuReturn == MRReject) {
         [[QBChat instance] rejectAddContactRequest:nudger.user.ID completion:^(NSError * _Nullable error) {
-            [center refresh];
-            [self refreshUI];
+            [g_center remove:nudger];
         }];
     }
+}
+
+- (Menu *)getMenu:(CGRect)frame menuSize:(CGSize)size{
+    Menu *menu = [Menu new];
+    if (frame.origin.y > 568/2.0) {
+        menu.menuPoint = CGPointMake(frame.origin.x+frame.size.width/2.0-size.width/2.0, frame.origin.y-size.height);
+        if (menu.menuPoint.x < 0) {
+            menu.menuPoint = CGPointMake(12, menu.menuPoint.y);
+        } else if (frame.origin.x + size.width > 320) {
+            menu.menuPoint = CGPointMake(320-12-size.width, menu.menuPoint.y);
+        }
+        menu.triDirection = NO;
+        menu.triPoint = CGPointMake(frame.origin.x+frame.size.width/2.0-9 - menu.menuPoint.x, frame.origin.y+frame.size.height);
+    } else {
+        menu.menuPoint = CGPointMake(frame.origin.x+frame.size.width/2.0-size.width/2.0, frame.origin.y+frame.size.height);
+        if (menu.menuPoint.x < 0) {
+            menu.menuPoint = CGPointMake(12, menu.menuPoint.y);
+        } else if (menu.menuPoint.x + size.width > 320) {
+            menu.menuPoint = CGPointMake(320-12-size.width, menu.menuPoint.y);
+        }
+        menu.triDirection = YES;
+        menu.triPoint = CGPointMake(frame.origin.x+frame.size.width/2.0-9 - menu.menuPoint.x, frame.origin.y+frame.size.height);
+    }
+    return menu;
 }
 
 #pragma mark - profile
@@ -583,6 +607,7 @@
     if (senderBtn.tag == 2) {
         [settingCtrl initView:YES];
     }
+    [settingCoverView setHidden:NO];
     if (settingView.frame.origin.y < 0) {
         [UIView transitionWithView:settingView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             [settingView setFrame:CGRectMake(0, 0, settingView.frame.size.width, settingView.frame.size.height)];        settingView.hidden = NO;
@@ -597,13 +622,16 @@
         [settingView setFrame:CGRectMake(0, settingView.frame.size.height*(-1), settingView.frame.size.width, settingView.frame.size.height)];        settingView.hidden = NO;
     } completion:^(BOOL finished){
         [settingCtrl initView:NO];
+        [settingCoverView setHidden:YES];
     }];
 }
 
 - (void)onSettingDone:(int)status {
     [UIView transitionWithView:settingView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
     [settingView setFrame:CGRectMake(0, settingView.frame.size.height*(-1), settingView.frame.size.width, settingView.frame.size.height)];
-    } completion:nil];
+    } completion:^(BOOL finished){
+        [settingCoverView setHidden:YES];
+    }];
     if (status == 1) {
         [self onGroupClose:nil];
         [self onAutoClose:nil];

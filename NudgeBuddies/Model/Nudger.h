@@ -27,6 +27,7 @@
 
 - (id)initWithUser:(QBUUser *)userInfo;
 - (id)initWithGroup:(Group *)groupInfo;
+- (BOOL)isEqualNudger:(Nudger *)newNudger;
 - (NSString *) getName;
 
 @end

@@ -54,8 +54,8 @@
     
     [QBRequest logInWithUserEmail:email.text password:passwd.text successBlock:^(QBResponse *response, QBUUser *user) {
         // Success, do something
-        g_var.currentUser = user;
-        g_var.currentUser.password = passwd.text;
+        user.password = passwd.text;
+        [g_center initCenter:user];
         [HUD hide:YES];
         if (g_var.profileImg) {
             [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {

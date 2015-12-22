@@ -19,6 +19,8 @@
 @interface MenuController : UITableViewController
 
 @property(weak) id <MenuControllerDelegate> delegate;
+@property(nonatomic, retain) Nudger *tUser;
+@property(nonatomic) BOOL isOpen;
 
 - (CGSize)createMenu:(Nudger *)nudger;
 

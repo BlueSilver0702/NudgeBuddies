@@ -20,6 +20,7 @@
 		29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59381C154A870056BB44 /* FBSDKCoreKit.framework */; };
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
+		4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB519241C271BC000EA06D5 /* AppCenter.m */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
 		CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */; };
 		CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */; };
@@ -27,7 +28,6 @@
 		CFD8EEF21C161BCE00F47D45 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */; };
 		CFF136511C1D1AC50001D351 /* Nudger.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136501C1D1AC50001D351 /* Nudger.m */; };
 		CFF136551C1D1BEE0001D351 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136541C1D1BEE0001D351 /* Group.m */; };
-		CFF136581C1D1E2C0001D351 /* NotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136571C1D1E2C0001D351 /* NotificationCenter.m */; };
 		CFF1365B1C1D201D0001D351 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF1365A1C1D201D0001D351 /* Global.m */; };
 		CFF136641C1D20300001D351 /* SigninController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF1365E1C1D20300001D351 /* SigninController.m */; };
 		CFF136651C1D20300001D351 /* SignupController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF136601C1D20300001D351 /* SignupController.m */; };
@@ -60,6 +60,8 @@
 		29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
+		4FB519231C271BC000EA06D5 /* AppCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCenter.h; path = Controller/AppCenter.h; sourceTree = "<group>"; };
+		4FB519241C271BC000EA06D5 /* AppCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppCenter.m; path = Controller/AppCenter.m; sourceTree = "<group>"; };
 		CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NudgeButton.h; path = View/NudgeButton.h; sourceTree = "<group>"; };
 		CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NudgeButton.m; path = View/NudgeButton.m; sourceTree = "<group>"; };
 		CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NudgeButton.xib; path = View/NudgeButton.xib; sourceTree = "<group>"; };
@@ -71,8 +73,6 @@
 		CFF136501C1D1AC50001D351 /* Nudger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Nudger.m; path = Model/Nudger.m; sourceTree = "<group>"; };
 		CFF136531C1D1BEE0001D351 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Group.h; path = Model/Group.h; sourceTree = "<group>"; };
 		CFF136541C1D1BEE0001D351 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Group.m; path = Model/Group.m; sourceTree = "<group>"; };
-		CFF136561C1D1E2C0001D351 /* NotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationCenter.h; path = Controller/NotificationCenter.h; sourceTree = "<group>"; };
-		CFF136571C1D1E2C0001D351 /* NotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCenter.m; path = Controller/NotificationCenter.m; sourceTree = "<group>"; };
 		CFF136591C1D201D0001D351 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Global.h; path = Controller/Global.h; sourceTree = "<group>"; };
 		CFF1365A1C1D201D0001D351 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Global.m; path = Controller/Global.m; sourceTree = "<group>"; };
 		CFF1365D1C1D20300001D351 /* SigninController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SigninController.h; path = View/SigninController.h; sourceTree = "<group>"; };
@@ -116,8 +116,8 @@
 			children = (
 				CFF136591C1D201D0001D351 /* Global.h */,
 				CFF1365A1C1D201D0001D351 /* Global.m */,
-				CFF136561C1D1E2C0001D351 /* NotificationCenter.h */,
-				CFF136571C1D1E2C0001D351 /* NotificationCenter.m */,
+				4FB519231C271BC000EA06D5 /* AppCenter.h */,
+				4FB519241C271BC000EA06D5 /* AppCenter.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -380,8 +380,8 @@
 				290C02A51C136EE40093D12A /* SearchController.m in Sources */,
 				CFF136551C1D1BEE0001D351 /* Group.m in Sources */,
 				CFF1367B1C1D7D110001D351 /* MenuController.m in Sources */,
+				4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */,
 				294891C71C0F87300086D1BE /* AppDelegate.m in Sources */,
-				CFF136581C1D1E2C0001D351 /* NotificationCenter.m in Sources */,
 				CF7D9A0E1C1F3EE30084D555 /* Menu.m in Sources */,
 				CFF136661C1D20300001D351 /* ViewController.m in Sources */,
 				CFF136731C1D208E0001D351 /* UIImage+KIAdditions.m in Sources */,
@@ -449,7 +449,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "f214ed48-ee94-4bbd-8500-79dafc0dc846";
+				PROVISIONING_PROFILE = "7e4a48e2-6925-42bc-b73c-367f04b5d085";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -488,7 +488,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "f214ed48-ee94-4bbd-8500-79dafc0dc846";
+				PROVISIONING_PROFILE = "7e4a48e2-6925-42bc-b73c-367f04b5d085";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -500,8 +500,8 @@
 			baseConfigurationReference = 3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: rami mualem (288RPPUNHU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: rami mualem (288RPPUNHU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -514,7 +514,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhs.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f214ed48-ee94-4bbd-8500-79dafc0dc846";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -524,8 +524,8 @@
 			baseConfigurationReference = 35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: rami mualem (288RPPUNHU)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: rami mualem (288RPPUNHU)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,7 +538,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhs.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f214ed48-ee94-4bbd-8500-79dafc0dc846";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

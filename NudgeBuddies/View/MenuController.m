@@ -11,13 +11,12 @@
 @interface MenuController ()
 {
     MenuType menuType;
-    Nudger *tUser;
     NSIndexPath *selectedPath;
 }
 @end
 
 @implementation MenuController
-
+@synthesize tUser;
 - (void)viewDidLoad {
     [super viewDidLoad];
     

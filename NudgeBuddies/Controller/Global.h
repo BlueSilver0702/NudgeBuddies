@@ -62,7 +62,6 @@ typedef NS_ENUM(NSInteger, MenuReturn) {
 @interface Global : NSObject
 
 @property (nonatomic, retain) NSData *profileImg;
-@property (nonatomic, retain) QBUUser *currentUser;
 
 // App Settings
 @property (nonatomic) BOOL sRemoveNudgeCount;

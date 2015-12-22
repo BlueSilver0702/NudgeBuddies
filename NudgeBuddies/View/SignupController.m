@@ -143,9 +143,8 @@
                              
                              [QBRequest logInWithUserEmail:user.email password:COMMON_PWD successBlock:^(QBResponse *response, QBUUser *user) {
                                  // Success, do something
-                                 g_var.currentUser = user;
-                                 g_var.currentUser.password = COMMON_PWD;
-                                
+                                 user.password = COMMON_PWD;
+                                 [g_center initCenter:user];
                                  [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
                                      [g_var saveFile:g_var.profileImg uid:blob.ID];
                                      QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
@@ -175,8 +174,8 @@
                              // error handling
                              [QBRequest logInWithUserEmail:user.email password:COMMON_PWD successBlock:^(QBResponse *response, QBUUser *user) {
                                  // Success, do something
-                                 g_var.currentUser = user;
-                                 g_var.currentUser.password = COMMON_PWD;
+                                 user.password = COMMON_PWD;
+                                 [g_center initCenter:user];
                                  [HUD hide:YES];
                                  [self performSegueWithIdentifier:@"segue-register" sender:nil];
                              } errorBlock:^(QBResponse *response) {

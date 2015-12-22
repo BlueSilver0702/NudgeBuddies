@@ -14,6 +14,8 @@
     IBOutlet UIButton *badgeBtn;
     IBOutlet UIImageView *noti1Img;
     IBOutlet UIImageView *noti2Img;
+    IBOutlet UILabel *nameLab;
+    BOOL isAnimating;
 }
 @end
 
@@ -23,10 +25,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [badgeBtn setHidden:YES];
-//    [noti1Img setHidden:YES];
-//    [noti2Img setHidden:YES];
+    [noti1Img setHidden:YES];
+    [noti2Img setHidden:YES];
     noti1Img.alpha = 1.0;
     noti2Img.alpha = 0.0;
+    isAnimating = NO;
     [imgBtn setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];
 }
 
@@ -36,6 +39,7 @@
         [badgeBtn setHidden:NO];
         [badgeBtn setTitle:[NSString stringWithFormat:@"%lu", userInfo.stream.count] forState:UIControlStateNormal];
     }
+    [nameLab setText:userInfo.user.fullName];
     [imgBtn setTitle:[userInfo getName] forState:UIControlStateNormal];
     if (userInfo.user.blobID > 0) {
         NSData *imgData = [g_var loadFile:userInfo.user.blobID];
@@ -55,22 +59,25 @@
     [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
     [noti1Img.layer removeAllAnimations];
     [noti2Img.layer removeAllAnimations];
-        noti1Img.alpha = 0.0f;
-        noti2Img.alpha = 0.0f;
+    noti1Img.alpha = 0.0f;
+    noti2Img.alpha = 0.0f;
+    isAnimating = NO;
 }
 
 - (void)notify {
-    [noti1Img setHidden:NO];
-    [noti2Img setHidden:NO];
-    noti2Img.alpha = 0.0f;
-    [UIView animateWithDuration:1.5 delay:0 options:(UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse) animations:^(){
-        [UIView setAnimationRepeatCount:6];
-        noti2Img.alpha = 1.0f;
-    } completion:^(BOOL success) {
+    if (!isAnimating) {
+        [noti1Img setHidden:NO];
+        [noti2Img setHidden:NO];
         noti2Img.alpha = 0.0f;
-        [self performSelector:@selector(removeNoti) withObject:nil afterDelay:20];
-    }];
-    
+        isAnimating = YES;
+        [UIView animateWithDuration:1.5 delay:0 options:(UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse) animations:^(){
+            [UIView setAnimationRepeatCount:6];
+            noti2Img.alpha = 1.0f;
+        } completion:^(BOOL success) {
+            noti2Img.alpha = 0.0f;
+            [self performSelector:@selector(removeNoti) withObject:nil afterDelay:20];
+        }];
+    }
 }
 
 - (void)removeNoti {
@@ -78,6 +85,7 @@
         noti1Img.alpha = 0.0f;
         noti2Img.alpha = 0.0f;
     }];
+    isAnimating = NO;
 }
 
 @end

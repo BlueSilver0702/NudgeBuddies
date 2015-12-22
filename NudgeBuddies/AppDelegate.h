@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class Global;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -16,3 +15,4 @@
 @end
 
 extern Global *g_var;
+extern AppCenter *g_center;

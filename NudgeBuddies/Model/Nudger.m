@@ -72,4 +72,13 @@
     return @"";
 }
 
+- (BOOL)isEqualNudger:(Nudger *)newNudger {
+    if (_user.ID == newNudger.user.ID) {
+        return YES;
+    } else if ([_group.gName isEqualToString:newNudger.group.gName]) {
+        return YES;
+    }
+    return NO;
+}
+
 @end

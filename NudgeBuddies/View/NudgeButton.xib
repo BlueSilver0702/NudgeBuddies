@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="badgeBtn" destination="TMe-rb-T8W" id="XCW-9T-ETa"/>
                 <outlet property="imgBtn" destination="PBX-1m-BIz" id="e0u-Kp-cbc"/>
+                <outlet property="nameLab" destination="336-gV-bEY" id="3NA-3a-L6B"/>
                 <outlet property="noti1Img" destination="Zc4-hw-GpT" id="3Ht-3H-BuD"/>
                 <outlet property="noti2Img" destination="eky-M9-QUl" id="QvS-2f-Re4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -53,6 +54,12 @@
                         <action selector="onNudgeSelected:" destination="-1" eventType="touchUpInside" id="voa-Il-8jI"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Dennis Chow" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="336-gV-bEY">
+                    <rect key="frame" x="0.0" y="72" width="96" height="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>

@@ -56,7 +56,7 @@
                 [QBRequest usersWithExtendedRequest:filters page:[QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:10] successBlock:^(QBResponse *response, QBGeneralResponsePage *page, NSArray *users) {
                     dataArr = [NSMutableArray new];
                     for (QBUUser *user in users) {
-                        if (![user.login isEqualToString:g_var.currentUser.login]) {
+                        if (![user.login isEqualToString:g_center.currentUser.login]) {
                             [dataArr addObject:user];
                         }
                     }

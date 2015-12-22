@@ -1,21 +1,23 @@
 //
-//  NotificationCenter.h
+//  AppCenter.h
 //  NudgeBuddies
 //
-//  Created by Hans Adler on 13/12/15.
+//  Created by Blue Silver on 12/21/15.
 //  Copyright © 2015 Blue Silver. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @protocol AppCenterDelegate <NSObject>
 @optional
-- (void)onceLogin;
+- (void)onceConnect;
 - (void)onceLoadedContactList;
-- (Nudger *)onceLoadedContact;
+- (void)startLoadContactList;
+- (void)onceAddedContact:(Nudger *)nudger;
+- (void)onceRemovedContact:(Nudger *)nudger;
+- (void)onceAccepted:(NSUInteger)fromID;
+- (void)onceRejected:(NSUInteger)fromID;
 @end
 
-@interface NotificationCenter : NSObject <QBChatDelegate>
+@interface AppCenter : NSObject <QBChatDelegate>
 
 //@property (nonatomic) int notifyCount;
 @property (nonatomic, retain) NSMutableArray *pendingArray;
@@ -23,12 +25,14 @@
 @property (nonatomic, retain) NSMutableArray *notificationArray;
 @property (nonatomic, retain) NSMutableArray *contactsArray;
 
+@property (nonatomic, retain) QBUUser *currentUser;
+
 @property(weak) id <AppCenterDelegate> delegate;
 
-- (void)initCenter;
-- (Menu *)getMenu:(CGRect)frame menuSize:(CGSize)size;
-- (void)refresh;
-- (void)update:(Nudger *)user;
+- (void)initCenter:(QBUUser *)user;
+- (void)getContact;
+- (void)add:(Nudger *)user;
+- (void)remove:(Nudger *)user;
 - (void)sort;
 
 @end
