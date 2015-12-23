@@ -15,6 +15,7 @@
     IBOutlet UIImageView *noti1Img;
     IBOutlet UIImageView *noti2Img;
     IBOutlet UILabel *nameLab;
+    IBOutlet UIButton *favBtn;
     BOOL isAnimating;
 }
 @end
@@ -27,6 +28,7 @@
     [badgeBtn setHidden:YES];
     [noti1Img setHidden:YES];
     [noti2Img setHidden:YES];
+    [favBtn setHidden:YES];
     noti1Img.alpha = 1.0;
     noti2Img.alpha = 0.0;
     isAnimating = NO;
@@ -39,20 +41,41 @@
         [badgeBtn setHidden:NO];
         [badgeBtn setTitle:[NSString stringWithFormat:@"%lu", userInfo.stream.count] forState:UIControlStateNormal];
     }
-    [nameLab setText:userInfo.user.fullName];
-    [imgBtn setTitle:[userInfo getName] forState:UIControlStateNormal];
-    if (userInfo.user.blobID > 0) {
-        NSData *imgData = [g_var loadFile:userInfo.user.blobID];
-        if (imgData) {
-            [imgBtn setImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
-        } else {
-            [QBRequest downloadFileWithID:userInfo.user.blobID successBlock:^(QBResponse *response, NSData *fileData) {
-                [g_var saveFile:fileData uid:userInfo.user.blobID];
-                [imgBtn setImage:[UIImage imageWithData:fileData] forState:UIControlStateNormal];
-            } statusBlock:nil errorBlock:nil];
+    if (userInfo.isFavorite) {
+        [favBtn setHidden:NO];
+        [nameLab setHidden:YES];
+    }
+    if (userInfo.type == NTGroup) {
+        [nameLab setText:userInfo.group.gName];
+        [imgBtn setTitle:[userInfo getName] forState:UIControlStateNormal];
+        if (userInfo.group.gBlobID > 0) {
+            NSData *imgData = [g_var loadFile:userInfo.group.gBlobID];
+            if (imgData) {
+                [imgBtn setImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
+            } else {
+                [QBRequest downloadFileWithID:userInfo.group.gBlobID successBlock:^(QBResponse *response, NSData *fileData) {
+                    [g_var saveFile:fileData uid:userInfo.group.gBlobID];
+                    [imgBtn setImage:[UIImage imageWithData:fileData] forState:UIControlStateNormal];
+                } statusBlock:nil errorBlock:nil];
+            }
+        }
+    } else {
+        [nameLab setText:userInfo.user.fullName];
+        [imgBtn setTitle:[userInfo getName] forState:UIControlStateNormal];
+        if (userInfo.user.blobID > 0) {
+            NSData *imgData = [g_var loadFile:userInfo.user.blobID];
+            if (imgData) {
+                [imgBtn setImage:[UIImage imageWithData:imgData] forState:UIControlStateNormal];
+            } else {
+                [QBRequest downloadFileWithID:userInfo.user.blobID successBlock:^(QBResponse *response, NSData *fileData) {
+                    [g_var saveFile:fileData uid:userInfo.user.blobID];
+                    [imgBtn setImage:[UIImage imageWithData:fileData] forState:UIControlStateNormal];
+                } statusBlock:nil errorBlock:nil];
+            }
         }
     }
-    if (isNotify) [self notify];
+    
+    if (user.shouldAnimate) [self notify];
 }
 
 - (IBAction)onNudgeSelected:(id)sender {
@@ -85,6 +108,7 @@
         noti1Img.alpha = 0.0f;
         noti2Img.alpha = 0.0f;
     }];
+    userInfo.shouldAnimate = NO;
     isAnimating = NO;
 }
 

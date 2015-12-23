@@ -13,5 +13,6 @@
 @property (nonatomic) NSUInteger gID;
 @property (nonatomic, retain) NSString *gName;
 @property (nonatomic, retain) NSMutableArray *gUsers;
+@property (nonatomic) NSUInteger gBlobID;
 
 @end

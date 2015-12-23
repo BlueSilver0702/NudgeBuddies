@@ -25,6 +25,7 @@
 @property (nonatomic) BOOL silent;
 @property (nonatomic) BOOL autoNudge;
 @property (nonatomic) BOOL isNew;
+@property (nonatomic) BOOL shouldAnimate;
 @property (nonatomic) int menuPos;
 
 - (id)initWithUser:(QBUUser *)userInfo;

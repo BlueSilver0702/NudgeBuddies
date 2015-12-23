@@ -10,6 +10,7 @@
 @optional
 - (void)onceConnect;
 - (void)onceLoadedContactList;
+- (void)onceLoadedGroupList;
 - (void)startLoadContactList;
 - (void)onceAddedContact:(Nudger *)nudger;
 - (void)onceRemovedContact:(Nudger *)nudger;
@@ -24,9 +25,11 @@
 @property (nonatomic, retain) NSMutableArray *favArray;
 @property (nonatomic, retain) NSMutableArray *notificationArray;
 @property (nonatomic, retain) NSMutableArray *contactsArray;
+@property (nonatomic, retain) NSMutableArray *groupArray;
 
 @property (nonatomic, retain) QBUUser *currentUser;
 @property (nonatomic, retain) Nudger *currentNudger;
+@property (nonatomic) BOOL isNight;
 
 @property(weak) id <AppCenterDelegate> delegate;
 
@@ -35,5 +38,7 @@
 - (void)add:(Nudger *)user;
 - (void)remove:(Nudger *)user;
 - (void)sort;
+
+- (QBChatMessage *)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
 
 @end

@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NudgeButton">
             <connections>
                 <outlet property="badgeBtn" destination="TMe-rb-T8W" id="XCW-9T-ETa"/>
+                <outlet property="favBtn" destination="68b-zO-Wtx" id="26H-7I-JXp"/>
                 <outlet property="imgBtn" destination="PBX-1m-BIz" id="e0u-Kp-cbc"/>
                 <outlet property="nameLab" destination="336-gV-bEY" id="3NA-3a-L6B"/>
                 <outlet property="noti1Img" destination="Zc4-hw-GpT" id="3Ht-3H-BuD"/>
@@ -60,6 +61,15 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="68b-zO-Wtx">
+                    <rect key="frame" x="0.0" y="70" width="96" height="26"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                    <inset key="titleEdgeInsets" minX="32" minY="4" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="26" minY="4" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="1" image="fav-star">
+                        <color key="titleColor" red="0.36470588235294116" green="0.54509803921568623" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
@@ -69,6 +79,7 @@
     </objects>
     <resources>
         <image name="fav-badge" width="21" height="20"/>
+        <image name="fav-star" width="22" height="21"/>
         <image name="noti-1" width="96" height="96"/>
         <image name="noti-2" width="96" height="96"/>
     </resources>

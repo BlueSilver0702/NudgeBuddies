@@ -97,39 +97,39 @@
         if (tUser.response == RTRumble) [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-active"] forState:UIControlStateNormal];
         if (tUser.response == RTSilent) [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent-active"] forState:UIControlStateNormal];
         if (tUser.response == RTAnnoy) [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy-active"] forState:UIControlStateNormal];
-    } else if (indexPath.row == 1 && tUser.stream > 0) {
+    } else if (indexPath.row == 1 && tUser.stream.count > 0) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"view nudge stream" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-stream"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTGroup && ((indexPath.row == 2 && tUser.stream > 0) || (indexPath.row == 1 && tUser.stream == 0))) {
+    } else if (tUser.type == NTGroup && ((indexPath.row == 2 && tUser.stream.count > 0) || (indexPath.row == 1 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"View Group" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-group"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream > 0) || (indexPath.row == 2 && tUser.stream == 0))) {
+    } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"block group" forState:UIControlStateNormal];
-        [itemBtn setImage:[UIImage imageNamed:@"menu-item-bgroup"] forState:UIControlStateNormal];
-    } else if ((indexPath.row == 4 && tUser.stream > 0) || (indexPath.row == 3 && tUser.stream == 0)) {
+        [itemBtn setImage:[UIImage imageNamed:@"menu-item-gblock"] forState:UIControlStateNormal];
+    } else if ((indexPath.row == 4 && tUser.stream.count > 0) || (indexPath.row == 3 && tUser.stream.count == 0)) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"silent mode" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-silent"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream > 0) || (indexPath.row == 4 && tUser.stream == 0))) {
+    } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"edit group" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-edit"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 2 && tUser.stream > 0) || (indexPath.row == 1 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 2 && tUser.stream.count > 0) || (indexPath.row == 1 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"Add to group" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-agroup"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream > 0) || (indexPath.row == 2 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"block" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-block"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream > 0) || (indexPath.row == 4 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"auto nudge" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-auto"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.stream > 0) || (indexPath.row == 5 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.stream.count > 0) || (indexPath.row == 5 && tUser.stream.count == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"edit profile" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-edit"] forState:UIControlStateNormal];
@@ -193,13 +193,13 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     UIImageView *checkView = (UIImageView *)[cell viewWithTag:2];
 
-    if (tUser.type == NTIndividual && indexPath.row == 1 && tUser.stream > 0) {
+    if (tUser.type == NTIndividual && indexPath.row == 1 && tUser.stream.count > 0) {
         [self.delegate onMenuClicked:MRStream nudger:tUser];
-    } else if (tUser.type == NTGroup && indexPath.row == 1 && tUser.stream > 0) {
+    } else if (tUser.type == NTGroup && indexPath.row == 1 && tUser.stream.count > 0) {
         [self.delegate onMenuClicked:MRStreamGroup nudger:tUser];
-    } else if (tUser.type == NTGroup && ((indexPath.row == 2 && tUser.stream > 0) || (indexPath.row == 1 && tUser.stream == 0))) {
+    } else if (tUser.type == NTGroup && ((indexPath.row == 2 && tUser.stream.count > 0) || (indexPath.row == 1 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRViewGroup nudger:tUser];
-    } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream > 0) || (indexPath.row == 2 && tUser.stream == 0))) {
+    } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRBlock nudger:tUser];
         if (tUser.block) {
             tUser.block = NO;
@@ -217,11 +217,11 @@
             tUser.silent = YES;
             checkView.hidden = NO;
         }
-    } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream > 0) || (indexPath.row == 4 && tUser.stream == 0))) {
+    } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MREditGroup nudger:tUser];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 2 && tUser.stream > 0) || (indexPath.row == 1 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 2 && tUser.stream.count > 0) || (indexPath.row == 1 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRAddGroup nudger:tUser];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream > 0) || (indexPath.row == 2 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRBlock nudger:tUser];
         if (tUser.block) {
             tUser.block = NO;
@@ -230,7 +230,7 @@
             tUser.block = YES;
             checkView.hidden = NO;
         }
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream > 0) || (indexPath.row == 4 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRAuto nudger:tUser];
         if (tUser.autoNudge) {
             tUser.autoNudge = NO;
@@ -239,7 +239,7 @@
             tUser.autoNudge = YES;
             checkView.hidden = NO;
         }
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.stream > 0) || (indexPath.row == 5 && tUser.stream == 0))) {
+    } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.stream.count > 0) || (indexPath.row == 5 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MREdit nudger:tUser];
     }
 }

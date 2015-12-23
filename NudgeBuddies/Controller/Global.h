@@ -70,6 +70,7 @@ typedef NS_ENUM(NSInteger, ViewTag) {
     VTStart,
     VTGroup,
     VTGroupSelect,
+    VTNP,
 };
 
 @interface Global : NSObject
@@ -130,4 +131,14 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define USER_RESPONSE                               @"user_response"
 #define USER_NUDGE                                  @"user_nudge"
 #define USER_ACKNOWLEDGE                            @"user_acknowledge"
+#define USER_NIGHT                                  @"user_night"
+
+#define FAV_1                                       CGPointMake(120, 120)
+#define FAV_2                                       CGPointMake(35, 20)
+#define FAV_3                                       CGPointMake(208, 221)
+#define FAV_4                                       CGPointMake(43, 221)
+#define FAV_5                                       CGPointMake(228, 20)
+#define FAV_6                                       CGPointMake(15, 125)
+#define FAV_7                                       CGPointMake(240, 120)
+#define FAV_8                                       CGPointMake(140, 43)
 

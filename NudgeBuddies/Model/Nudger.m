@@ -26,6 +26,7 @@
         self.silent = NO;
         self.autoNudge = NO;
         self.isNew = NO;
+        self.shouldAnimate = NO;
         self.menuPos = 0;
     }
     return self;
@@ -47,6 +48,7 @@
         self.silent = NO;
         self.autoNudge = NO;
         self.isNew = NO;
+        self.shouldAnimate = NO;
         self.menuPos = 0;
     }
     return self;
