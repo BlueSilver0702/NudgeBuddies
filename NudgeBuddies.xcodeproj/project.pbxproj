@@ -20,6 +20,7 @@
 		29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59381C154A870056BB44 /* FBSDKCoreKit.framework */; };
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
+		4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */; };
 		4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB519241C271BC000EA06D5 /* AppCenter.m */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
 		CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */; };
@@ -60,6 +61,8 @@
 		29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
+		4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBTouchAndHoldButton.h; path = View/Helper/NBTouchAndHoldButton.h; sourceTree = "<group>"; };
+		4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBTouchAndHoldButton.m; path = View/Helper/NBTouchAndHoldButton.m; sourceTree = "<group>"; };
 		4FB519231C271BC000EA06D5 /* AppCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCenter.h; path = Controller/AppCenter.h; sourceTree = "<group>"; };
 		4FB519241C271BC000EA06D5 /* AppCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppCenter.m; path = Controller/AppCenter.m; sourceTree = "<group>"; };
 		CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NudgeButton.h; path = View/NudgeButton.h; sourceTree = "<group>"; };
@@ -228,6 +231,8 @@
 		CFF136691C1D206D0001D351 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */,
+				4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */,
 				CFF1366A1C1D208E0001D351 /* KICropImageView.h */,
 				CFF1366B1C1D208E0001D351 /* KICropImageView.m */,
 				CFF1366C1C1D208E0001D351 /* UIImage+KIAdditions.h */,
@@ -390,6 +395,7 @@
 				CFF136651C1D20300001D351 /* SignupController.m in Sources */,
 				CFF136511C1D1AC50001D351 /* Nudger.m in Sources */,
 				CFF1365B1C1D201D0001D351 /* Global.m in Sources */,
+				4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */,
 				290C029A1C1321440093D12A /* SettingController.m in Sources */,
 				294891C41C0F87300086D1BE /* main.m in Sources */,
 			);
@@ -500,8 +506,8 @@
 			baseConfigurationReference = 3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: rami mualem (288RPPUNHU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: rami mualem (288RPPUNHU)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -514,7 +520,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhs.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7e4a48e2-6925-42bc-b73c-367f04b5d085";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -524,8 +530,8 @@
 			baseConfigurationReference = 35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: rami mualem (288RPPUNHU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: rami mualem (288RPPUNHU)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,7 +544,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhs.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7e4a48e2-6925-42bc-b73c-367f04b5d085";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

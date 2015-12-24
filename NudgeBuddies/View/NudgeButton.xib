@@ -42,7 +42,7 @@
                         <action selector="onNudgeSelected:" destination="-1" eventType="touchUpInside" id="IgN-uZ-PnE"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PBX-1m-BIz">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PBX-1m-BIz" customClass="NBTouchAndHoldButton">
                     <rect key="frame" x="24" y="23" width="48" height="48"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <userDefinedRuntimeAttributes>

@@ -94,9 +94,13 @@
         nameLabel.text = tUser.user.fullName;
     } else if (indexPath.row == 0 && menuType != MTAdd) {
         if (tUser.response == RTNudge) [nudgeBtn setImage:[UIImage imageNamed:@"icon-nudge-active"] forState:UIControlStateNormal];
+        else [nudgeBtn setImage:[UIImage imageNamed:@"icon-nudge"] forState:UIControlStateNormal];
         if (tUser.response == RTRumble) [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-active"] forState:UIControlStateNormal];
+        else [rumbleBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble"] forState:UIControlStateNormal];
         if (tUser.response == RTSilent) [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent-active"] forState:UIControlStateNormal];
+        else  [silentBtn setImage:[UIImage imageNamed:@"icon-nudge-rumble-silent"] forState:UIControlStateNormal];
         if (tUser.response == RTAnnoy) [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy-active"] forState:UIControlStateNormal];
+        else [annoyBtn setImage:[UIImage imageNamed:@"icon-nudge-annoy"] forState:UIControlStateNormal];
     } else if (indexPath.row == 1 && tUser.stream.count > 0) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"view nudge stream" forState:UIControlStateNormal];
@@ -106,11 +110,13 @@
         [itemBtn setTitle:@"View Group" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-group"] forState:UIControlStateNormal];
     } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
-        [itemLab setHidden:YES];
+        if (tUser.block) [itemLab setHidden:NO];
+        else [itemLab setHidden:YES];
         [itemBtn setTitle:@"block group" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-gblock"] forState:UIControlStateNormal];
     } else if ((indexPath.row == 4 && tUser.stream.count > 0) || (indexPath.row == 3 && tUser.stream.count == 0)) {
-        [itemLab setHidden:YES];
+        if (tUser.silent) [itemLab setHidden:NO];
+        else [itemLab setHidden:YES];
         [itemBtn setTitle:@"silent mode" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-silent"] forState:UIControlStateNormal];
     } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
@@ -122,7 +128,8 @@
         [itemBtn setTitle:@"Add to group" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-agroup"] forState:UIControlStateNormal];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
-        [itemLab setHidden:YES];
+        if (tUser.block) [itemLab setHidden:NO];
+        else [itemLab setHidden:YES];
         [itemBtn setTitle:@"block" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-block"] forState:UIControlStateNormal];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
@@ -200,7 +207,6 @@
     } else if (tUser.type == NTGroup && ((indexPath.row == 2 && tUser.stream.count > 0) || (indexPath.row == 1 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRViewGroup nudger:tUser];
     } else if (tUser.type == NTGroup && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
-        [self.delegate onMenuClicked:MRBlock nudger:tUser];
         if (tUser.block) {
             tUser.block = NO;
             checkView.hidden = YES;
@@ -208,8 +214,8 @@
             tUser.block = YES;
             checkView.hidden = NO;
         }
-    } else if ((indexPath.row == 4 && tUser.stream > 0) || (indexPath.row == 3 && tUser.stream == 0)) {
-        [self.delegate onMenuClicked:MRSilent nudger:tUser];
+        [self.delegate onMenuClicked:MRBlock nudger:tUser];
+    } else if ((indexPath.row == 4 && tUser.stream.count > 0) || (indexPath.row == 3 && tUser.stream.count == 0)) {
         if (tUser.silent) {
             tUser.silent = NO;
             checkView.hidden = YES;
@@ -217,12 +223,12 @@
             tUser.silent = YES;
             checkView.hidden = NO;
         }
+        [self.delegate onMenuClicked:MRSilent nudger:tUser];
     } else if (tUser.type == NTGroup && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MREditGroup nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 2 && tUser.stream.count > 0) || (indexPath.row == 1 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MRAddGroup nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 3 && tUser.stream.count > 0) || (indexPath.row == 2 && tUser.stream.count == 0))) {
-        [self.delegate onMenuClicked:MRBlock nudger:tUser];
         if (tUser.block) {
             tUser.block = NO;
             checkView.hidden = YES;
@@ -230,8 +236,8 @@
             tUser.block = YES;
             checkView.hidden = NO;
         }
+        [self.delegate onMenuClicked:MRBlock nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.stream.count > 0) || (indexPath.row == 4 && tUser.stream.count == 0))) {
-        [self.delegate onMenuClicked:MRAuto nudger:tUser];
         if (tUser.autoNudge) {
             tUser.autoNudge = NO;
             checkView.hidden = YES;
@@ -239,6 +245,7 @@
             tUser.autoNudge = YES;
             checkView.hidden = NO;
         }
+        [self.delegate onMenuClicked:MRAuto nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.stream.count > 0) || (indexPath.row == 5 && tUser.stream.count == 0))) {
         [self.delegate onMenuClicked:MREdit nudger:tUser];
     }

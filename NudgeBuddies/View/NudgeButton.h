@@ -13,6 +13,7 @@
 @optional
 
 - (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect;
+- (void)onSendNudge:(Nudger *)nudger;
 
 @end
 

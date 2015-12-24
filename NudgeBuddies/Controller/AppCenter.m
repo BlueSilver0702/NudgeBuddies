@@ -47,7 +47,7 @@
                     NSMutableDictionary *getRequest = [NSMutableDictionary dictionary];
                     [getRequest setObject:dialog.ID forKey:@"_parent_id"];
                     Group *group = [Group new];
-                    group.gID = [dialog.ID integerValue];
+                    group.gID = dialog.ID;
                     group.gName = dialog.name;
                     group.gBlobID = [dialog.photo integerValue];
                     group.gUsers = (NSMutableArray *)dialog.occupantIDs;
@@ -59,6 +59,7 @@
                             gNudger.response = (ResponseType)object.fields[@"NudgerType"];
                             gNudger.defaultNudge = object.fields[@"NudgeTxt"];
                             gNudger.defaultReply = object.fields[@"AcknowledgeTxt"];
+                            gNudger.metaID = object.ID;
                             [groupArray addObject:gNudger];
                             [notificationArray addObject:gNudger];
                             if (groupArray.count == dialogObjects.count) {
@@ -80,6 +81,8 @@
 
 - (void)add:(Nudger *)user {
     BOOL isFound = NO;
+    user.isNew = NO;
+    user.status = NSFriend;
     for (int i=0; i<self.notificationArray.count; i++) {
         Nudger *nudger = [self.notificationArray objectAtIndex:i];
         if (nudger.user.ID == user.user.ID || [nudger.group.gName isEqualToString:user.group.gName]) {
@@ -115,19 +118,28 @@
             [notificationArray addObject:newUser];
             loadCount ++;
             if (loadCount == cArr.count) {
-                [self.delegate onceLoadedContactList];
-//                for (QBContactListItem *item in [QBChat instance].contactList.pendingApproval) {
-//                    NSLog(@"%lu", item.subscriptionState);
-//                    if (item.subscriptionState == QBPresenseSubscriptionStateFrom) {
-//                        [QBRequest userWithID:item.userID successBlock:^(QBResponse *response, QBUUser *user) {
-//                            Nudger *newUser = [[Nudger alloc] initWithUser:user];
-//                            newUser.status = NSInvited;
-//                            [self.pendingArray addObject:newUser];
-//                        } errorBlock:^(QBResponse *response) {
-//                            NSLog(@"Err: loading pending users");
-//                        }];
-//                    }
-//                }
+                NSMutableDictionary *getRequest = [NSMutableDictionary dictionary];
+                [getRequest setObject:[NSString stringWithFormat:@"%lu",currentUser.ID] forKey:@"_user_id"];
+                [QBRequest objectsWithClassName:@"NudgerBuddy" extendedRequest:getRequest successBlock:^(QBResponse *response, NSArray *objects, QBResponsePage *page) {
+                    for (QBCOCustomObject *cObject in objects) {
+                        NSString *desID = cObject.parentID;
+                        for (Nudger *contactUser in contactsArray) {
+                            if ([desID integerValue] == contactUser.user.ID) {
+                                contactUser.isFavorite = [cObject.fields[@"Favorite"] boolValue];
+                                contactUser.response = (ResponseType)[cObject.fields[@"NudgerType"] integerValue];
+                                contactUser.defaultNudge = cObject.fields[@"NudgeTxt"];
+                                contactUser.defaultReply = cObject.fields[@"AcknowledgeTxt"];
+                                contactUser.silent = [cObject.fields[@"Silent"] boolValue];
+                                contactUser.block = [cObject.fields[@"Block"] boolValue];
+                                contactUser.metaID = cObject.ID;
+                            }
+                        }
+                    }
+                    [self.delegate onceLoadedContactList];
+                } errorBlock:^(QBResponse *response) {
+                    // error handling
+                    NSLog(@"Response error: %@", [response.error description]);
+                }];
             }
         } errorBlock:^(QBResponse *response) {
             NSLog(@"Err: loading pending users");
@@ -162,23 +174,24 @@
         newUser.shouldAnimate = YES;
         newUser.status = NSInvited;
         [self add:newUser];
+        
+//        QBCOCustomObject *object = [QBCOCustomObject customObject];
+//        object.className = @"NudgerBuddy"; // your Class name
+//        [object.fields setObject:[NSString stringWithFormat:@"%lu",userID] forKey:@"_parent_id"];
+//        [object.fields setObject:currentNudger.defaultNudge forKey:@"NudgeTxt"];
+//        [object.fields setObject:currentNudger.defaultReply forKey:@"AcknowledgeTxt"];
+//        [object.fields setObject:[NSNumber numberWithBool:NO] forKey:@"Favorite"];
+//        [object.fields setObject:[NSNumber numberWithInteger:RTNudge] forKey:@"NudgerType"];
+//        
+//        [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
+//        } errorBlock:^(QBResponse *response) {
+//            NSLog(@"Response error: %@", [response.error description]);
+//        }];
+
         [self.delegate onceAddedContact:newUser];
     } errorBlock:^(QBResponse *response) {
         NSLog(@"Err: loading pending users");
     }];
-    
-//    QBCOCustomObject *object = [QBCOCustomObject customObject];
-//    object.className = @"NudgerBuddy"; // your Class name
-//    [object.fields setObject:[NSString stringWithFormat:@"%lu",userID] forKey:@"_parent_id"];
-//    [object.fields setObject:currentNudger.defaultNudge forKey:@"NudgeTxt"];
-//    [object.fields setObject:currentNudger.defaultReply forKey:@"AcknowledgeTxt"];
-//    [object.fields setObject:[NSNumber numberWithBool:NO] forKey:@"Favorite"];
-//    [object.fields setObject:[NSNumber numberWithInteger:RTNudge] forKey:@"NudgerType"];
-//    
-//    [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-//    } errorBlock:^(QBResponse *response) {
-//        NSLog(@"Response error: %@", [response.error description]);
-//    }];
 }
 
 - (void)chatContactListDidChange:(QB_NONNULL QBContactList *)contactList {

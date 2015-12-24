@@ -27,6 +27,7 @@
 @property (nonatomic) BOOL isNew;
 @property (nonatomic) BOOL shouldAnimate;
 @property (nonatomic) int menuPos;
+@property (nonatomic, retain) NSString *metaID;
 
 - (id)initWithUser:(QBUUser *)userInfo;
 - (id)initWithGroup:(Group *)groupInfo;

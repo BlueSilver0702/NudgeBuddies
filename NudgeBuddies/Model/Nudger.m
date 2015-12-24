@@ -15,7 +15,9 @@
     if (self) {
         self.type = NTIndividual;
         self.status = NSFriend;
-        self.response = RTNil;
+        self.response = RTNudge;
+        self.defaultNudge = @"You there? Give me a call";
+        self.defaultReply = @"Give me 5, I'll call you back";
         self.user = userInfo;
         self.isFavorite = NO;
         self.favCount = 0;
@@ -28,6 +30,7 @@
         self.isNew = NO;
         self.shouldAnimate = NO;
         self.menuPos = 0;
+        self.metaID = nil;
     }
     return self;
 }
@@ -37,7 +40,9 @@
     if (self) {
         self.type = NTGroup;
         self.status = NSFriend;
-        self.response = RTNil;
+        self.response = RTNudge;
+        self.defaultNudge = @"You there? Give me a call";
+        self.defaultReply = @"Give me 5, I'll call you back";
         self.user = nil;
         self.isFavorite = NO;
         self.favCount = 0;
@@ -50,6 +55,7 @@
         self.isNew = NO;
         self.shouldAnimate = NO;
         self.menuPos = 0;
+        self.metaID = nil;
     }
     return self;
 }

@@ -7,16 +7,18 @@
 //
 
 #import "NudgeButton.h"
+#import "NBTouchAndHoldButton.h"
 
 @interface NudgeButton ()
 {
-    IBOutlet UIButton *imgBtn;
+    IBOutlet NBTouchAndHoldButton *imgBtn;
     IBOutlet UIButton *badgeBtn;
     IBOutlet UIImageView *noti1Img;
     IBOutlet UIImageView *noti2Img;
     IBOutlet UILabel *nameLab;
     IBOutlet UIButton *favBtn;
     BOOL isAnimating;
+    BOOL isLong;
 }
 @end
 
@@ -33,6 +35,7 @@
     noti2Img.alpha = 0.0;
     isAnimating = NO;
     [imgBtn setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];
+    [imgBtn addTarget:self action:@selector(longPress) forTouchAndHoldControlEventWithTimeInterval:0.8];
 }
 
 - (void)initNudge:(Nudger *)user notify:(BOOL)isNotify {
@@ -76,15 +79,41 @@
     }
     
     if (user.shouldAnimate) [self notify];
+    
+//    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+//    [imgBtn addGestureRecognizer:longPress];
 }
 
-- (IBAction)onNudgeSelected:(id)sender {
+- (void)longPress {
+    NSLog(@"Long Press");
     [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
     [noti1Img.layer removeAllAnimations];
     [noti2Img.layer removeAllAnimations];
     noti1Img.alpha = 0.0f;
     noti2Img.alpha = 0.0f;
     isAnimating = NO;
+    isLong = YES;
+}
+//
+//- (void)longPress:(UILongPressGestureRecognizer *)gesture {
+//    if (gesture.state == UIGestureRecognizerStateEnded) {
+//        NSLog(@"Long Press");
+//        [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
+//        [noti1Img.layer removeAllAnimations];
+//        [noti2Img.layer removeAllAnimations];
+//        noti1Img.alpha = 0.0f;
+//        noti2Img.alpha = 0.0f;
+//        isAnimating = NO;
+//    }
+//}
+
+- (IBAction)onNudgeSelected:(id)sender {
+    if (isLong) {
+        isLong = NO;
+        return;
+    }
+    NSLog(@"shortTouch");
+    [self.delegate onSendNudge:userInfo];
 }
 
 - (void)notify {
