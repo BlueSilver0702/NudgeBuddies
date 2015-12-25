@@ -7,7 +7,7 @@ target 'NudgeBuddies' do
 
 pod 'QuickBlox'
 pod 'TPKeyboardAvoiding'
-pod 'MBProgressHUD'
+pod 'SVProgressHUD'
 
 end
 

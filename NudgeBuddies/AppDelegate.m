@@ -32,6 +32,8 @@ AppCenter *g_center;
     [QBSettings setAuthSecret:   kQBRegisterServiceSecret];
     [QBSettings setAccountKey:   kQBAccountKey];
     
+    [QBSettings setAutoReconnectEnabled:YES];
+    
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     ViewController *viewCtrl = (ViewController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"viewCtrl"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -97,17 +99,25 @@ AppCenter *g_center;
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [[QBChat instance] disconnectWithCompletionBlock:^(NSError * _Nullable error) {
+        
+    }];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [[QBChat instance] disconnectWithCompletionBlock:^(NSError * _Nullable error) {
+        
+    }];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    [[QBChat instance] connectWithUser:g_center.currentUser  completion:^(NSError * _Nullable error) {
+        
+    }];
 }
 
 @end

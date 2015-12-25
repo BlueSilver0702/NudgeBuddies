@@ -27,6 +27,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     userDefaults = [NSUserDefaults standardUserDefaults];
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
 }
 
 - (IBAction)onAlreadyHaveAccount:(id)sender {
@@ -62,23 +64,20 @@
     user.password = passwd.text;
     user.email = email.text;
     
-    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD setDetailsLabelText:@"Registering..."];
-    [HUD show:YES];
+    [SVProgressHUD showWithStatus:@"Registering..."];
     [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
         // Success, do something
         NSLog(@"Success");
-        [HUD hide:YES];
+        [SVProgressHUD dismiss];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Successfully Registered!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alertView show];
+        [SVProgressHUD dismiss];
         [userDefaults setObject:email.text forKey:@"email"];
         [userDefaults setObject:passwd.text forKey:@"pwd"];
         [userDefaults setBool:YES forKey:@"register"];
         [userDefaults synchronize];
     } errorBlock:^(QBResponse *response) {
         // error handling
-        [HUD hide:YES];
+        [SVProgressHUD dismiss];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Register Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alertView setTag:10];
         [alertView show];
@@ -101,11 +100,7 @@
 }
 
 - (IBAction)onFacebook:(id)sender {
-    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    //    [HUD setLabelText:@"Registering..."];
-    [HUD setDetailsLabelText:@"Signing..."];
-    [HUD show:YES];
+    [SVProgressHUD showWithStatus:@"Signing..."];
     
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
@@ -116,7 +111,7 @@
              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You can't change facebook account on this device." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
              [alertView show];
          } else if (result.isCancelled) {
-             [HUD hide:YES];
+             [SVProgressHUD dismiss];
          } else {
              NSLog(@"Logged in");
              if ([FBSDKAccessToken currentAccessToken]) {
@@ -150,7 +145,7 @@
                                      QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
                                      updateParameters.blobID = blob.ID;
                                      [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
-                                         [HUD hide:YES];
+                                         [SVProgressHUD dismiss];
                                          [self performSegueWithIdentifier:@"segue-register" sender:nil];
                                      } errorBlock:^(QBResponse *response) {
                                          NSLog(@"error: %@", response.error);
@@ -166,7 +161,7 @@
                              } errorBlock:^(QBResponse *response) {
                                  // error handling
                                  NSLog(@"error: %@", response.error);
-                                 [HUD hide:YES];
+                                 [SVProgressHUD dismiss];
                                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                  [alertView show];
                              }];
@@ -176,12 +171,12 @@
                                  // Success, do something
                                  user.password = COMMON_PWD;
                                  [g_center initCenter:user];
-                                 [HUD hide:YES];
+                                 [SVProgressHUD dismiss];
                                  [self performSegueWithIdentifier:@"segue-register" sender:nil];
                              } errorBlock:^(QBResponse *response) {
                                  // error handling
                                  NSLog(@"error: %@", response.error);
-                                 [HUD hide:YES];
+                                 [SVProgressHUD dismiss];
                                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                  [alertView show];
                              }];

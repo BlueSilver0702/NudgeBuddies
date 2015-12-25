@@ -154,27 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1055"
-            endingLineNumber = "1055"
-            landmarkName = "-addGroupItems"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1043"
-            endingLineNumber = "1043"
+            startingLineNumber = "1084"
+            endingLineNumber = "1084"
             landmarkName = "-onGroupItemRemoved:"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +170,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1037"
-            endingLineNumber = "1037"
+            startingLineNumber = "1072"
+            endingLineNumber = "1072"
+            landmarkName = "-onGropOpen:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NudgeBuddies/View/ViewController.m"
+            timestampString = "472716115.694856"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1066"
+            endingLineNumber = "1066"
             landmarkName = "-onGropOpen:"
             landmarkType = "5">
          </BreakpointContent>
@@ -208,38 +208,6 @@
             startingLineNumber = "56"
             endingLineNumber = "56"
             landmarkName = "-initCenter:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/Controller/AppCenter.m"
-            timestampString = "472619512.392349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "-createChatNotificationForGroupChatCreation:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/Controller/AppCenter.m"
-            timestampString = "472619512.392349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "-chatDidReceiveSystemMessage:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -282,27 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "517"
-            endingLineNumber = "517"
-            landmarkName = "-display:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "548"
+            endingLineNumber = "548"
             landmarkName = "-display:"
             landmarkType = "5">
          </BreakpointContent>
@@ -314,11 +266,59 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "441"
-            endingLineNumber = "441"
+            startingLineNumber = "472"
+            endingLineNumber = "472"
+            landmarkName = "-display:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ViewController display:]"
+                  moduleName = "NudgeBuddies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bluesilver/Documents/NudgeBuddies/NudgeBuddies/NudgeBuddies/View/ViewController.m"
+                  timestampString = "472716116.78317"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "472"
+                  endingLineNumber = "472"
+                  offsetFromSymbolStart = "7344">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ViewController display:]"
+                  moduleName = "NudgeBuddies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bluesilver/Documents/NudgeBuddies/NudgeBuddies/NudgeBuddies/View/ViewController.m"
+                  timestampString = "472716116.783774"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "472"
+                  endingLineNumber = "472"
+                  offsetFromSymbolStart = "7380">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NudgeBuddies/View/ViewController.m"
+            timestampString = "472716115.694856"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
             landmarkName = "-display:"
             landmarkType = "5">
          </BreakpointContent>
@@ -330,11 +330,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "399"
-            endingLineNumber = "399"
+            startingLineNumber = "406"
+            endingLineNumber = "406"
             landmarkName = "-display:"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,44 +346,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
-            landmarkName = "-display:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1230"
-            endingLineNumber = "1230"
+            startingLineNumber = "1257"
+            endingLineNumber = "1257"
             landmarkName = "-onNPOpen:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1284"
-            endingLineNumber = "1284"
-            landmarkName = "-onNPSave:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -410,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "472647000.120397"
+            timestampString = "472716115.694856"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "625"
-            endingLineNumber = "625"
+            startingLineNumber = "656"
+            endingLineNumber = "656"
             landmarkName = "-onMenuClicked:nudger:"
             landmarkType = "5">
          </BreakpointContent>

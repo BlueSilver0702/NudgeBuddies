@@ -247,4 +247,8 @@
     return inviteMessage;
 }
 
+- (void)chatDidAccidentallyDisconnect{
+    [self.delegate onceDisconnected];
+}
+
 @end

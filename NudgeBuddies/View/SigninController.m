@@ -32,6 +32,8 @@
     } else {
         uncheckBtn.hidden = NO;
     }
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -46,17 +48,14 @@
 
 - (IBAction)onLgoin:(id)sender {
     
-    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD setDetailsLabelText:@"Logging in..."];
-    [HUD show:YES];
+    [SVProgressHUD showWithStatus:@"Logging in..."];
     //    user.
     
     [QBRequest logInWithUserEmail:email.text password:passwd.text successBlock:^(QBResponse *response, QBUUser *user) {
         // Success, do something
         user.password = passwd.text;
         [g_center initCenter:user];
-        [HUD hide:YES];
+        [SVProgressHUD dismiss];
         if (g_var.profileImg) {
             [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
                 [g_var saveFile:g_var.profileImg uid:blob.ID];
@@ -90,7 +89,7 @@
     } errorBlock:^(QBResponse *response) {
         // error handling
         NSLog(@"error: %@", response.error);
-        [HUD hide:YES];
+        [SVProgressHUD dismiss];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alertView show];
     }];

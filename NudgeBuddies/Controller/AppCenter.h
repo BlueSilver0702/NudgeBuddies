@@ -16,6 +16,7 @@
 - (void)onceRemovedContact:(Nudger *)nudger;
 - (void)onceAccepted:(NSUInteger)fromID;
 - (void)onceRejected:(NSUInteger)fromID;
+- (void)onceDisconnected;
 @end
 
 @interface AppCenter : NSObject <QBChatDelegate>

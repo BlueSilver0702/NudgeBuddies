@@ -21,6 +21,9 @@
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
 		4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */; };
+		4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */; };
+		4F7E02B41C2CF704000B7A50 /* effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E02B31C2CF704000B7A50 /* effect.mp3 */; };
+		4F7E02B61C2CF720000B7A50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */; };
 		4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB519241C271BC000EA06D5 /* AppCenter.m */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
 		CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */; };
@@ -63,6 +66,9 @@
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
 		4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBTouchAndHoldButton.h; path = View/Helper/NBTouchAndHoldButton.h; sourceTree = "<group>"; };
 		4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBTouchAndHoldButton.m; path = View/Helper/NBTouchAndHoldButton.m; sourceTree = "<group>"; };
+		4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4F7E02B31C2CF704000B7A50 /* effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = effect.mp3; path = Resources/effect.mp3; sourceTree = "<group>"; };
+		4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FB519231C271BC000EA06D5 /* AppCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCenter.h; path = Controller/AppCenter.h; sourceTree = "<group>"; };
 		4FB519241C271BC000EA06D5 /* AppCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppCenter.m; path = Controller/AppCenter.m; sourceTree = "<group>"; };
 		CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NudgeButton.h; path = View/NudgeButton.h; sourceTree = "<group>"; };
@@ -102,6 +108,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F7E02B61C2CF720000B7A50 /* AVFoundation.framework in Frameworks */,
+				4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */,
 				CFD8EEF21C161BCE00F47D45 /* CoreMotion.framework in Frameworks */,
 				290C029C1C1367270093D12A /* iAd.framework in Frameworks */,
 				29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */,
@@ -141,6 +149,7 @@
 		290F900C1C1205AD00F345D8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4F7E02B31C2CF704000B7A50 /* effect.mp3 */,
 				290F900D1C1205B900F345D8 /* Default-568h@2x.png */,
 				290F900E1C1205B900F345D8 /* Default.png */,
 				290F900F1C1205B900F345D8 /* Default@2x.png */,
@@ -195,6 +204,8 @@
 		AEF3E02EB89A0D5C4C3580CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */,
+				4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */,
 				CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */,
 				29EE59381C154A870056BB44 /* FBSDKCoreKit.framework */,
 				29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */,
@@ -315,6 +326,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F7E02B41C2CF704000B7A50 /* effect.mp3 in Resources */,
 				294891CF1C0F87300086D1BE /* Assets.xcassets in Resources */,
 				294891CD1C0F87300086D1BE /* Main.storyboard in Resources */,
 				290F90121C1205B900F345D8 /* Default@2x.png in Resources */,

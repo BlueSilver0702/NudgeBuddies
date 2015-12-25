@@ -13,13 +13,16 @@
 #import <iAd/iAd.h>
 #import <CoreMotion/CoreMotion.h>
 #import "UIImagePickerHelper.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate>
 {
     // general
     QBUUser *currentUser;
-    MBProgressHUD *HUD;
+    AVAudioPlayer *audioPlayer;
     
+    id <NSObject> observerDidBecomeActive;
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
     IBOutlet UIView *notificationView;
@@ -124,8 +127,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
    
+    observerDidBecomeActive = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
+                                                                                object:nil queue:[NSOperationQueue mainQueue]
+                                                                            usingBlock:^(NSNotification *note) {
+                                                                                if (![[QBChat instance] isConnected]) {
+                                                                                    [SVProgressHUD showWithStatus:@"Connecting..." maskType:SVProgressHUDMaskTypeClear];
+                                                                                }
+                                                                            }];
+    
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
+    
     stopAccel = NO;
     iPH = [[UIImagePickerHelper alloc] init];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"effect" ofType:@"mp3"];
+    NSURL *file = [NSURL fileURLWithPath:path];
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];
+    [audioPlayer prepareToPlay];
     // **********  alert page  ************
     alertView.hidden = YES;
     
@@ -187,11 +205,6 @@
         [nightBtn setImage:[UIImage imageNamed:@"bottom-night"] forState:UIControlStateNormal];
     }
     
-    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD setDetailsLabelText:@"Connecting..."];
-    [HUD show:YES];
-    
     [g_center setDelegate:self];
     nudgebuddiesBar.hidden = YES;
     notificationView.hidden = YES;
@@ -200,6 +213,10 @@
     [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y + initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
     
     nudgeButtonArr = [NSMutableArray new];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [SVProgressHUD showWithStatus:@"Connecting..."];
 }
 
 - (void) initLogger {
@@ -239,10 +256,12 @@
         g_center.isNight = NO;
         [g_var saveLocalBool:NO key:USER_NIGHT];
         [nightBtn setImage:[UIImage imageNamed:@"bottom-night"] forState:UIControlStateNormal];
+//        AudioServicesPlayAlertSound(1104);
     } else {
         g_center.isNight = YES;
         [g_var saveLocalBool:YES key:USER_NIGHT];
         [nightBtn setImage:[UIImage imageNamed:@"bottom-night-active"] forState:UIControlStateNormal];
+        AudioServicesPlayAlertSound(1104);
     }
 }
 
@@ -262,24 +281,25 @@
         [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y - initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
     }];
     if ([QBChat instance].contactList.contacts.count == 0) {
-        [HUD hide:YES];
+        [SVProgressHUD dismiss];
     }
     if (g_center.currentNudger.defaultNudge == nil) {
         [self onStartOpen];
     }
 }
 
+- (void)onceDisconnected {
+    [self showAlert:@"Accidently disconnected."];
+}
+
 - (void)startLoadContactList {
-    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD setDetailsLabelText:@"Loading contacts..."];
-    [HUD show:YES];
+    [SVProgressHUD showWithStatus:@"Loading contacts..."];
     [self performSelector:@selector(onLoadingClose) withObject:self afterDelay:2.0];
 }
 
 - (void)onceLoadedContactList {
     NSLog(@"%@",g_center.notificationArray);
-    [HUD hide:YES];
+    [SVProgressHUD dismiss];
     [self display:NO];
     // **********  favorite module  ************
     motionManager = [CMMotionManager new];
@@ -331,7 +351,32 @@
 }
 
 - (void) onLoadingClose {
-    [HUD hide:YES];
+    [SVProgressHUD dismiss];
+}
+
+- (void)onceNudgeReceived:(Nudger *)nudger {
+    if (nudger.response == RTNudge) {
+        if (!g_center.isNight && !g_center.currentNudger.silent) {
+            [audioPlayer play];
+        }
+    } else if (nudger.response == RTSilent) {
+        if (!g_center.isNight) {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
+    } else if (nudger.response == RTAnnoy) {
+        if (!g_center.isNight) {
+            if (!g_center.currentNudger.silent) [audioPlayer play];
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
+    } else {
+        if (!g_center.isNight) {
+            if (!g_center.currentNudger.silent) [audioPlayer play];
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
+    }
+    
+    [audioPlayer play];
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
 }
 
 - (void) display:(BOOL)animatable {
@@ -560,12 +605,14 @@
 - (void)onSendNudge:(Nudger *)nudger {
     [self onMenuClose];
     menuCtrl.isOpen = NO;
+//    AudioServicesPlaySystemSound(1103);
+    [audioPlayer play];
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];
 }
 
 - (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect {
     [self hide:VTMenu];
-
     if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
         [self onMenuClose];
         return;
@@ -715,9 +762,7 @@
 }
 
 - (IBAction)onProfileSave:(id)sender {
-    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD show:YES];
+    [SVProgressHUD show];
     if (profilePictureUpdate) {
         [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
             [g_var saveFile:g_var.profileImg uid:blob.ID];
@@ -726,7 +771,7 @@
             updateParameters.oldPassword = currentUser.password;
             updateParameters.password = passwd.text;
             [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
-                [HUD hide:YES];
+                [SVProgressHUD dismiss];
                 [self onProfileClose:nil];
             } errorBlock:^(QBResponse *response) {
                 NSLog(@"error: %@", response.error);
@@ -746,7 +791,7 @@
         [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
             // User updated successfully
             NSLog(@"%@", user);
-            [HUD hide:YES];
+            [SVProgressHUD dismiss];
             [self onProfileClose:nil];
         } errorBlock:^(QBResponse *response) {
             // Handle error
@@ -1086,9 +1131,7 @@
 - (IBAction)onGroupSave:(id)sender {
     
     [self onGroupClose:nil];
-    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD show:YES];
+    [SVProgressHUD show];
 //    return;
     QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypeGroup];
     chatDialog.name = groupNameTxt.text;
@@ -1119,11 +1162,11 @@
                 openGroup.group.gBlobID = uploadedFileID;
                 [QBRequest updateDialog:createdDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
                     [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                        [HUD hide:YES];
+                        [SVProgressHUD dismiss];
                         [self onGroupClose:nil];
                         [self sendGroupInvite:createdDialog];
                     } errorBlock:^(QBResponse *response) {
-                        [HUD hide:YES];
+                        [SVProgressHUD dismiss];
                         // error handling
                         NSLog(@"Response error: %@", [response.error description]);
                     }];
@@ -1132,22 +1175,22 @@
                 }];
             } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
             } errorBlock:^(QBResponse *response) {
-                [HUD hide:YES];
+                [SVProgressHUD dismiss];
                 NSLog(@"error: %@", response.error);
             }];
         } else {
             [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                [HUD hide:YES];
+                [SVProgressHUD dismiss];
                 [self onGroupClose:nil];
                 [self sendGroupInvite:createdDialog];
             } errorBlock:^(QBResponse *response) {
                 // error handling
-                [HUD hide:YES];
+                [SVProgressHUD dismiss];
                 NSLog(@"Response error: %@", [response.error description]);
             }];
         }
     } errorBlock:^(QBResponse *response) {
-        [HUD hide:YES];
+        [SVProgressHUD dismiss];
         NSLog(@"Response error: %@", [response.error description]);
     }];
 }
@@ -1276,9 +1319,7 @@
     openNP.silent = nProfileSilentSwitch.on;
     openNP.block = nProfileBlockSwitch.on;
 
-    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [HUD setMode:MBProgressHUDModeIndeterminate];
-    [HUD show:YES];
+    [SVProgressHUD show];
     
     if (openNP.metaID != nil) {
         QBCOCustomObject *object = [QBCOCustomObject customObject];
@@ -1292,12 +1333,12 @@
         [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
         [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-            [HUD hide:YES];
+            [SVProgressHUD dismiss];
             [self onNPClose:nil];
             [self display:NO];
         } errorBlock:^(QBResponse *response) {
             // error handling
-            [HUD hide:YES];
+            [SVProgressHUD dismiss];
             NSLog(@"Response error: %@", [response.error description]);
         }];
     } else {
@@ -1312,12 +1353,12 @@
         [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
         
         [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-            [HUD hide:YES];
+            [SVProgressHUD dismiss];
             [self onNPClose:nil];
             [self display:NO];
         } errorBlock:^(QBResponse *response) {
             // error handling
-            [HUD hide:YES];
+            [SVProgressHUD dismiss];
             NSLog(@"Response error: %@", [response.error description]);
         }];
     }
@@ -1427,9 +1468,7 @@
 - (void)hideAlert {
     [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         alertView.hidden = YES;
-    } completion:^(BOOL completion){
-        [self performSelector:@selector(hideAlert) withObject:self afterDelay:3.0];
-    }];
+    } completion:nil];
 }
 
 #pragma mark - iAd
