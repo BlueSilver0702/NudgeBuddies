@@ -241,7 +241,7 @@
             } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
                 // handle progress
             } errorBlock:^(QBResponse *response) {
-                NSLog(@"error: %@", response.error);
+                [self error:err_later];
             }];
         }
     }
@@ -292,10 +292,10 @@
     [self showAlert:@"Accidently disconnected."];
 }
 
-- (void)startLoadContactList {
-    [SVProgressHUD showWithStatus:@"Loading contacts..."];
-    [self performSelector:@selector(onLoadingClose) withObject:self afterDelay:2.0];
-}
+//- (void)startLoadContactList {
+//    [SVProgressHUD showWithStatus:@"Loading contacts..."];
+//    [self performSelector:@selector(onLoadingClose) withObject:self afterDelay:2.0];
+//}
 
 - (void)onceLoadedContactList {
     NSLog(@"%@",g_center.notificationArray);
@@ -308,7 +308,7 @@
     [motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
         [self outputAccelerometer:accelerometerData.acceleration];
         if (error) {
-            NSLog(@"%@", error);
+            [self error:err_later];
         }
     }];
 }
@@ -592,6 +592,10 @@
     }
 }
 
+- (void)onceErr {
+    [self error:err_later];
+}
+
 #pragma mark - Menu
 ////////////////////////////////////// --------- Menu Views ----------- ////////////////////////////////////////
 - (void)onMenuClose {
@@ -702,11 +706,24 @@
         menuCtrl.isOpen = NO;
         NSLog(@"MRViewGroup");
     } else if (menuReturn == MRAdd) {
+        
         [self onMenuClose];
         menuCtrl.isOpen = NO;
         NSLog(@"MRAdd");
+        
         [[QBChat instance] confirmAddContactRequest:nudger.user.ID completion:^(NSError * _Nullable error) {
-            [g_center add:nudger];
+            if (error) {
+                [SVProgressHUD showErrorWithStatus:err_later];
+            } else {
+                QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypePrivate];
+                chatDialog.occupantIDs = @[@(nudger.user.ID)];
+                
+                [QBRequest createDialog:chatDialog successBlock:^(QBResponse *response, QBChatDialog *createdDialog) {
+                    [g_center add:nudger];
+                } errorBlock:^(QBResponse *response) {
+                    [self error:err_later];
+                }];
+            }
         }];
     } else if (menuReturn == MRReject) {
         [self onMenuClose];
@@ -756,8 +773,7 @@
         g_var.profileImg = profileImgData;
         profilePictureUpdate = YES;
     } failure:^(NSError *error) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alertView show];
+        [self error:err_later];
     }];
 }
 
@@ -774,15 +790,13 @@
                 [SVProgressHUD dismiss];
                 [self onProfileClose:nil];
             } errorBlock:^(QBResponse *response) {
-                NSLog(@"error: %@", response.error);
-                [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", response.error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                [self error:err_later];
             }];
         } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
             // handle progress
             NSLog(@"profile status err");
         } errorBlock:^(QBResponse *response) {
-            NSLog(@"error: %@", response.error);
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", response.error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+            [self error:err_later];
         }];
     } else {
         QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
@@ -794,8 +808,7 @@
             [SVProgressHUD dismiss];
             [self onProfileClose:nil];
         } errorBlock:^(QBResponse *response) {
-            // Handle error
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", response.error] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+            [self error:err_later];
         }];
     }
 }
@@ -1053,12 +1066,12 @@
     object.ID = @"502f7c4036c9ae2163000002";
     
     for (Nudger *group in gSelectActiveArr) {
-        QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.group.gID type:QBChatDialogTypeGroup];
+        QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.dialogID type:QBChatDialogTypeGroup];
         updateDialog.pushOccupantsIDs = @[[NSString stringWithFormat:@"%lu",gSelectNudger.user.ID]];
         [QBRequest updateDialog:updateDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
             
         } errorBlock:^(QBResponse *response) {
-            
+            [self error:err_later];
         }];
     }
     [self onGroupSelectClose:nil];
@@ -1154,7 +1167,7 @@
         [object.fields setObject:[NSNumber numberWithInteger:openGroup.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.block] forKey:@"Block"];
-        openGroup.group.gID = createdDialog.ID;
+        openGroup.dialogID = createdDialog.ID;
         if (groupPicUpdate) {
             [QBRequest TUploadFile:groupPicData fileName:@"group.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *uploadedBlob) {
                 NSUInteger uploadedFileID = uploadedBlob.ID;
@@ -1167,16 +1180,14 @@
                         [self sendGroupInvite:createdDialog];
                     } errorBlock:^(QBResponse *response) {
                         [SVProgressHUD dismiss];
-                        // error handling
-                        NSLog(@"Response error: %@", [response.error description]);
+                        [self error:err_later];
                     }];
                 } errorBlock:^(QBResponse *response) {
-                    NSLog(@"error: %@", response.error);
+                    [self error:err_later];
                 }];
             } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
             } errorBlock:^(QBResponse *response) {
-                [SVProgressHUD dismiss];
-                NSLog(@"error: %@", response.error);
+                [self error:err_later];
             }];
         } else {
             [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
@@ -1184,14 +1195,11 @@
                 [self onGroupClose:nil];
                 [self sendGroupInvite:createdDialog];
             } errorBlock:^(QBResponse *response) {
-                // error handling
-                [SVProgressHUD dismiss];
-                NSLog(@"Response error: %@", [response.error description]);
+                [self error:err_later];
             }];
         }
     } errorBlock:^(QBResponse *response) {
-        [SVProgressHUD dismiss];
-        NSLog(@"Response error: %@", [response.error description]);
+        [self error:err_later];
     }];
 }
 
@@ -1203,7 +1211,9 @@
         inviteMessage.customParameters[@"date_sent"] = (NSString *)@(timestamp);
         inviteMessage.customParameters[@"sender"] = currentUser.fullName;
         inviteMessage.recipientID = [occupantID integerValue];
-        [[QBChat instance] sendSystemMessage:inviteMessage completion:^(NSError * _Nullable error) {}];
+        [[QBChat instance] sendSystemMessage:inviteMessage completion:^(NSError * _Nullable error) {
+            [self error:err_later];
+        }];
     }
 }
 
@@ -1220,8 +1230,7 @@
         groupPicData = UIImageJPEGRepresentation(newImage, 1.0f);
         groupPicUpdate = YES;
     } failure:^(NSError *error) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alertView show];
+        [self error:err_later];
     }];
 }
 
@@ -1295,7 +1304,7 @@
         } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
             // handle progress
         } errorBlock:^(QBResponse *response) {
-            NSLog(@"error: %@", response.error);
+            [self error:err_later];
         }];
     }
 }
@@ -1337,9 +1346,7 @@
             [self onNPClose:nil];
             [self display:NO];
         } errorBlock:^(QBResponse *response) {
-            // error handling
-            [SVProgressHUD dismiss];
-            NSLog(@"Response error: %@", [response.error description]);
+            [self error:err_later];
         }];
     } else {
         QBCOCustomObject *object = [QBCOCustomObject customObject];
@@ -1357,9 +1364,7 @@
             [self onNPClose:nil];
             [self display:NO];
         } errorBlock:^(QBResponse *response) {
-            // error handling
-            [SVProgressHUD dismiss];
-            NSLog(@"Response error: %@", [response.error description]);
+            [self error:err_later];
         }];
     }
     //    return;
@@ -1471,6 +1476,9 @@
     } completion:nil];
 }
 
+- (void)error:(NSString *)err {
+    [SVProgressHUD showErrorWithStatus:err];
+}
 #pragma mark - iAd
 /////////////////////////////// --------- iAd ----------- ///////////////////////////////////////////////
 -(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{

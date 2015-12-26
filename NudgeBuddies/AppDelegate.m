@@ -72,7 +72,7 @@ AppCenter *g_center;
     [QBRequest createSubscription:subscription successBlock:^(QBResponse *response, NSArray *objects) {
         
     } errorBlock:^(QBResponse *response) {
-        
+
     }];
 }
 

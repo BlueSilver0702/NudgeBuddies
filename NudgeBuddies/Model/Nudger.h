@@ -10,6 +10,7 @@
 
 @interface Nudger : NSObject
 
+@property (nonatomic, retain) NSString *dialogID;
 @property (nonatomic) NudgerType type;
 @property (nonatomic) NudgerStatus status;
 @property (nonatomic) ResponseType response;
@@ -28,6 +29,7 @@
 @property (nonatomic) BOOL shouldAnimate;
 @property (nonatomic) int menuPos;
 @property (nonatomic, retain) NSString *metaID;
+@property (nonatomic, retain) NSData *picData;
 
 - (id)initWithUser:(QBUUser *)userInfo;
 - (id)initWithGroup:(Group *)groupInfo;

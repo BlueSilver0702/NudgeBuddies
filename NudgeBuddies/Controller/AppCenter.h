@@ -10,13 +10,13 @@
 @optional
 - (void)onceConnect;
 - (void)onceLoadedContactList;
-- (void)onceLoadedGroupList;
 - (void)startLoadContactList;
 - (void)onceAddedContact:(Nudger *)nudger;
 - (void)onceRemovedContact:(Nudger *)nudger;
 - (void)onceAccepted:(NSUInteger)fromID;
 - (void)onceRejected:(NSUInteger)fromID;
 - (void)onceDisconnected;
+- (void)onceErr;
 @end
 
 @interface AppCenter : NSObject <QBChatDelegate>
@@ -35,7 +35,6 @@
 @property(weak) id <AppCenterDelegate> delegate;
 
 - (void)initCenter:(QBUUser *)user;
-- (void)getContact;
 - (void)add:(Nudger *)user;
 - (void)remove:(Nudger *)user;
 - (void)sort;

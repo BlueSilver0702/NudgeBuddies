@@ -142,3 +142,4 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define FAV_7                                       CGPointMake(240, 120)
 #define FAV_8                                       CGPointMake(140, 43)
 
+#define err_later                                         @"An error occured. Please try later."
