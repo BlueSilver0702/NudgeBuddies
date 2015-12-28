@@ -13,8 +13,8 @@
 - (void)startLoadContactList;
 - (void)onceAddedContact:(Nudger *)nudger;
 - (void)onceRemovedContact:(Nudger *)nudger;
-- (void)onceAccepted:(NSUInteger)fromID;
-- (void)onceRejected:(NSUInteger)fromID;
+- (void)onceAccepted:(NSString *)from;
+- (void)onceRejected:(NSUInteger)from;
 - (void)onceDisconnected;
 - (void)onceErr;
 @end
@@ -27,6 +27,7 @@
 @property (nonatomic, retain) NSMutableArray *notificationArray;
 @property (nonatomic, retain) NSMutableArray *contactsArray;
 @property (nonatomic, retain) NSMutableArray *groupArray;
+@property (nonatomic, retain) NSMutableArray *fbFriendsArr;
 
 @property (nonatomic, retain) QBUUser *currentUser;
 @property (nonatomic, retain) Nudger *currentNudger;
@@ -37,8 +38,8 @@
 - (void)initCenter:(QBUUser *)user;
 - (void)add:(Nudger *)user;
 - (void)remove:(Nudger *)user;
-- (void)sort;
+- (void) addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success;
 
-- (QBChatMessage *)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
+- (void)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
 
 @end

@@ -2426,11 +2426,11 @@ in the search box above.</string>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YAx-Of-4iN">
+                                        <view tag="9" contentMode="scaleToFill" id="4i5-nQ-GJT">
                                             <rect key="frame" x="320" y="0.0" width="88" height="65"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" backgroundImage="search-request"/>
-                                        </button>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </tableViewCellContentView>
@@ -3085,7 +3085,6 @@ in the search box above.</string>
         <image name="search-logo-sm" width="17" height="25"/>
         <image name="search-mic" width="7" height="14"/>
         <image name="search-more" width="8" height="14"/>
-        <image name="search-request" width="103" height="64"/>
         <image name="search-result-default-nudge" width="22" height="16"/>
         <image name="search-result-default-nudge-active" width="22" height="16"/>
         <image name="search-result-nudge-rumble" width="22" height="21"/>

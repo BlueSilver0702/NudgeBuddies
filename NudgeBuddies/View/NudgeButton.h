@@ -23,7 +23,7 @@
 @property (nonatomic) int index;
 @property (nonatomic, retain) Nudger *userInfo;
 
-- (void)initNudge:(Nudger *)user notify:(BOOL)isNotify;
+- (void)initNudge:(Nudger *)user;
 - (void)notify;
 
 @end

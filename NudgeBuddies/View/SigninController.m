@@ -56,36 +56,12 @@
         user.password = passwd.text;
         [g_center initCenter:user];
         [SVProgressHUD dismiss];
-        if (g_var.profileImg) {
-            [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-                [g_var saveFile:g_var.profileImg uid:blob.ID];
-                QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
-                updateParameters.blobID = blob.ID;
-                [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
-                    [self performSegueWithIdentifier:@"segue-login" sender:nil];
-                    if (uncheckBtn.hidden == YES) {
-                        [userDefaults setObject:email.text forKey:@"email"];
-                        [userDefaults setObject:passwd.text forKey:@"pwd"];
-                        [userDefaults synchronize];
-                    }
-                } errorBlock:^(QBResponse *response) {
-                    NSLog(@"error: %@", response.error);
-                }];
-            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
-                // handle progress
-                NSLog(@"profile status err");
-            } errorBlock:^(QBResponse *response) {
-                NSLog(@"error: %@", response.error);
-            }];
-
-            return;
-        }
-        [self performSegueWithIdentifier:@"segue-login" sender:nil];
         if (uncheckBtn.hidden == YES) {
             [userDefaults setObject:email.text forKey:@"email"];
             [userDefaults setObject:passwd.text forKey:@"pwd"];
             [userDefaults synchronize];
         }
+        [self performSegueWithIdentifier:@"segue-login" sender:nil];
     } errorBlock:^(QBResponse *response) {
         // error handling
         NSLog(@"error: %@", response.error);

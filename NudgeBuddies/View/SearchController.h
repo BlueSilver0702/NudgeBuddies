@@ -20,7 +20,7 @@
 
 @property(weak) id <SearchControllerDelegate> delegate;
 
-- (int)searchResult:(NSString *)searchStr;
+- (int)searchResult:(NSArray *)searchArr;
 - (void)emptyTable;
 
 @end

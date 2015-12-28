@@ -10,9 +10,12 @@
 
 @implementation AppCenter {
     NSUInteger loadCount;
+    NSUInteger fixLoadCount;
+    BOOL contactLoaded;
+    QBContactList *delegateContactList;
 }
 
-@synthesize pendingArray, contactsArray, notificationArray, favArray, currentUser, currentNudger, isNight, groupArray;
+@synthesize pendingArray, contactsArray, notificationArray, favArray, currentUser, currentNudger, isNight, groupArray, fbFriendsArr;
 
 #pragma mark - Retrieve Module
 
@@ -23,6 +26,7 @@
     notificationArray = [NSMutableArray new];
     favArray = [NSMutableArray new];
     groupArray = [NSMutableArray new];
+    fbFriendsArr = [NSMutableArray new];
     
     currentUser = user;
     currentNudger = [[Nudger alloc] initWithUser:user];
@@ -32,54 +36,58 @@
     
     isNight = [g_var loadLocalBool:USER_NIGHT];
 
+    [SVProgressHUD showWithStatus:@"Connecting..."];
+    
     [[QBChat instance] addDelegate:self];
     [[QBChat instance] connectWithUser:user  completion:^(NSError *error) {
+
         if (error) {
             [self.delegate onceErr];
-            [self initCenter:user];
-        } else {
-            QBResponsePage *allPage = [QBResponsePage responsePageWithLimit:100 skip:0];
-            
-            [QBRequest dialogsForPage:allPage extendedRequest:nil successBlock:^(QBResponse *response, NSArray *dialogObjects, NSSet *dialogsUsersIDs, QBResponsePage *page) {
-                
-                loadCount = 0;
-                for (QBChatDialog *dialog in dialogObjects) {
-                    if (dialog.type == QBChatDialogTypePrivate) {
-                        [QBRequest userWithID:dialog.occupantIDs[0].integerValue successBlock:^(QBResponse *response, QBUUser *user) {
-                            Nudger *newUser = [[Nudger alloc] initWithUser:user];
-                            newUser.dialogID = dialog.ID;
-                            [contactsArray addObject:newUser];
-                            [notificationArray addObject:newUser];
-                            loadCount ++;
-                            if (loadCount == dialogObjects.count) {
-                                [self loadMetaTable];
-                            }
-                        } errorBlock:^(QBResponse *response) {
-                            [self.delegate onceErr];
-                        }];
-                    } else if (dialog.type == QBChatDialogTypeGroup) {
-
-                        Group *group = [Group new];
-                        group.gName = dialog.name;
-                        group.gBlobID = [dialog.photo integerValue];
-                        group.gUsers = (NSMutableArray *)dialog.occupantIDs;
-                        
-                        Nudger *gNudger = [[Nudger alloc] initWithGroup:group];
-                        gNudger.dialogID = dialog.ID;
-                        
-                        [groupArray addObject:gNudger];
-                        [notificationArray addObject:gNudger];
-                        loadCount ++;
-                        
-                        if (loadCount == dialogObjects.count) {
-                            [self loadMetaTable];
-                        }
-                    }
-                }
-            } errorBlock:^(QBResponse *response) {
-                [self.delegate onceErr];
-            }];
+//            [self initCenter:user];
         }
+    }];
+}
+
+- (void)loadContacts:(QBContactList *)contactList {
+    NSMutableArray *userIDs = [NSMutableArray new];
+    for (QBContactListItem *item in contactList.contacts) {
+        [userIDs addObject:[NSNumber numberWithUnsignedInteger:item.userID]];
+    }
+    [QBRequest usersWithIDs:userIDs page:[QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:100] successBlock:^(QBResponse *response, QBGeneralResponsePage *page, NSArray *users) {
+        for (QBUUser *user in users) {
+            Nudger *newUser = [[Nudger alloc] initWithUser:user];
+            [contactsArray addObject:newUser];
+            [notificationArray addObject:newUser];
+        }
+        
+        [self loadGroups];
+    } errorBlock:^(QBResponse *response) {
+        [self.delegate onceErr];
+    }];
+}
+
+- (void)loadGroups {
+    
+    NSMutableDictionary *extendedRequest = @{@"type" : @(QBChatDialogTypeGroup)}.mutableCopy;
+    
+    QBResponsePage *allPage = [QBResponsePage responsePageWithLimit:100 skip:0];
+    
+    [QBRequest dialogsForPage:allPage extendedRequest:extendedRequest successBlock:^(QBResponse *response, NSArray *dialogObjects, NSSet *dialogsUsersIDs, QBResponsePage *page) {
+        for (QBChatDialog *dialog in dialogObjects) {
+            Group *group = [Group new];
+            group.gName = dialog.name;
+            group.gBlobID = [dialog.photo integerValue];
+            group.gUsers = (NSMutableArray *)dialog.occupantIDs;
+            group.gID = dialog.ID;
+
+            Nudger *gNudger = [[Nudger alloc] initWithGroup:group];
+            [groupArray addObject:gNudger];
+            [notificationArray addObject:gNudger];
+        }
+        [self loadMetaTable];
+
+    } errorBlock:^(QBResponse *response) {
+        [self.delegate onceErr];
     }];
 }
 
@@ -105,7 +113,7 @@
             }
             if (found) {
                 for (Nudger *contactUser in groupArray) {
-                    if ([desID isEqualToString:contactUser.dialogID] && [cObject.fields[@"Accept"] boolValue]) {
+                    if ([desID isEqualToString:contactUser.group.gID] && [cObject.fields[@"Accept"] boolValue]) {
                         contactUser.isFavorite = [cObject.fields[@"Favorite"] boolValue];
                         contactUser.response = (ResponseType)[cObject.fields[@"NudgerType"] integerValue];
                         contactUser.defaultNudge = cObject.fields[@"NudgeTxt"];
@@ -118,60 +126,134 @@
                 }
             }
         }
+//        [self.delegate onceLoadedContactList];
+        [self getPending];
+    } errorBlock:^(QBResponse *response) {
+        [self.delegate onceErr];
+    }];
+}
 
+- (void)getPending {
+    NSMutableArray *newPendingArr = [NSMutableArray new];
+    for (QBContactListItem *item in delegateContactList.pendingApproval) {
+        if (item.subscriptionState == QBPresenseSubscriptionStateFrom || item.subscriptionState == QBPresenseSubscriptionStateBoth) {
+            [newPendingArr addObject:item];
+        }
+    }
+    
+    if (newPendingArr.count == 0) {
+        [self.delegate onceLoadedContactList];
+        return;
+    }
+    
+    NSMutableArray *userIDs = [NSMutableArray new];
+    for (QBContactListItem *item in newPendingArr) {
+        [userIDs addObject:[NSNumber numberWithUnsignedInteger:item.userID]];
+    }
+    
+    [QBRequest usersWithIDs:userIDs page:[QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:100] successBlock:^(QBResponse *response, QBGeneralResponsePage *page, NSArray *users) {
+        for (QBUUser *user in users) {
+            Nudger *newUser = [[Nudger alloc] initWithUser:user];
+            newUser.status = NSInvited;
+            newUser.isNew = YES;
+            newUser.shouldAnimate = NO;
+            [notificationArray addObject:newUser];
+        }
         [self.delegate onceLoadedContactList];
     } errorBlock:^(QBResponse *response) {
         [self.delegate onceErr];
     }];
 }
 
-- (NSMutableArray *)searchBuddy:(NSString *)searchStr {
+#pragma mark - QBChat Delegate
+
+- (void)chatContactListDidChange:(QB_NONNULL QBContactList *)contactList {
     
-    return nil;
+    if (!contactLoaded) {
+        
+        contactLoaded = YES;
+        delegateContactList = contactList;
+        
+        [SVProgressHUD showWithStatus:@"Loading contacts..."];
+        
+        if (contactList.contacts.count > 0) {
+            [self loadContacts:contactList];
+        } else if (contactList.pendingApproval.count > 0) {
+            [self getPending];
+        } else {
+            [self.delegate onceLoadedContactList];
+        }
+    }
 }
 
-- (void)sort {
-    contactsArray = (NSMutableArray *)[contactsArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        Nudger *nuObj1 = (Nudger *)obj1;
-        Nudger *nuObj2 = (Nudger *)obj2;
-        NSString *user1 = nuObj1.type==NTGroup?nuObj1.group.gName:nuObj1.user.fullName;
-        NSString *user2 = nuObj2.type==NTGroup?nuObj2.group.gName:nuObj2.user.fullName;
-        return [user1 compare:user2];
+- (void)chatRoomDidReceiveMessage:(QB_NONNULL QBChatMessage *)message fromDialogID:(QB_NONNULL NSString *)dialogID {
+    NSLog(@"%@", message);
+    [self.delegate onceErr];
+}
+
+- (void)chatDidReceiveContactAddRequestFromUser:(NSUInteger)userID {
+    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
+        Nudger *newUser = [[Nudger alloc] initWithUser:user];
+        newUser.isNew = YES;
+        newUser.shouldAnimate = YES;
+        newUser.status = NSInvited;
+        [self add:newUser];
+        
+    } errorBlock:^(QBResponse *response) {
+        [self.delegate onceErr];
     }];
+}
+
+- (void)chatDidReceiveAcceptContactRequestFromUser:(NSUInteger)userID {
+    NSLog(@"--------chatDidReceiveAcceptContactRequestFromUser--------- %lu", userID);
+
+    for (Nudger *contact in contactsArray) {
+        if (contact.user.ID == userID) {
+            return;
+        }
+    }
+    
+    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
+        Nudger *newUser = [[Nudger alloc] initWithUser:user];
+        newUser.isNew = NO;
+        newUser.shouldAnimate = NO;
+        newUser.status = NSFriend;
+        [self add:newUser];
+        [self.delegate onceAddedContact:newUser];
+        [self.delegate onceAccepted:newUser.user.fullName];
+    } errorBlock:^(QBResponse *response) {
+        [self.delegate onceErr];
+    }];
+}
+
+- (void)chatDidReceiveRejectContactRequestFromUser:(NSUInteger)userID {
+    NSLog(@"--------chatDidReceiveRejectContactRequestFromUser--------- %lu", userID);
+    [self.delegate onceRejected:userID];
+}
+
+- (void)chatDidReceiveSystemMessage:(QBChatMessage *)message
+{
+    NSLog(@"%@", message);
+    [self.delegate onceErr];
+}
+
+- (void)chatDidAccidentallyDisconnect{
+    [self.delegate onceDisconnected];
+}
+
+- (void)chatDidConnect {
+    [self.delegate onceConnect];
 }
 
 #pragma mark - Add Contact Module
 
 - (void) addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success {
     [[QBChat instance] confirmAddContactRequest:buddy.user.ID completion:^(NSError * _Nullable error) {
-        if (error) {
-            success(NO);
-        } else {
-            QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypePrivate];
-            chatDialog.occupantIDs = @[@(buddy.user.ID)];
-            
-            [QBRequest createDialog:chatDialog successBlock:^(QBResponse *response, QBChatDialog *createdDialog) {
-                
-                QBCOCustomObject *object = [QBCOCustomObject customObject];
-                object.className = @"NudgerBuddy"; // your Class name
-                [object.fields setObject:createdDialog.ID forKey:@"_parent_id"];
-                [object.fields setObject:buddy.defaultNudge forKey:@"NudgeTxt"];
-                [object.fields setObject:buddy.defaultReply forKey:@"AcknowledgeTxt"];
-                [object.fields setObject:[NSNumber numberWithBool:buddy.isFavorite] forKey:@"Favorite"];
-                [object.fields setObject:[NSNumber numberWithInteger:buddy.response] forKey:@"NudgerType"];
-                [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
-                [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
-                [object.fields setObject:[NSNumber numberWithBool:YES] forKey:@"Accept"];
-                
-                [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                    success(YES);
-                } errorBlock:^(QBResponse *response) {
-                    success(NO);
-                }];
-            } errorBlock:^(QBResponse *response) {
-                success(NO);
-            }];
-        }
+        [self.contactsArray addObject:buddy];
+        buddy.status = NSFriend;
+        buddy.isNew = NO;
+        buddy.shouldAnimate = NO;
+        [self add:buddy];
     }];
 }
 
@@ -182,28 +264,13 @@
     chatDialog.occupantIDs = (NSArray *)group.group.gUsers;
     
     [QBRequest createDialog:chatDialog successBlock:^(QBResponse *response, QBChatDialog *createdDialog) {
-        QBCOCustomObject *object = [QBCOCustomObject customObject];
-        object.className = @"NudgerBuddy"; // your Class name
-        [object.fields setObject:createdDialog.ID forKey:@"_parent_id"];
-        [object.fields setObject:group.defaultNudge forKey:@"NudgeTxt"];
-        [object.fields setObject:group.defaultReply forKey:@"AcknowledgeTxt"];
-        [object.fields setObject:[NSNumber numberWithBool:group.isFavorite] forKey:@"Favorite"];
-        [object.fields setObject:[NSNumber numberWithInteger:group.response] forKey:@"NudgerType"];
-        [object.fields setObject:[NSNumber numberWithBool:group.silent] forKey:@"Silent"];
-        [object.fields setObject:[NSNumber numberWithBool:group.block] forKey:@"Block"];
-        [object.fields setObject:[NSNumber numberWithBool:YES] forKey:@"Accept"];
-
         if (group.picData && update) {
             [QBRequest TUploadFile:group.picData fileName:@"group.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *uploadedBlob) {
                 NSUInteger uploadedFileID = uploadedBlob.ID;
                 createdDialog.photo = [NSString stringWithFormat:@"%lu", uploadedFileID];
                 group.group.gBlobID = uploadedFileID;
                 [QBRequest updateDialog:createdDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
-                    [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                        success(YES);
-                    } errorBlock:^(QBResponse *response) {
-                        success(NO);
-                    }];
+                    success(YES);
                 } errorBlock:^(QBResponse *response) {
                     success(NO);
                 }];
@@ -213,36 +280,58 @@
                 success(NO);
             }];
         } else {
-            [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                success(YES);
-            } errorBlock:^(QBResponse *response) {
-                success(NO);
-            }];
+            success(YES);
         }
     } errorBlock:^(QBResponse *response) {
         success(NO);
     }];
 }
 
-- (QBChatMessage *)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog
+//- (QBChatMessage *)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog
+//{
+//    // create message:
+//    QBChatMessage *inviteMessage = [QBChatMessage message];
+//    
+//    NSMutableDictionary *customParams = [NSMutableDictionary new];
+//    customParams[@"name"] = dialog.name;
+//    customParams[@"photo"] = dialog.photo;
+//    customParams[@"notification_type"] = @"1";
+//    
+//    inviteMessage.customParameters = customParams;
+//    return inviteMessage;
+//}
+
+- (void)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog
 {
     // create message:
     QBChatMessage *inviteMessage = [QBChatMessage message];
+    inviteMessage.text = @"optional text";
     
     NSMutableDictionary *customParams = [NSMutableDictionary new];
+    customParams[@"xmpp_room_jid"] = dialog.roomJID;
     customParams[@"name"] = dialog.name;
-    customParams[@"photo"] = dialog.photo;
+    customParams[@"_id"] = dialog.ID;
+    customParams[@"type"] = @(dialog.type);
+    customParams[@"occupants_ids"] = [dialog.occupantIDs componentsJoinedByString:@","];
+    
+    // Add notification_type=2 to extra params when you updated a group chat
+    //
     customParams[@"notification_type"] = @"1";
     
     inviteMessage.customParameters = customParams;
-    
-    return inviteMessage;
+    NSTimeInterval timestamp = (unsigned long)[[NSDate date] timeIntervalSince1970];
+    inviteMessage.customParameters[@"date_sent"] = (NSString *)@(timestamp);
+    inviteMessage.customParameters[@"sender"] = currentUser.fullName;
+    [[QBChat instance] sendSystemMessage:inviteMessage completion:^(NSError * _Nullable error) {
+        NSLog(@"");
+    }];
+
 }
 
 - (void)add:(Nudger *)user {
+    
     BOOL isFound = NO;
-    user.isNew = NO;
-    user.status = NSFriend;
+
     for (int i=0; i<self.notificationArray.count; i++) {
         Nudger *nudger = [self.notificationArray objectAtIndex:i];
         if (nudger.user.ID == user.user.ID || [nudger.group.gName isEqualToString:user.group.gName]) {
@@ -256,30 +345,49 @@
         [self.notificationArray addObject:user];
     }
     [self.delegate onceAddedContact:user];
+    
 }
 
 #pragma mark - Update Contact Module
 
 - (void)updateContact:(Nudger *)buddy success:(void (^)(BOOL))success {
-    QBCOCustomObject *object = [QBCOCustomObject customObject];
-    object.className = @"NudgerBuddy"; // your Class name
-    object.ID = buddy.metaID;
-    [object.fields setObject:buddy.dialogID forKey:@"_parent_id"];
-    [object.fields setObject:buddy.defaultNudge forKey:@"NudgeTxt"];
-    [object.fields setObject:buddy.defaultReply forKey:@"AcknowledgeTxt"];
-    [object.fields setObject:[NSNumber numberWithBool:buddy.isFavorite] forKey:@"Favorite"];
-    [object.fields setObject:[NSNumber numberWithInteger:buddy.response] forKey:@"NudgerType"];
-    [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
-    [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
-    [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-        success(YES);
-    } errorBlock:^(QBResponse *response) {
-        success(NO);
-    }];
+    if (buddy.metaID) {
+        QBCOCustomObject *object = [QBCOCustomObject customObject];
+        object.className = @"NudgerBuddy"; // your Class name
+        object.ID = buddy.metaID;
+        [object.fields setObject:buddy.group.gID forKey:@"_parent_id"];
+        [object.fields setObject:buddy.defaultNudge forKey:@"NudgeTxt"];
+        [object.fields setObject:buddy.defaultReply forKey:@"AcknowledgeTxt"];
+        [object.fields setObject:[NSNumber numberWithBool:buddy.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:buddy.response] forKey:@"NudgerType"];
+        [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
+        [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
+        [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
+            success(YES);
+        } errorBlock:^(QBResponse *response) {
+            success(NO);
+        }];
+    } else {
+        QBCOCustomObject *object = [QBCOCustomObject customObject];
+        object.className = @"NudgerBuddy"; // your Class name
+        [object.fields setObject:buddy.group.gID forKey:@"_parent_id"];
+        [object.fields setObject:buddy.defaultNudge forKey:@"NudgeTxt"];
+        [object.fields setObject:buddy.defaultReply forKey:@"AcknowledgeTxt"];
+        [object.fields setObject:[NSNumber numberWithBool:buddy.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:buddy.response] forKey:@"NudgerType"];
+        [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
+        [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
+        [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
+            buddy.metaID = object.ID;
+            success(YES);
+        } errorBlock:^(QBResponse *response) {
+            success(NO);
+        }];
+    }
 }
 
 - (void)addBuddyToGroup:(Nudger *)buddy group:(Nudger *)group success:(void (^)(BOOL))success {
-    QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.dialogID type:QBChatDialogTypeGroup];
+    QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.group.gID type:QBChatDialogTypeGroup];
     updateDialog.pushOccupantsIDs = @[[NSString stringWithFormat:@"%lu",buddy.user.ID]];
     [QBRequest updateDialog:updateDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
         success(YES);
@@ -293,7 +401,7 @@
 - (void)removeBuddy:(Nudger *)buddy success:(void (^)(BOOL))success {
     ////////////////////////////////////////
     ////////////////////////////////////////
-    [QBRequest deleteDialogsWithIDs:[NSSet setWithObject:buddy.dialogID] forAllUsers:YES
+    [QBRequest deleteDialogsWithIDs:[NSSet setWithObject:buddy.group.gID] forAllUsers:YES
                        successBlock:^(QBResponse *response, NSArray *deletedObjectsIDs, NSArray *notFoundObjectsIDs, NSArray *wrongPermissionsObjectsIDs) {
                            success(YES);
                        } errorBlock:^(QBResponse *response) {
@@ -302,7 +410,7 @@
 }
 
 - (void)removeGroup:(Nudger *)group success:(void (^)(BOOL))success {
-    [QBRequest deleteDialogsWithIDs:[NSSet setWithObject:group.dialogID] forAllUsers:NO
+    [QBRequest deleteDialogsWithIDs:[NSSet setWithObject:group.group.gID] forAllUsers:NO
                        successBlock:^(QBResponse *response, NSArray *deletedObjectsIDs, NSArray *notFoundObjectsIDs, NSArray *wrongPermissionsObjectsIDs) {
                            success(YES);
                        } errorBlock:^(QBResponse *response) {
@@ -326,65 +434,6 @@
 - (BOOL)sendNudge:(Nudger *)to {
     
     return NO;
-}
-
-#pragma mark - QBChat Delegate
-
-- (void)chatRoomDidReceiveMessage:(QB_NONNULL QBChatMessage *)message fromDialogID:(QB_NONNULL NSString *)dialogID {
-    
-}
-
-- (void)chatDidReceiveContactAddRequestFromUser:(NSUInteger)userID {
-    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
-
-        Nudger *newUser = [[Nudger alloc] initWithUser:user];
-        newUser.isNew = YES;
-        newUser.shouldAnimate = YES;
-        newUser.status = NSInvited;
-        [self add:newUser];
-        
-        [self.delegate onceAddedContact:newUser];
-
-    } errorBlock:^(QBResponse *response) {
-        NSLog(@"Err: loading pending users");
-    }];
-}
-
-- (void)chatContactListDidChange:(QB_NONNULL QBContactList *)contactList {
-
-}
-
-- (void)chatDidReceiveContactItemActivity:(NSUInteger)userID isOnline:(BOOL)isOnline status:(QB_NULLABLE NSString *)status {
-    NSLog(@"--------chatDidReceiveContactItemActivity--------- %lu", userID);
-}
-
-- (void)chatDidReceiveAcceptContactRequestFromUser:(NSUInteger)userID {
-    NSLog(@"--------chatDidReceiveAcceptContactRequestFromUser--------- %lu", userID);
-    [[[UIAlertView alloc] initWithTitle:@"Alert" message:[NSString stringWithFormat:@"Your add contact request (ID:%lu is accepted!", userID] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-    [QBRequest userWithID:userID successBlock:^(QBResponse *response, QBUUser *user) {
-        Nudger *newUser = [[Nudger alloc] initWithUser:user];
-        newUser.isNew = YES;
-        newUser.status = NSFriend;
-        [self add:newUser];
-        [self.delegate onceAddedContact:newUser];
-        [self.delegate onceAccepted:newUser.user.ID];
-    } errorBlock:^(QBResponse *response) {
-        [self.delegate onceErr];
-    }];
-}
-
-- (void)chatDidReceiveRejectContactRequestFromUser:(NSUInteger)userID {
-    NSLog(@"--------chatDidReceiveRejectContactRequestFromUser--------- %lu", userID);
-    [self.delegate onceRejected:userID];
-}
-
-- (void)chatDidReceiveSystemMessage:(QBChatMessage *)message
-{
-    
-}
-
-- (void)chatDidAccidentallyDisconnect{
-    [self.delegate onceDisconnected];
 }
 
 @end

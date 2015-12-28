@@ -38,7 +38,7 @@
     [imgBtn addTarget:self action:@selector(longPress) forTouchAndHoldControlEventWithTimeInterval:0.8];
 }
 
-- (void)initNudge:(Nudger *)user notify:(BOOL)isNotify {
+- (void)initNudge:(Nudger *)user {
     if (user) userInfo = user;
     if (userInfo.stream.count > 0) {
         [badgeBtn setHidden:NO];
@@ -94,26 +94,20 @@
     isAnimating = NO;
     isLong = YES;
 }
-//
-//- (void)longPress:(UILongPressGestureRecognizer *)gesture {
-//    if (gesture.state == UIGestureRecognizerStateEnded) {
-//        NSLog(@"Long Press");
-//        [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
-//        [noti1Img.layer removeAllAnimations];
-//        [noti2Img.layer removeAllAnimations];
-//        noti1Img.alpha = 0.0f;
-//        noti2Img.alpha = 0.0f;
-//        isAnimating = NO;
-//    }
-//}
 
 - (IBAction)onNudgeSelected:(id)sender {
+    if (userInfo.status == NSInvited) {
+        [self longPress];
+        return;
+    }
+    
     if (isLong) {
         isLong = NO;
         return;
     }
-    NSLog(@"shortTouch");
+    
     [self.delegate onSendNudge:userInfo];
+    NSLog(@"shortTouch");
 }
 
 - (void)notify {
@@ -126,8 +120,8 @@
             [UIView setAnimationRepeatCount:6];
             noti2Img.alpha = 1.0f;
         } completion:^(BOOL success) {
-            noti2Img.alpha = 0.0f;
-            [self performSelector:@selector(removeNoti) withObject:nil afterDelay:20];
+//            noti2Img.alpha = 0.0f;
+//            [self performSelector:@selector(removeNoti) withObject:nil afterDelay:20];
         }];
     }
 }

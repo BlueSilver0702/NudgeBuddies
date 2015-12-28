@@ -11,11 +11,9 @@
 @interface SearchController ()
 {
     NSMutableArray *dataArr;
-    NSMutableArray *fbFriendsArr;
     NSMutableArray *localNudgers;
     NSMutableArray *otherNudgers;
     NSMutableArray *potentialNudgers;
-    NSMutableArray *searchArr;
     NSIndexPath *selectedPath;
 }
 @end
@@ -25,88 +23,28 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-//    User *user1 = [User new]; user1.fname = @"Stuart"; user1.lname = @"Jeaves"; user1.type = 0; user1.profile = @"user-1";
-//    User *user2 = [User new]; user2.fname = @"Stuart"; user2.lname = @"Michaels"; user2.type = 0; user2.profile = @"user-2";
-//    User *user3 = [User new]; user3.fname = @"Stuart"; user3.lname = @"Jimmy"; user3.type = 0; user3.profile = @"user-3";
-//    User *user4 = [User new]; user4.fname = @"Stuart001"; user4.lname = @""; user4.type = 1; user4.profile = @"user-4";
-//    User *user5 = [User new]; user5.fname = @"Android12"; user5.lname = @""; user5.type = 1; user5.profile = @"user-5";
-//    User *user6 = [User new]; user6.fname = @"ABC333"; user6.lname = @""; user6.type = 1; user6.profile = @"user-1";
-//    User *user7 = [User new]; user7.fname = @"Stuart"; user7.lname = @"Adler"; user7.type = 2; user7.profile = @"user-2";
-//    User *user8 = [User new]; user8.fname = @"Stuart323"; user8.lname = @""; user8.type = 2; user8.profile = @"user-3";
     localNudgers = [NSMutableArray new];
     otherNudgers = [NSMutableArray new];
     potentialNudgers = [NSMutableArray new];
-    
-    fbFriendsArr = [NSMutableArray new];
-    
-    if ([FBSDKAccessToken currentAccessToken]) {
-        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/friends" parameters:@{ @"fields" : @"id"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-            if (!error) {
-                NSLog(@"%@", result);
-                NSDictionary *dictionary = (NSDictionary *)result;
-                NSArray* friends = [dictionary objectForKey:@"data"];
-                for (NSDictionary* friend in friends) {
-                    NSLog(@"I have a friend named %@ with id", [friend objectForKey:@"id"]);
-                    [fbFriendsArr addObject:friend];
-                }
-                
-                NSMutableDictionary *filters = [NSMutableDictionary dictionary];
-                filters[@"order"] = @"asc string full_name";
-                
-                [QBRequest usersWithExtendedRequest:filters page:[QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:10] successBlock:^(QBResponse *response, QBGeneralResponsePage *page, NSArray *users) {
-                    dataArr = [NSMutableArray new];
-                    for (QBUUser *user in users) {
-                        if (![user.login isEqualToString:g_center.currentUser.login]) {
-                            [dataArr addObject:user];
-                        }
-                    }
-                    [self searchResult:@""];
-                    NSLog(@"completed!");
-                } errorBlock:^(QBResponse *response) {
-                    // Handle error  
-                }];
-            }
-        }];
-    }
-
-//    dataArr = [NSArray arrayWithObjects:user1, user2, user3, user4, user5, user6, user7, user8, nil];
-
 }
 
-- (int)searchResult:(NSString *)searchStr {
-    searchArr = [NSMutableArray new];
-    localNudgers = [NSMutableArray new];
-    otherNudgers = [NSMutableArray new];
-    potentialNudgers = [NSMutableArray new];
-    for (QBUUser *user in dataArr) {
-        NSUInteger searchOptions = NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch;
-        NSString *string = user.fullName;
-        NSRange searchRange = NSMakeRange(0, string.length);
-        NSRange foundRange = [string rangeOfString:searchStr options:searchOptions range:searchRange];
-        if (foundRange.length > 0 || [searchStr isEqualToString:@""]) {
-            [searchArr addObject:user];
-        }
-    }
+- (int)searchResult:(NSArray *)searchArr {
+    selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [localNudgers removeAllObjects];
+    [otherNudgers removeAllObjects];
+    [potentialNudgers removeAllObjects];
+    
     for (QBUUser *user in searchArr) {
         BOOL isAdded = NO;
-        for (QBContactListItem *item in [QBChat instance].contactList.contacts) {
-            if (user.ID == item.userID) {
+        for (Nudger *nudger in g_center.contactsArray) {
+            if (user.ID == nudger.user.ID) {
                 [localNudgers addObject:user];
                 isAdded = YES;
                 break;
             }
         }
         if (!isAdded) {
-            for (QBContactListItem *item in [QBChat instance].contactList.pendingApproval) {
-                if (user.ID == item.userID) {
-                    [localNudgers addObject:user];
-                    isAdded = YES;
-                    break;
-                }
-            }
-        }
-        if (!isAdded) {
-            for (NSDictionary *dict in fbFriendsArr) {
+            for (NSDictionary *dict in g_center.fbFriendsArr) {
                 NSString *dictID = [dict objectForKey:@"id"];
                 if ([dictID isEqualToString: user.facebookID]) {
                     [potentialNudgers addObject: user];
@@ -155,7 +93,12 @@
     UIButton *btn1 = (UIButton *) [cell viewWithTag:6];
     UIButton *btn2 = (UIButton *) [cell viewWithTag:7];
     UIButton *btn3 = (UIButton *) [cell viewWithTag:8];
-    UIButton *becomeLab = [(UIButton *) cell viewWithTag:9];
+    UIView *becomeView = [(UIView *) cell viewWithTag:9];
+    [[becomeView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    UIButton *becomeLab = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, becomeView.frame.size.width, becomeView.frame.size.height)];
+    [becomeLab setBackgroundImage:[UIImage imageNamed:@"search-request"] forState:UIControlStateNormal];
+    [becomeLab addTarget:self action:@selector(becomeNudger:) forControlEvents:UIControlEventTouchUpInside];
+    [becomeView addSubview:becomeLab];
     QBUUser *userInfo;
     if (indexPath.section == 0) {
         userInfo = [localNudgers objectAtIndex:indexPath.row];
@@ -170,8 +113,9 @@
         if (imgData) {
             [profileImg setImage:[UIImage imageWithData:imgData]];
         } else {
+            [profileImg setImage:[UIImage imageNamed:@"empty"]];
             [QBRequest downloadFileWithID:userInfo.blobID successBlock:^(QBResponse *response, NSData *fileData) {
-                [profileImg setImage:[UIImage imageWithData:fileData]];
+                if (fileData) [profileImg setImage:[UIImage imageWithData:fileData]];
             } statusBlock:nil errorBlock:nil];
         }
     } else {
@@ -219,8 +163,7 @@
     } else {
         userInfo = [potentialNudgers objectAtIndex:indexPath.row];
     }
-    UIButton *becomeLab = [(UIButton *) cell viewWithTag:userInfo.ID];
-    [becomeLab addTarget:self action:@selector(becomeNudger:) forControlEvents:UIControlEventTouchUpInside];
+    UIView *becomeLab = [(UIView *) cell viewWithTag:9];
     if (indexPath.section > 0) {
         if (selectedPath != indexPath) {
             UITableViewCell *selected = [tableView cellForRowAtIndexPath:selectedPath];
@@ -279,10 +222,12 @@
     } else {
         userInfo = [potentialNudgers objectAtIndex:selectedPath.row];
     }
-    UIButton *becomeLab = [(UIButton *) cell viewWithTag:userInfo.ID];
+    UIView *becomeLab = [(UIView *) cell viewWithTag:9];
     [UIView transitionWithView:becomeLab duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [becomeLab setFrame:CGRectMake(320, becomeLab.frame.origin.y, becomeLab.frame.size.width, becomeLab.frame.size.height)];
-    } completion:nil];
+    } completion:^(BOOL complete){
+        [self.delegate onSearchDone];
+    }];
     [[QBChat instance] addUserToContactListRequest:button.tag completion:^(NSError *error) {
         [self.tableView reloadData];
         NSLog(@"Successfully added ------------>");
@@ -296,7 +241,6 @@
 }
 
 - (void) emptyTable {
-    searchArr = nil;
     [self.tableView reloadData];
     [self.tableView setFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 0)];
 }

@@ -22,7 +22,6 @@
     QBUUser *currentUser;
     AVAudioPlayer *audioPlayer;
     
-    id <NSObject> observerDidBecomeActive;
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
     IBOutlet UIView *notificationView;
@@ -126,17 +125,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
-    observerDidBecomeActive = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
-                                                                                object:nil queue:[NSOperationQueue mainQueue]
-                                                                            usingBlock:^(NSNotification *note) {
-                                                                                if (![[QBChat instance] isConnected]) {
-                                                                                    [SVProgressHUD showWithStatus:@"Connecting..." maskType:SVProgressHUDMaskTypeClear];
-                                                                                }
-                                                                            }];
     
     [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
-    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:255/255.0 green:130/255.0 blue:64/255.0 alpha:1.0]];
+    [SVProgressHUD showWithStatus:@"Connecting..."];
     
     stopAccel = NO;
     iPH = [[UIImagePickerHelper alloc] init];
@@ -173,7 +165,7 @@
     [self addChildViewController:searchCtrl];
     [searchView addSubview:searchCtrl.view];
     searchCtrl.delegate = self;
-    int tableSize = [searchCtrl searchResult:@""];
+    int tableSize = 0;
     if (tableSize > 320) {
         [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 320)];
     } else {
@@ -213,10 +205,6 @@
     [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y + initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
     
     nudgeButtonArr = [NSMutableArray new];
-}
-
-- (void) viewDidAppear:(BOOL)animated {
-    [SVProgressHUD showWithStatus:@"Connecting..."];
 }
 
 - (void) initLogger {
@@ -279,17 +267,18 @@
         initFavView.hidden = NO;
         [initSearchView setFrame:CGRectMake(0, initSearchView.frame.origin.y + initSearchView.frame.size.height, initSearchView.frame.size.width, initSearchView.frame.size.height)];
         [initControlView setFrame:CGRectMake(0, initControlView.frame.origin.y - initControlView.frame.size.height, initControlView.frame.size.width, initControlView.frame.size.height)];
+    } completion:^(BOOL finished) {
+        if (g_center.currentNudger.defaultNudge == nil) {
+            [self onStartOpen];
+        }
     }];
-    if ([QBChat instance].contactList.contacts.count == 0) {
-        [SVProgressHUD dismiss];
-    }
-    if (g_center.currentNudger.defaultNudge == nil) {
-        [self onStartOpen];
-    }
+
+    [SVProgressHUD dismiss];
 }
 
 - (void)onceDisconnected {
-    [self showAlert:@"Accidently disconnected."];
+//    [self showAlert:@"Accidently disconnected."];
+    NSLog(@"Disconnected");
 }
 
 //- (void)startLoadContactList {
@@ -298,9 +287,10 @@
 //}
 
 - (void)onceLoadedContactList {
-    NSLog(@"%@",g_center.notificationArray);
+
     [SVProgressHUD dismiss];
     [self display:NO];
+    
     // **********  favorite module  ************
     motionManager = [CMMotionManager new];
     motionManager.accelerometerUpdateInterval = .05;
@@ -311,6 +301,19 @@
             [self error:err_later];
         }
     }];
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/friends" parameters:@{ @"fields" : @"id"}] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+            if (!error) {
+                NSDictionary *dictionary = (NSDictionary *)result;
+                NSArray* friends = [dictionary objectForKey:@"data"];
+                for (NSDictionary* friend in friends) {
+                    NSLog(@"I have a friend named %@ with id", [friend objectForKey:@"id"]);
+                    [g_center.fbFriendsArr addObject:friend];
+                }
+            }
+        }];
+    }
 }
 
 - (void)onceLoadedGroupList {
@@ -325,13 +328,14 @@
     [self display:YES];
 }
 
-- (void)onceAccepted:(NSUInteger)fromID {
-    [self display:YES];
+- (void)onceAccepted:(NSString *)from {
+    [self showAlert:[NSString stringWithFormat:@"%@ accepted your buddy invite", from]];
+    [self onceNudgeReceived:nil];
 }
 
 - (void)onceRejected:(NSUInteger)fromID {
-    NSLog(@"You're rejected.");
-    [self display:YES];
+    [self showAlert:[NSString stringWithFormat:@"Your request is rejected (%lu)", fromID]];
+    [self onceNudgeReceived:nil];
 }
 
 - (void)registerForRemoteNotifications{
@@ -355,6 +359,15 @@
 }
 
 - (void)onceNudgeReceived:(Nudger *)nudger {
+    if (nudger == nil) {
+        if (g_center.isNight) {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        } else {
+            [audioPlayer play];
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+        }
+        return;
+    }
     if (nudger.response == RTNudge) {
         if (!g_center.isNight && !g_center.currentNudger.silent) {
             [audioPlayer play];
@@ -374,9 +387,6 @@
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         }
     }
-    
-    [audioPlayer play];
-    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
 }
 
 - (void) display:(BOOL)animatable {
@@ -389,10 +399,76 @@
     
     [[nudgebuddiesBar subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [[initFavView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[notificationView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    NSMutableArray *notiArr = [NSMutableArray new];
+    NSMutableArray *contArr = [NSMutableArray new];
+    NSMutableArray *favoArr = [NSMutableArray new];
+    
+    for (int i=(int)g_center.notificationArray.count-1; i>=0; i--) {
+        Nudger *nudger = [g_center.notificationArray objectAtIndex:i];
+        if (nudger.isNew && !nudger.isFavorite && notiArr.count <3) {
+            [notiArr addObject:nudger];
+        } else if (nudger.isFavorite) {
+            [favoArr addObject:nudger];
+        } else {
+            [contArr addObject:nudger];
+        }
+    }
+    
     UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, initFavView.frame.size.width, initFavView.frame.size.height)];
     [closeButton addTarget:self action:@selector(onMenuClose) forControlEvents:UIControlEventTouchUpInside];
     [initFavView addSubview:closeButton];
     
+    for (Nudger *nudger in contArr) {
+        NudgeButton *nudgeBtn = [NudgeButton new];
+        [self addChildViewController:nudgeBtn];
+        nudgeBtn.delegate = self;
+        
+        nudger.menuPos = 1;
+        [nudgebuddiesBar addSubview:nudgeBtn.view];
+        [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
+        barWidth += 70;
+        [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
+        [nudgeBtn initNudge:nudger];
+    }
+
+    for (Nudger *nudger in favoArr) {
+        NudgeButton *nudgeBtn = [NudgeButton new];
+        [self addChildViewController:nudgeBtn];
+        nudgeBtn.delegate = self;
+        
+        nudger.menuPos = 2;
+        favTmp ++;
+        if (favTmp == 1) [nudgeBtn.view setFrame:CGRectMake(FAV_1.x, FAV_1.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 2) [nudgeBtn.view setFrame:CGRectMake(FAV_2.x, FAV_2.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 3) [nudgeBtn.view setFrame:CGRectMake(FAV_3.x, FAV_3.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 4) [nudgeBtn.view setFrame:CGRectMake(FAV_4.x, FAV_4.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 5) [nudgeBtn.view setFrame:CGRectMake(FAV_5.x, FAV_5.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 6) [nudgeBtn.view setFrame:CGRectMake(FAV_6.x, FAV_6.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 7) [nudgeBtn.view setFrame:CGRectMake(FAV_7.x, FAV_7.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else if (favTmp == 8) [nudgeBtn.view setFrame:CGRectMake(FAV_8.x, FAV_8.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
+        else {
+            nudger.menuPos = 1;
+            [nudgebuddiesBar addSubview:nudgeBtn.view];
+            [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
+            barWidth += 70;
+            [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
+            [nudgeBtn initNudge:nudger];
+        }
+        if (favTmp <= 8) {
+            [favViewArray addObject:nudgeBtn.view];
+            [nudgeBtn initNudge:nudger];
+            [initFavView addSubview:nudgeBtn.view];
+        }
+    }
+
+    for (Nudger *nudger in contArr) {
+        NudgeButton *nudgeBtn = [NudgeButton new];
+        [self addChildViewController:nudgeBtn];
+        nudgeBtn.delegate = self;
+    }
+
     for (int i=(int)g_center.notificationArray.count-1; i>=0; i--) {
         Nudger *nudger = [g_center.notificationArray objectAtIndex:i];
         lastIndex ++;
@@ -407,19 +483,19 @@
                 [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
                 barWidth += (width + 70);
                 [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
-                [nudgeBtn initNudge:nudger notify:NO];
+                [nudgeBtn initNudge:nudger];
             } else {
                 nudger.menuPos = 0;
                 if (nudgeButtonArr.count == 0) {
                     [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                     [notificationView addSubview:nudgeBtn.view];
-                    [nudgeBtn initNudge:nudger notify:YES];
+                    [nudgeBtn initNudge:nudger];
                     nudgeBtn.index = 0;
                     [nudgeButtonArr addObject:nudgeBtn];
                 } else if (nudgeButtonArr.count == 1) {
                     NudgeButton *oldBtn = [nudgeButtonArr objectAtIndex:0];
                     if (oldBtn.userInfo.user.ID == nudger.user.ID || [oldBtn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
-                        [oldBtn initNudge:nudger notify:YES];
+                        [oldBtn initNudge:nudger];
                     } else {
                         [notificationView addSubview:nudgeBtn.view];
                         [nudgeBtn.view setHidden:YES];
@@ -428,13 +504,13 @@
                             [UIView transitionWithView:oldBtn.view duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
                                 [oldBtn.view setFrame:CGRectMake(15, 0, width, width)];
                             } completion:^(BOOL complete){
-                                [nudgeBtn initNudge:nudger notify:YES];
+                                [nudgeBtn initNudge:nudger];
                                 [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                                 [nudgeBtn.view setHidden:NO];
                             }];
                         } else {
                             [oldBtn.view setFrame:CGRectMake(15, 0, width, width)];
-                            [nudgeBtn initNudge:nudger notify:YES];
+                            [nudgeBtn initNudge:nudger];
                             [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                             [nudgeBtn.view setHidden:NO];
                         }
@@ -444,7 +520,7 @@
                     NudgeButton *old2Btn = [nudgeButtonArr objectAtIndex:1];
                     if (old1Btn.userInfo.user.ID == nudger.user.ID || [old1Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
                         nudgeButtonArr = [NSMutableArray arrayWithObjects:old2Btn, old1Btn, nil];
-                        [old1Btn initNudge:nudger notify:YES];
+                        [old1Btn initNudge:nudger];
                         [old1Btn.view setFrame:CGRectMake(112, 0, width, width)];
                         [old1Btn.view setHidden:YES];
                         if (animatable) {
@@ -460,7 +536,7 @@
                             [old1Btn.view setHidden:NO];
                         }
                     } else if (old2Btn.userInfo.user.ID == nudger.user.ID || [old2Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
-                        [old2Btn initNudge:nudger notify:YES];
+                        [old2Btn initNudge:nudger];
                     } else {
                         [notificationView addSubview:nudgeBtn.view];
                         [nudgeBtn.view setHidden:YES];
@@ -470,14 +546,14 @@
                                 [old2Btn.view setFrame:CGRectMake(211, 0, width, width)];
                             } completion:^(BOOL complete) {
                                 [UIView animateWithDuration:0.3 animations:^(void){
-                                    [nudgeBtn initNudge:nudger notify:YES];
+                                    [nudgeBtn initNudge:nudger];
                                     [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                                     [nudgeBtn.view setHidden:NO];
                                 }];
                             }];
                         } else {
                             [old2Btn.view setFrame:CGRectMake(211, 0, width, width)];
-                            [nudgeBtn initNudge:nudger notify:YES];
+                            [nudgeBtn initNudge:nudger];
                             [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                             [nudgeBtn.view setHidden:NO];
                         }
@@ -488,7 +564,7 @@
                     NudgeButton *old3Btn = [nudgeButtonArr objectAtIndex:2];
                     if (old1Btn.userInfo.user.ID == nudger.user.ID || [old1Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
                         nudgeButtonArr = [NSMutableArray arrayWithObjects:old2Btn, old3Btn, old1Btn, nil];
-                        [old1Btn initNudge:nudger notify:YES];
+                        [old1Btn initNudge:nudger];
                         [old1Btn.view setFrame:CGRectMake(112, 0, width, width)];
                         [old1Btn.view setHidden:YES];
                         if (animatable) {
@@ -509,7 +585,7 @@
                         }
                     } else if (old2Btn.userInfo.user.ID == nudger.user.ID || [old2Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
                         nudgeButtonArr = [NSMutableArray arrayWithObjects:old1Btn, old3Btn, old2Btn, nil];
-                        [old2Btn initNudge:nudger notify:YES];
+                        [old2Btn initNudge:nudger];
                         [old2Btn.view setFrame:CGRectMake(112, 0, width, width)];
                         [old2Btn.view setHidden:YES];
                         if (animatable) {
@@ -525,7 +601,7 @@
                             [old2Btn.view setHidden:NO];
                         }
                     } else if (old3Btn.userInfo.user.ID == nudger.user.ID || [old3Btn.userInfo.group.gName isEqualToString:nudger.group.gName]) {
-                        [old3Btn initNudge:nudger notify:YES];
+                        [old3Btn initNudge:nudger];
                     } else {
                         NudgeButton *old1Btn = [nudgeButtonArr objectAtIndex:0];
                         NudgeButton *old2Btn = [nudgeButtonArr objectAtIndex:1];
@@ -539,7 +615,7 @@
                                 [old2Btn.view setFrame:CGRectMake(15, 0, width, width)];
                             } completion:^(BOOL complete) {
                                 [UIView animateWithDuration:0.3 animations:^(void){
-                                    [nudgeBtn initNudge:nudger notify:YES];
+                                    [nudgeBtn initNudge:nudger];
                                     [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                                     [nudgeBtn.view setHidden:NO];
                                 }];
@@ -549,7 +625,7 @@
                             } completion:nil];
                         } else {
                             [old2Btn.view setFrame:CGRectMake(15, 0, width, width)];
-                            [nudgeBtn initNudge:nudger notify:YES];
+                            [nudgeBtn initNudge:nudger];
                             [nudgeBtn.view setFrame:CGRectMake(112, 0, width, width)];
                             [nudgeBtn.view setHidden:NO];
                             [old3Btn.view setFrame:CGRectMake(211, 0, width, width)];
@@ -558,38 +634,26 @@
                 }
             }
         } else if (nudger.isFavorite) {
-            nudger.menuPos = 2;
-            favTmp ++;
-            if (favTmp == 1) [nudgeBtn.view setFrame:CGRectMake(FAV_1.x, FAV_1.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 2) [nudgeBtn.view setFrame:CGRectMake(FAV_2.x, FAV_2.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 3) [nudgeBtn.view setFrame:CGRectMake(FAV_3.x, FAV_3.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 4) [nudgeBtn.view setFrame:CGRectMake(FAV_4.x, FAV_4.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 5) [nudgeBtn.view setFrame:CGRectMake(FAV_5.x, FAV_5.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 6) [nudgeBtn.view setFrame:CGRectMake(FAV_6.x, FAV_6.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 7) [nudgeBtn.view setFrame:CGRectMake(FAV_7.x, FAV_7.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else if (favTmp == 8) [nudgeBtn.view setFrame:CGRectMake(FAV_8.x, FAV_8.y, nudgeBtn.view.frame.size.width, nudgeBtn.view.frame.size.height)];
-            else {
-                nudger.menuPos = 1;
-                [nudgebuddiesBar addSubview:nudgeBtn.view];
-                [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
-                barWidth += 70;
-                [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
-                [nudgeBtn initNudge:nudger notify:NO];
-            }
-            if (favTmp <= 8) {
-                [favViewArray addObject:nudgeBtn.view];
-                [nudgeBtn initNudge:nudger notify:NO];
-                [initFavView addSubview:nudgeBtn.view];
-            }
+            
         } else {
-            nudger.menuPos = 1;
-            [nudgebuddiesBar addSubview:nudgeBtn.view];
-            [nudgeBtn.view setFrame:CGRectMake(barWidth, 0, width, width)];
-            barWidth += 70;
-            [nudgebuddiesBar setContentSize:CGSizeMake(barWidth, width)];
-            [nudgeBtn initNudge:nudger notify:NO];
+            
         }
     }
+}
+
+- (NSMutableArray *)sort:(NSMutableArray *)sourceArr {
+    NSMutableArray *retArr;
+    retArr = (NSMutableArray *)[sourceArr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        Nudger *nuObj1 = (Nudger *)obj1;
+        Nudger *nuObj2 = (Nudger *)obj2;
+        NSString *user1 = nuObj1.type==NTGroup?nuObj1.group.gName:nuObj1.user.fullName;
+        NSString *user2 = nuObj2.type==NTGroup?nuObj2.group.gName:nuObj2.user.fullName;
+        if (nuObj1.isNew && nuObj2.isNew) return NSOrderedSame;
+        else if (nuObj1.isNew && !nuObj2.isNew) return NSOrderedAscending;
+        else if (!nuObj1.isNew && nuObj2.isNew) return NSOrderedDescending;
+        else return [user1 compare:user2];
+    }];
+    return retArr;
 }
 
 - (void)onceErr {
@@ -706,23 +770,14 @@
         menuCtrl.isOpen = NO;
         NSLog(@"MRViewGroup");
     } else if (menuReturn == MRAdd) {
-        
         [self onMenuClose];
         menuCtrl.isOpen = NO;
-        NSLog(@"MRAdd");
-        
-        [[QBChat instance] confirmAddContactRequest:nudger.user.ID completion:^(NSError * _Nullable error) {
-            if (error) {
+
+        [g_center addBuddy:nudger success:^(BOOL success){
+            if (!success) {
                 [SVProgressHUD showErrorWithStatus:err_later];
             } else {
-                QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypePrivate];
-                chatDialog.occupantIDs = @[@(nudger.user.ID)];
-                
-                [QBRequest createDialog:chatDialog successBlock:^(QBResponse *response, QBChatDialog *createdDialog) {
-                    [g_center add:nudger];
-                } errorBlock:^(QBResponse *response) {
-                    [self error:err_later];
-                }];
+                [SVProgressHUD showSuccessWithStatus:@"Successfully added to your contact list."];
             }
         }];
     } else if (menuReturn == MRReject) {
@@ -907,39 +962,30 @@
 }
 
 - (void)onSearchDone {
-    NSLog(@"search done");
     [self onSearchClose:nil];
 }
 
 - (void)textFieldDidChange:(UITextField *)textField {
-    NSLog(@"changed");
+    if (textField.text.length < 3) {
+        return;
+    }
     searchView.hidden = NO;
     [self hide:VTSearch];
-    int size = [searchCtrl searchResult:textField.text];
-    [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
-    [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
-        [searchCtrl.view setFrame:CGRectMake(0, 0, searchCtrl.view.frame.size.width, size)];
-    } completion:nil];
-    [UIView transitionWithView:searchDoneButton duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        searchDoneButton.hidden = NO;
-    } completion:nil];
-}
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-    searchView.hidden = NO;
-    int size = [searchCtrl searchResult:textField.text];
-    [self hide:VTSearch];
-    [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
-    [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
-        [searchCtrl.view setFrame:CGRectMake(0, 0, searchCtrl.view.frame.size.width, size)];
-    } completion:nil];
-    [UIView transitionWithView:searchDoneButton duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        searchDoneButton.hidden = NO;
-    } completion:nil];
-    NSLog(@"started");
-    return YES;
+    
+    [QBRequest usersWithFullName:textField.text page:[QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:10]
+                    successBlock:^(QBResponse *response, QBGeneralResponsePage *page, NSArray *users) {
+                        int size = [searchCtrl searchResult:users];
+                        [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, 0)];
+                        [UIView transitionWithView:searchView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                            [searchView setFrame:CGRectMake(searchView.frame.origin.x, searchView.frame.origin.y, searchView.frame.size.width, size)];
+                            [searchCtrl.view setFrame:CGRectMake(0, 0, searchCtrl.view.frame.size.width, size)];
+                        } completion:nil];
+                        [UIView transitionWithView:searchDoneButton duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+                            searchDoneButton.hidden = NO;
+                        } completion:nil];
+                    } errorBlock:^(QBResponse *response) {
+                        [self error:@"No Result."];
+                    }];
 }
 
 #pragma mark - Add Friend
@@ -958,11 +1004,11 @@
 - (IBAction)onAddClose:(id)sender {
     if (sender) {
         [searchBox becomeFirstResponder];
-    } else {
+    }
         [UIView transitionWithView:addView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
             addView.hidden = YES;
         } completion:nil];
-    }
+
 }
 
 #pragma mark - Select Group
@@ -1066,7 +1112,7 @@
     object.ID = @"502f7c4036c9ae2163000002";
     
     for (Nudger *group in gSelectActiveArr) {
-        QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.dialogID type:QBChatDialogTypeGroup];
+        QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.group.gID type:QBChatDialogTypeGroup];
         updateDialog.pushOccupantsIDs = @[[NSString stringWithFormat:@"%lu",gSelectNudger.user.ID]];
         [QBRequest updateDialog:updateDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
             
@@ -1167,7 +1213,7 @@
         [object.fields setObject:[NSNumber numberWithInteger:openGroup.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.block] forKey:@"Block"];
-        openGroup.dialogID = createdDialog.ID;
+        openGroup.group.gID = createdDialog.ID;
         if (groupPicUpdate) {
             [QBRequest TUploadFile:groupPicData fileName:@"group.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *uploadedBlob) {
                 NSUInteger uploadedFileID = uploadedBlob.ID;
@@ -1206,14 +1252,14 @@
 - (void) sendGroupInvite:(QBChatDialog *)dialog {
     for (NSString *occupantID in dialog.occupantIDs) {
         
-        QBChatMessage *inviteMessage = [g_center createChatNotificationForGroupChatCreation:dialog];
-        NSTimeInterval timestamp = (unsigned long)[[NSDate date] timeIntervalSince1970];
-        inviteMessage.customParameters[@"date_sent"] = (NSString *)@(timestamp);
-        inviteMessage.customParameters[@"sender"] = currentUser.fullName;
-        inviteMessage.recipientID = [occupantID integerValue];
-        [[QBChat instance] sendSystemMessage:inviteMessage completion:^(NSError * _Nullable error) {
-            [self error:err_later];
-        }];
+//        QBChatMessage *inviteMessage = [g_center createChatNotificationForGroupChatCreation:dialog];
+//        NSTimeInterval timestamp = (unsigned long)[[NSDate date] timeIntervalSince1970];
+//        inviteMessage.customParameters[@"date_sent"] = (NSString *)@(timestamp);
+//        inviteMessage.customParameters[@"sender"] = currentUser.fullName;
+//        inviteMessage.recipientID = [occupantID integerValue];
+//        [[QBChat instance] sendSystemMessage:inviteMessage completion:^(NSError * _Nullable error) {
+//            [self error:err_later];
+//        }];
     }
 }
 
@@ -1316,7 +1362,11 @@
 }
 
 - (IBAction)onNPDelete:(id)sender {
+    if (openNP == nil) {
+        return;
+    }
     [[QBChat instance] removeUserFromContactList:openNP.user.ID completion:^(NSError * _Nullable error) {
+        [g_center remove:openNP];
         [self onNPClose:nil];
         [self display:YES];
     }];

@@ -70,7 +70,7 @@
         NSLog(@"Success");
         [SVProgressHUD dismiss];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Successfully Registered!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [SVProgressHUD dismiss];
+        [alertView show];
         [userDefaults setObject:email.text forKey:@"email"];
         [userDefaults setObject:passwd.text forKey:@"pwd"];
         [userDefaults setBool:YES forKey:@"register"];
@@ -100,7 +100,6 @@
 }
 
 - (IBAction)onFacebook:(id)sender {
-    [SVProgressHUD showWithStatus:@"Signing..."];
     
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
@@ -111,10 +110,13 @@
              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You can't change facebook account on this device." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
              [alertView show];
          } else if (result.isCancelled) {
-             [SVProgressHUD dismiss];
+//             [SVProgressHUD dismiss];
          } else {
              NSLog(@"Logged in");
              if ([FBSDKAccessToken currentAccessToken]) {
+                 
+                 [SVProgressHUD showWithStatus:@"Signing..."];
+                 
                  [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : [NSString stringWithFormat:@"id,name,email,picture.width(%d).height(%d)", RESIZE_WIDTH, RESIZE_HEIGHT]}]startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                      if (!error) {
                          NSString *imageStringOfLoginUser = [[[result valueForKey:@"picture"] valueForKey:@"data"] valueForKey:@"url"];

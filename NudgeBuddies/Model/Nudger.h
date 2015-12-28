@@ -10,7 +10,6 @@
 
 @interface Nudger : NSObject
 
-@property (nonatomic, retain) NSString *dialogID;
 @property (nonatomic) NudgerType type;
 @property (nonatomic) NudgerStatus status;
 @property (nonatomic) ResponseType response;
