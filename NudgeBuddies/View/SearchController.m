@@ -28,7 +28,7 @@
     potentialNudgers = [NSMutableArray new];
 }
 
-- (int)searchResult:(NSArray *)searchArr {
+- (int)searchResult:(NSMutableArray *)searchArr {
     selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [localNudgers removeAllObjects];
     [otherNudgers removeAllObjects];

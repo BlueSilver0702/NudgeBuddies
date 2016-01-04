@@ -14,5 +14,6 @@
 @property (nonatomic, retain) NSString *gName;
 @property (nonatomic, retain) NSMutableArray *gUsers;
 @property (nonatomic) NSUInteger gBlobID;
+@property (nonatomic, retain) NSString *gInviter;
 
 @end

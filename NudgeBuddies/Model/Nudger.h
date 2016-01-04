@@ -27,8 +27,11 @@
 @property (nonatomic) BOOL isNew;
 @property (nonatomic) BOOL shouldAnimate;
 @property (nonatomic) int menuPos;
+@property (nonatomic) NSUInteger unreadMsg;
 @property (nonatomic, retain) NSString *metaID;
+@property (nonatomic, retain) NSString *dialogID;
 @property (nonatomic, retain) NSData *picData;
+@property (nonatomic) BOOL accept;
 
 - (id)initWithUser:(QBUUser *)userInfo;
 - (id)initWithGroup:(Group *)groupInfo;

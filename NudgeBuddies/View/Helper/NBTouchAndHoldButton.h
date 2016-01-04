@@ -31,5 +31,6 @@
 @interface NBTouchAndHoldButton : UIButton
 
 - (void)addTarget:(id)target action:(SEL)action forTouchAndHoldControlEventWithTimeInterval:(NSTimeInterval)periodTime;
+- (void)invalidTime;
 
 @end

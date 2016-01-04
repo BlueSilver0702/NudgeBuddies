@@ -16,6 +16,7 @@
 - (void)onceAccepted:(NSString *)from;
 - (void)onceRejected:(NSUInteger)from;
 - (void)onceDisconnected;
+- (void)onceNudged:(Nudger *)nudger;
 - (void)onceErr;
 @end
 
@@ -32,14 +33,20 @@
 @property (nonatomic, retain) QBUUser *currentUser;
 @property (nonatomic, retain) Nudger *currentNudger;
 @property (nonatomic) BOOL isNight;
+@property (nonatomic) BOOL isCount;
 
 @property(weak) id <AppCenterDelegate> delegate;
 
 - (void)initCenter:(QBUUser *)user;
 - (void)add:(Nudger *)user;
 - (void)remove:(Nudger *)user;
-- (void) addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success;
-
+- (void)addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success;
+- (void)updateContact:(Nudger *)buddy success:(void (^)(BOOL))success;
+- (void)removeGroup:(Nudger *)group success:(void (^)(BOOL))success;
 - (void)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
+
+- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text success:(void (^)(BOOL))success;
+- (void)getUnreadMessages;
+- (void)connectGroupChat;
 
 @end

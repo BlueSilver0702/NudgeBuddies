@@ -46,12 +46,14 @@
 }*/
 
 - (void)addTarget:(id)target action:(SEL)action forTouchAndHoldControlEventWithTimeInterval:(NSTimeInterval)periodTime{
+    if (holdTimer != nil) {
+        [holdTimer invalidate];
+        holdTimer = nil;
+    }
     dt = periodTime;
     targetOfRepeatSel = target;
     [self addTarget:self action:@selector(sourceTouchUp:)
    forControlEvents:UIControlEventTouchUpInside];
-    [self addTarget:self action:@selector(sourceTouchUp:)
-   forControlEvents:UIControlEventTouchUpOutside];
     [self addTarget:self action:@selector(sourceTouchDown:)
    forControlEvents:UIControlEventTouchDown];
     repeateSelectorAsValue = [NSValue valueWithBytes:&action objCType:@encode(SEL)];
@@ -71,6 +73,10 @@
         [repeateSelectorAsValue getValue:&selector];
         holdTimer = [NSTimer scheduledTimerWithTimeInterval:dt  target:targetOfRepeatSel selector:selector userInfo:nil repeats: YES];
     }
+}
+
+- (void)invalidTime {
+    [holdTimer invalidate];
 }
     
 @end

@@ -35,14 +35,14 @@
     noti2Img.alpha = 0.0;
     isAnimating = NO;
     [imgBtn setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];
-    [imgBtn addTarget:self action:@selector(longPress) forTouchAndHoldControlEventWithTimeInterval:0.8];
+    [imgBtn addTarget:self action:@selector(longPress) forTouchAndHoldControlEventWithTimeInterval:1.0];
 }
 
 - (void)initNudge:(Nudger *)user {
     if (user) userInfo = user;
-    if (userInfo.stream.count > 0) {
+    if (userInfo.unreadMsg > 0) {
         [badgeBtn setHidden:NO];
-        [badgeBtn setTitle:[NSString stringWithFormat:@"%lu", userInfo.stream.count] forState:UIControlStateNormal];
+        [badgeBtn setTitle:[NSString stringWithFormat:@"%lu", userInfo.unreadMsg] forState:UIControlStateNormal];
     }
     if (userInfo.isFavorite) {
         [favBtn setHidden:NO];
@@ -50,7 +50,8 @@
     }
     if (userInfo.type == NTGroup) {
         [nameLab setText:userInfo.group.gName];
-        [imgBtn setTitle:[userInfo getName] forState:UIControlStateNormal];
+        [imgBtn setBackgroundImage:[UIImage imageNamed:@"user-group"] forState:UIControlStateNormal];
+        [imgBtn setTitle:@"" forState:UIControlStateNormal];
         if (userInfo.group.gBlobID > 0) {
             NSData *imgData = [g_var loadFile:userInfo.group.gBlobID];
             if (imgData) {
@@ -78,6 +79,11 @@
         }
     }
     
+    if (user.isNew) {
+        noti1Img.hidden = NO;
+        noti1Img.alpha = 1.0f;
+    }
+    
     if (user.shouldAnimate) [self notify];
     
 //    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
@@ -86,6 +92,7 @@
 
 - (void)longPress {
     NSLog(@"Long Press");
+    [imgBtn invalidTime];
     [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
     [noti1Img.layer removeAllAnimations];
     [noti2Img.layer removeAllAnimations];
@@ -98,15 +105,23 @@
 - (IBAction)onNudgeSelected:(id)sender {
     if (userInfo.status == NSInvited) {
         [self longPress];
+        userInfo.isNew = NO;
+        userInfo.shouldAnimate = NO;
         return;
     }
+    
+    [noti1Img.layer removeAllAnimations];
+    [noti2Img.layer removeAllAnimations];
+    noti1Img.alpha = 0.0f;
+    noti2Img.alpha = 0.0f;
+    isAnimating = NO;
     
     if (isLong) {
         isLong = NO;
         return;
     }
     
-    [self.delegate onSendNudge:userInfo];
+    [self.delegate onSendNudge:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
     NSLog(@"shortTouch");
 }
 
@@ -120,10 +135,15 @@
             [UIView setAnimationRepeatCount:6];
             noti2Img.alpha = 1.0f;
         } completion:^(BOOL success) {
-//            noti2Img.alpha = 0.0f;
+            noti2Img.alpha = 0.0f;
+            userInfo.shouldAnimate = NO;
 //            [self performSelector:@selector(removeNoti) withObject:nil afterDelay:20];
         }];
     }
+}
+
+- (IBAction)onFavTouch:(id)sender {
+    [self.delegate onFavClicked:userInfo];
 }
 
 - (void)removeNoti {

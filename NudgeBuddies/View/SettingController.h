@@ -13,6 +13,7 @@
 @optional
 
 - (void)onSettingDone:(int)status;
+- (void)onSettingUpdate;
 
 @end
 

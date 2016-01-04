@@ -13,7 +13,8 @@
 @optional
 
 - (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect;
-- (void)onSendNudge:(Nudger *)nudger;
+- (void)onSendNudge:(Nudger *)nudger frame:(CGRect)rect;
+- (void)onFavClicked:(Nudger *)nudger;
 
 @end
 

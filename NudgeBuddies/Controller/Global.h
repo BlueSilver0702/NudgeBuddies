@@ -37,7 +37,8 @@ typedef NS_ENUM(NSInteger, MenuType) {
     MTBuddyStream,
     MTGroup,
     MTGroupStream,
-    MTAdd
+    MTAdd,
+    MTNudge,
 };
 
 typedef NS_ENUM(NSInteger, MenuReturn) {
@@ -71,6 +72,8 @@ typedef NS_ENUM(NSInteger, ViewTag) {
     VTGroup,
     VTGroupSelect,
     VTNP,
+    VTViewGroup,
+    VTStream
 };
 
 @interface Global : NSObject
@@ -132,14 +135,15 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define USER_NUDGE                                  @"user_nudge"
 #define USER_ACKNOWLEDGE                            @"user_acknowledge"
 #define USER_NIGHT                                  @"user_night"
+#define USER_COUNT                                  @"user_count"
 
-#define FAV_1                                       CGPointMake(120, 120)
-#define FAV_2                                       CGPointMake(35, 20)
-#define FAV_3                                       CGPointMake(208, 221)
-#define FAV_4                                       CGPointMake(43, 221)
-#define FAV_5                                       CGPointMake(228, 20)
-#define FAV_6                                       CGPointMake(15, 125)
-#define FAV_7                                       CGPointMake(240, 120)
-#define FAV_8                                       CGPointMake(140, 43)
+#define FAV_1                                       CGPointMake(116, 128)
+#define FAV_2                                       CGPointMake(15, 20)
+#define FAV_3                                       CGPointMake(200, 221)
+#define FAV_4                                       CGPointMake(38, 221)
+#define FAV_5                                       CGPointMake(220, 20)
+#define FAV_6                                       CGPointMake(0, 120)
+#define FAV_7                                       CGPointMake(230, 120)
+#define FAV_8                                       CGPointMake(116, 43)
 
 #define err_later                                         @"An error occured. Please try later."

@@ -13,6 +13,7 @@
 @optional
 
 - (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger;
+- (void)onMenuNudged:(Nudger *)nudger;
 
 @end
 
@@ -23,5 +24,6 @@
 @property(nonatomic) BOOL isOpen;
 
 - (CGSize)createMenu:(Nudger *)nudger;
+- (CGSize)createSendMenu:(Nudger *)nudger;
 
 @end

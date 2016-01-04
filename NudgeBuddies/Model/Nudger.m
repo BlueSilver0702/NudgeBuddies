@@ -31,6 +31,8 @@
         self.shouldAnimate = NO;
         self.menuPos = 0;
         self.metaID = nil;
+        self.dialogID = nil;
+        self.unreadMsg = 0;
     }
     return self;
 }
@@ -56,6 +58,8 @@
         self.shouldAnimate = NO;
         self.menuPos = 0;
         self.metaID = nil;
+        self.dialogID = nil;
+        self.unreadMsg = 0;
     }
     return self;
 }
@@ -81,10 +85,14 @@
 }
 
 - (BOOL)isEqualNudger:(Nudger *)newNudger {
-    if (_user.ID == newNudger.user.ID) {
-        return YES;
-    } else if ([_group.gName isEqualToString:newNudger.group.gName]) {
-        return YES;
+    if (self.type == NTGroup && newNudger.type == NTGroup) {
+        if ([_group.gName isEqualToString:newNudger.group.gName]) {
+            return YES;
+        }
+    } else if (self.type == NTIndividual && newNudger.type == NTIndividual) {
+        if (_user.ID == newNudger.user.ID) {
+            return YES;
+        }
     }
     return NO;
 }

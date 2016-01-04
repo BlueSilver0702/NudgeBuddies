@@ -76,6 +76,10 @@ AppCenter *g_center;
     }];
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+}
+
 - (void)initialApp {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *loginEmail = (NSString *)[userDefaults objectForKey:@"email"];
