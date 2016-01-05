@@ -558,49 +558,66 @@
 }
 
 - (void)onSendNudge:(Nudger *)nudger frame:(CGRect)rect {
-    [self hide:VTMenu];
-    if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
-        [self onMenuClose];
-        return;
-    }
-/*    AudioServicesPlaySystemSound(1103);
-      [audioPlayer play];
-      AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-      [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];*/
-    openNP = nudger;
-    menuCtrl.isOpen = YES;
-    [nudgebuddiesBar setScrollEnabled:NO];
-    CGSize size = [menuCtrl createSendMenu:nudger];
-    CGRect newRect;
+//    [self hide:VTMenu];
+//    if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
+//        [self onMenuClose];
+//        return;
+//    }
+///*    AudioServicesPlaySystemSound(1103);
+//      [audioPlayer play];
+//      AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+//      [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];*/
+//    openNP = nudger;
+//    menuCtrl.isOpen = YES;
+//    [nudgebuddiesBar setScrollEnabled:NO];
+//    CGSize size = [menuCtrl createSendMenu:nudger];
+//    CGRect newRect;
+//    
+//    if (nudger.menuPos == 0) {
+//        newRect = CGRectMake(rect.origin.x, rect.origin.y+notificationView.frame.origin.y, rect.size.width, rect.size.height);
+//    } else if (nudger.menuPos == 1) {
+//        newRect = CGRectMake(rect.origin.x-nudgebuddiesBar.contentOffset.x, rect.origin.y+nudgebuddiesBar.frame.origin.y, rect.size.width, rect.size.height);
+//    } else {
+//        newRect = CGRectMake(rect.origin.x, rect.origin.y+initFavView.frame.origin.y, rect.size.width, rect.size.height);
+//    }
+//    Menu *menu = [self getMenu:newRect menuSize:size];
+//    if (nudger.menuPos == 0) {
+//        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
+//    } else if (nudger.menuPos == 1){
+//        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y-15, size.width, size.height+15)];
+//    } else {
+//        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
+//    }
+//    UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
+//    if (menu.triDirection) {
+//        [triImg setImage:[UIImage imageNamed:@"menu-tri"]];
+//        [menuCtrl.view setFrame:CGRectMake(0, triImg.frame.size.height, size.width, size.height)];
+//        [triImg setFrame:CGRectMake(menu.triPoint.x, 0, triImg.frame.size.width, triImg.frame.size.height)];
+//    } else {
+//        [triImg setImage:[UIImage imageNamed:@"menu-tri-down"]];
+//        [menuCtrl.view setFrame:CGRectMake(0, 0, size.width, size.height)];
+//        [triImg setFrame:CGRectMake(menu.triPoint.x, size.height, triImg.frame.size.width, triImg.frame.size.height)];
+//    }
+//    [UIView transitionWithView:self.view duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+//        [menuView setHidden:NO];
+//    } completion:nil];
     
-    if (nudger.menuPos == 0) {
-        newRect = CGRectMake(rect.origin.x, rect.origin.y+notificationView.frame.origin.y, rect.size.width, rect.size.height);
-    } else if (nudger.menuPos == 1) {
-        newRect = CGRectMake(rect.origin.x-nudgebuddiesBar.contentOffset.x, rect.origin.y+nudgebuddiesBar.frame.origin.y, rect.size.width, rect.size.height);
-    } else {
-        newRect = CGRectMake(rect.origin.x, rect.origin.y+initFavView.frame.origin.y, rect.size.width, rect.size.height);
-    }
-    Menu *menu = [self getMenu:newRect menuSize:size];
-    if (nudger.menuPos == 0) {
-        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
-    } else if (nudger.menuPos == 1){
-        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y-15, size.width, size.height+15)];
-    } else {
-        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
-    }
-    UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
-    if (menu.triDirection) {
-        [triImg setImage:[UIImage imageNamed:@"menu-tri"]];
-        [menuCtrl.view setFrame:CGRectMake(0, triImg.frame.size.height, size.width, size.height)];
-        [triImg setFrame:CGRectMake(menu.triPoint.x, 0, triImg.frame.size.width, triImg.frame.size.height)];
-    } else {
-        [triImg setImage:[UIImage imageNamed:@"menu-tri-down"]];
-        [menuCtrl.view setFrame:CGRectMake(0, 0, size.width, size.height)];
-        [triImg setFrame:CGRectMake(menu.triPoint.x, size.height, triImg.frame.size.width, triImg.frame.size.height)];
-    }
-    [UIView transitionWithView:self.view duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        [menuView setHidden:NO];
-    } completion:nil];
+}
+
+- (void)onFavClicked:(Nudger *)nudger {
+    nudger.isFavorite = NO;
+    [self display:NO];
+    
+    QBCOCustomObject *object = [QBCOCustomObject customObject];
+    object.className = @"NudgerBuddy"; // your Class name
+    object.ID = nudger.metaID;
+
+    [object.fields setObject:[NSNumber numberWithBool:NO] forKey:@"Favorite"];
+    [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
+        NSLog(@"Favorite Removed!");
+    } errorBlock:^(QBResponse *response) {
+        [self error:err_later];
+    }];
 }
 
 - (void)onNudgeClicked:(Nudger *)nudger frame:(CGRect)rect {
@@ -1173,6 +1190,8 @@
     int initPosX = 8;
     [[groupContactScr subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     for (Nudger *nudger in groupContacts) {
+//        if (!nudger.isFavorite) continue;
+        
         UIView *contactView = [[UIView alloc] initWithFrame:CGRectMake(initPosX, 0, 63, 59)];
         UIButton *imgView = [[UIButton alloc] initWithFrame:CGRectMake(3, 10, 48, 48)];
         [imgView setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];

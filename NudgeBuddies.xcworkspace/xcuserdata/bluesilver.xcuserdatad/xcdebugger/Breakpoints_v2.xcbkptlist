@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "NudgeBuddies/AppDelegate.m"
-            timestampString = "473579744.444353"
+            timestampString = "473612611.819206"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
             landmarkName = "-initialApp"
             landmarkType = "5">
          </BreakpointContent>
@@ -665,29 +665,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/View/ViewController.m"
-            timestampString = "473589913.301101"
+            filePath = "NudgeBuddies/View/NudgeButton.m"
+            timestampString = "473619947.947682"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "644"
-            endingLineNumber = "644"
-            landmarkName = "-onNudgeClicked:frame:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/AppDelegate.m"
-            timestampString = "473608640.924526"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "-application:didReceiveRemoteNotification:"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "-onFavTouch:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

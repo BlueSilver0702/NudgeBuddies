@@ -20,6 +20,7 @@
 		29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59381C154A870056BB44 /* FBSDKCoreKit.framework */; };
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
+		4F02E9531C3ACBD6007BBA04 /* Blow.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4F02E9521C3ACBD6007BBA04 /* Blow.aiff */; };
 		4F467FD01C34856C00840D82 /* StreamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F467FCF1C34856C00840D82 /* StreamController.m */; };
 		4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */; };
 		4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */; };
@@ -65,6 +66,7 @@
 		29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
+		4F02E9521C3ACBD6007BBA04 /* Blow.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Blow.aiff; path = Resources/Blow.aiff; sourceTree = "<group>"; };
 		4F467FCE1C34856C00840D82 /* StreamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamController.h; path = View/StreamController.h; sourceTree = "<group>"; };
 		4F467FCF1C34856C00840D82 /* StreamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamController.m; path = View/StreamController.m; sourceTree = "<group>"; };
 		4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBTouchAndHoldButton.h; path = View/Helper/NBTouchAndHoldButton.h; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		290F900C1C1205AD00F345D8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4F02E9521C3ACBD6007BBA04 /* Blow.aiff */,
 				4F7E02B31C2CF704000B7A50 /* effect.mp3 */,
 				290F900D1C1205B900F345D8 /* Default-568h@2x.png */,
 				290F900E1C1205B900F345D8 /* Default.png */,
@@ -332,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F7E02B41C2CF704000B7A50 /* effect.mp3 in Resources */,
+				4F02E9531C3ACBD6007BBA04 /* Blow.aiff in Resources */,
 				294891CF1C0F87300086D1BE /* Assets.xcassets in Resources */,
 				294891CD1C0F87300086D1BE /* Main.storyboard in Resources */,
 				290F90121C1205B900F345D8 /* Default@2x.png in Resources */,
@@ -524,8 +528,8 @@
 			baseConfigurationReference = 3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,7 +542,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -548,8 +552,8 @@
 			baseConfigurationReference = 35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -562,7 +566,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

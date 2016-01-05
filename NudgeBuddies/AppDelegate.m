@@ -76,9 +76,14 @@ AppCenter *g_center;
     }];
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-}
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//    AVAudioPlayer *audioPlayer;
+//    NSString *path = [[NSBundle mainBundle] pathForResource:@"effect" ofType:@"mp3"];
+//    NSURL *file = [NSURL fileURLWithPath:path];
+//    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];
+//    [audioPlayer prepareToPlay];
+//    [audioPlayer play];
+//}
 
 - (void)initialApp {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];

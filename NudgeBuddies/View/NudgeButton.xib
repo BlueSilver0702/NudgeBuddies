@@ -61,7 +61,7 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="68b-zO-Wtx">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="68b-zO-Wtx">
                     <rect key="frame" x="0.0" y="70" width="96" height="26"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                     <inset key="titleEdgeInsets" minX="32" minY="4" maxX="0.0" maxY="0.0"/>
@@ -69,6 +69,9 @@
                     <state key="normal" title="1" image="fav-star">
                         <color key="titleColor" red="0.36470588235294116" green="0.54509803921568623" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
+                    <connections>
+                        <action selector="onFavTouch:" destination="-1" eventType="touchUpInside" id="YKN-SM-jcE"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
