@@ -138,6 +138,10 @@
     IBOutlet UITextField *startAcknowledgeTxt;
     NSInteger startTag;
     
+    // Info module
+    IBOutlet UIView *infoView;
+    IBOutlet UIButton *infoButton;
+    
     // menus module
     MenuController *menuCtrl;
     IBOutlet UIView *menuView;
@@ -208,6 +212,7 @@
     groupView.hidden = YES;
     profileView.hidden = YES;
     groupSelectView.hidden = YES;
+    [groupNameTxt addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     // **********  view group module  ************
     vGroupView.hidden = YES;
@@ -223,6 +228,9 @@
     
     // **********  start module  ************
     startView.hidden = YES;
+    
+    // **********  info module  ************
+    infoView.hidden = YES;
     
     // **********  init module  ************
     if ([g_var loadLocalBool:USER_NIGHT]) {
@@ -294,7 +302,7 @@
 - (void)onceLoadedContactList {
 
     [SVProgressHUD dismiss];
-    [self display:NO];
+    [self display];
     
     // **********  favorite module  ************
     motionManager = [CMMotionManager new];
@@ -325,17 +333,17 @@
 
 - (void)onceLoadedGroupList {
     [SVProgressHUD dismiss];
-    [self display:NO];
+    [self display];
 }
 
 - (void)onceAddedContact:(Nudger *)nudger {
     [SVProgressHUD dismiss];
-    [self display:NO];
+    [self display];
 }
 
 - (void)onceRemovedContact:(Nudger *)nudger {
     [SVProgressHUD dismiss];
-    [self display:YES];
+    [self display];
 }
 
 - (void)onceAccepted:(NSString *)from {
@@ -345,9 +353,12 @@
 }
 
 - (void)onceRejected:(NSUInteger)fromID {
-    [SVProgressHUD dismiss];
-    [self showAlert:[NSString stringWithFormat:@"Your request is rejected (%lu)", fromID]];
-    [self onceNudgeReceived:nil];
+    [QBRequest userWithID:fromID successBlock:^(QBResponse *response, QBUUser *user) {
+        [SVProgressHUD dismiss];
+        [self showAlert:[NSString stringWithFormat:@"%@ has rejected your nudgebuddy request.", user.fullName]];
+        [self onceNudgeReceived:nil];
+    } errorBlock:^(QBResponse *response) {
+    }];
 }
 
 - (void)registerForRemoteNotifications{
@@ -372,7 +383,7 @@
 
 - (void)onceNudged:(Nudger *)nudger {
     [self onceNudgeReceived:nudger];
-    [self display:YES];
+    [self display];
 }
 
 - (void)onceNudgeReceived:(Nudger *)nudger {
@@ -406,7 +417,7 @@
     }
 }
 
-- (void) display:(BOOL)animatable {
+- (void) display {
     int barWidth = 0;
     int width = nudgebuddiesBar.frame.size.height;
     int favTmp = 0;
@@ -558,6 +569,9 @@
 }
 
 - (void)onSendNudge:(Nudger *)nudger frame:(CGRect)rect {
+
+    [self onMenuNudged:nudger];
+    
 //    [self hide:VTMenu];
 //    if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
 //        [self onMenuClose];
@@ -606,7 +620,7 @@
 
 - (void)onFavClicked:(Nudger *)nudger {
     nudger.isFavorite = NO;
-    [self display:NO];
+    [self display];
     
     QBCOCustomObject *object = [QBCOCustomObject customObject];
     object.className = @"NudgerBuddy"; // your Class name
@@ -935,6 +949,8 @@
     } else {
         [nightBtn setImage:[UIImage imageNamed:@"bottom-night"] forState:UIControlStateNormal];
     }
+    
+    [self display];
 }
 
 #pragma mark - Search
@@ -959,6 +975,10 @@
 }
 
 - (void)textFieldDidChange:(UITextField *)textField {
+    if (textField.tag == 100) {
+        groupNameLab.text = textField.text;
+        return;
+    }
     if (textField.text.length < 3) {
         return;
     }
@@ -1156,6 +1176,8 @@
         [self onGroupClose:nil];
         return;
     }
+    
+    groupNameLab.text = @"";
     openGroup = [[Nudger alloc] initWithGroup:nil];
     groupFavBtn.hidden = YES;
     groupPicUpdate = NO;
@@ -1550,13 +1572,13 @@
         [SVProgressHUD show];
         [g_center removeGroup:openNP success:^(BOOL success) {
             [self onNPClose:nil];
-            [self display:YES];
+            [self display];
         }];
     } else {
         [[QBChat instance] removeUserFromContactList:openNP.user.ID completion:^(NSError * _Nullable error) {
             [g_center remove:openNP];
             [self onNPClose:nil];
-            [self display:YES];
+            [self display];
         }];
     }
 }
@@ -1586,7 +1608,7 @@
         [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             [SVProgressHUD dismiss];
             [self onNPClose:nil];
-            [self display:NO];
+            [self display];
         } errorBlock:^(QBResponse *response) {
             [self error:err_later];
         }];
@@ -1607,7 +1629,7 @@
         [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             [SVProgressHUD dismiss];
             [self onNPClose:nil];
-            [self display:NO];
+            [self display];
             openNP.metaID = object.ID;
         } errorBlock:^(QBResponse *response) {
             [self error:err_later];
@@ -1699,7 +1721,7 @@
     menuCtrl.isOpen = NO;
 }
 
-#pragma mark - Add Start
+#pragma mark - Start
 ///////////////////////////////// --------- Add Start View ----------- /////////////////////////////////////////////
 - (void)onStartOpen {
     [UIView transitionWithView:self.view duration:1.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -1747,6 +1769,27 @@
     }
 }
 
+#pragma mark - Info Page
+///////////////////////////////// --------- Add Start View ----------- /////////////////////////////////////////////
+- (IBAction)onInfoOpen:(id)sender {
+    [UIView transitionWithView:self.view duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        infoView.hidden = NO;
+    } completion:^(BOOL success) {
+        [UIView animateWithDuration:0.6 delay:0 options:(UIViewAnimationOptionRepeat|UIViewAnimationOptionAutoreverse) animations:^(){
+            infoButton.alpha = 0.0f;
+        } completion:^(BOOL success) {
+            infoButton.alpha = 1.0f;
+        }];
+    }];
+}
+
+- (IBAction)onInfoClose:(id)sender {
+    [UIView transitionWithView:self.view duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        infoView.hidden = YES;
+    } completion:nil];
+    [infoButton.layer removeAllAnimations];
+}
+
 #pragma mark - General
 /////////////////////////////////// --------- General ----------- ///////////////////////////////////////////
 - (void)hide:(ViewTag)viewTag {
@@ -1762,6 +1805,7 @@
     if (viewTag != VTNP) [self onNPClose:nil];
     if (viewTag != VTViewGroup) [self onVGroupClose:nil];
     if (viewTag != VTStream) [self onStreamClose:nil];
+    if (viewTag != VTInfo) [self onInfoClose:nil];
 }
 
 - (void)showAlert:(NSString *)text {

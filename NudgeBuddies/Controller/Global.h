@@ -73,7 +73,8 @@ typedef NS_ENUM(NSInteger, ViewTag) {
     VTGroupSelect,
     VTNP,
     VTViewGroup,
-    VTStream
+    VTStream,
+    VTInfo,
 };
 
 @interface Global : NSObject

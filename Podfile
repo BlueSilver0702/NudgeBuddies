@@ -8,6 +8,8 @@ target 'NudgeBuddies' do
 pod 'QuickBlox'
 pod 'TPKeyboardAvoiding'
 pod 'SVProgressHUD'
+pod 'DownPicker'
+pod 'LinqToObjectiveC'
 
 end
 

@@ -175,10 +175,14 @@
                                         <rect key="frame" x="0.0" y="2" width="320" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="search-logo" id="JFg-vS-cnR">
-                                                <rect key="frame" x="9" y="22" width="29" height="27"/>
+                                            <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Em0-Gt-IrM">
+                                                <rect key="frame" x="3" y="20" width="40" height="34"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
+                                                <state key="normal" image="search-logo"/>
+                                                <connections>
+                                                    <action selector="onInfoOpen:" destination="BYZ-38-t0r" eventType="touchUpInside" id="klw-iv-jWb"/>
+                                                </connections>
+                                            </button>
                                             <view contentMode="scaleToFill" id="2eB-Nt-1j8">
                                                 <rect key="frame" x="49" y="25" width="263" height="26"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -187,7 +191,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="253" height="26"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     </imageView>
-                                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xFQ-uQ-oF4">
+                                                    <button hidden="YES" opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xFQ-uQ-oF4">
                                                         <rect key="frame" x="228" y="0.0" width="25" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <state key="normal" image="search-mic"/>
@@ -195,6 +199,7 @@
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="natural" minimumFontSize="17" id="5c2-my-hKM">
                                                         <rect key="frame" x="31" y="1" width="191" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                         <userDefinedRuntimeAttributes>
@@ -418,11 +423,14 @@
                                                                 <rect key="frame" x="0.0" y="20" width="262" height="27"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
-                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Group Name" textAlignment="natural" minimumFontSize="17" id="qIK-u5-5oc">
+                                                                    <textField opaque="NO" clipsSubviews="YES" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Group Name" textAlignment="natural" minimumFontSize="17" id="qIK-u5-5oc">
                                                                         <rect key="frame" x="8" y="0.0" width="246" height="27"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits"/>
+                                                                        <connections>
+                                                                            <outlet property="delegate" destination="sNP-xF-8tV" id="thL-1m-5kW"/>
+                                                                        </connections>
                                                                     </textField>
                                                                 </subviews>
                                                                 <color key="backgroundColor" red="0.6297389967" green="0.62939123119999996" blue="0.63207455189999995" alpha="0.65045673079999999" colorSpace="calibratedRGB"/>
@@ -1719,7 +1727,113 @@ in the search box above.</string>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.83385817309999999" colorSpace="calibratedRGB"/>
                                     </view>
-                                    <view contentMode="scaleToFill" id="Bs4-mq-OrH">
+                                    <view contentMode="scaleToFill" id="YCh-GK-gpE">
+                                        <rect key="frame" x="14" y="64" width="292" height="267"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-bg" id="wIP-kb-Q7K">
+                                                <rect key="frame" x="0.0" y="0.0" width="292" height="267"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-info" id="NOx-ND-SmU">
+                                                <rect key="frame" x="55" y="8" width="184" height="72"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="©" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2dw-OL-NJc">
+                                                <rect key="frame" x="51" y="220" width="34" height="45"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="38"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5Xn-x9-oex">
+                                                <rect key="frame" x="238" y="3" width="56" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                                                <state key="normal" title="exit">
+                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="onInfoClose:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Muz-GO-jHv"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="e0o-0d-eN7">
+                                                <rect key="frame" x="91" y="226" width="161" height="38"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <string key="text">Copyright 2016
+Nudgebuddies Pty Ltd</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version:      1.0.0" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="BCG-wJ-aXd">
+                                                <rect key="frame" x="17" y="89" width="248" height="38"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Support:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7wX-HZ-dY8">
+                                                <rect key="frame" x="17" y="107" width="57" height="38"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Cvx-VC-T3z">
+                                                <rect key="frame" x="17" y="126" width="71" height="38"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Web:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RKr-oH-np3">
+                                                <rect key="frame" x="17" y="146" width="57" height="38"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Design:       Wayne Peterson" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cWh-m0-p8q">
+                                                <rect key="frame" x="17" y="165" width="248" height="38"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ySR-2r-EGy">
+                                                <rect key="frame" x="94" y="117" width="185" height="18"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="support@nudgebuddies.com">
+                                                    <color key="titleColor" red="0.0" green="0.32549019607843138" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SZQ-Ut-KLP">
+                                                <rect key="frame" x="94" y="136" width="185" height="18"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="feedback@nudgebuddies.com">
+                                                    <color key="titleColor" red="0.0" green="0.32549019607843138" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hHz-H0-d7U">
+                                                <rect key="frame" x="94" y="156" width="185" height="18"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <state key="normal" title="www.nudgebuddies.com">
+                                                    <color key="titleColor" red="0.0" green="0.32549019607843138" blue="0.62745098039215685" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="6"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" id="Bs4-mq-OrH">
                                         <rect key="frame" x="0.0" y="119" width="101" height="102"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -1739,7 +1853,7 @@ in the search box above.</string>
                                                 <rect key="frame" x="0.0" y="0.0" width="304" height="428"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="lets get started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vWc-1x-jxM">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="let's get started" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vWc-1x-jxM">
                                                 <rect key="frame" x="21" y="0.0" width="262" height="40"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
@@ -1963,7 +2077,7 @@ in the search box above.</string>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.83385817309999999" colorSpace="calibratedRGB"/>
                                     </view>
-                                    <view contentMode="scaleToFill" id="grF-pj-lye">
+                                    <view hidden="YES" contentMode="scaleToFill" id="grF-pj-lye">
                                         <rect key="frame" x="15" y="59" width="290" height="272"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -2082,6 +2196,8 @@ in the search box above.</string>
                         <outlet property="groupSelectView" destination="2zF-6a-WjD" id="Dp2-gS-EGP"/>
                         <outlet property="groupSilentBtn" destination="fQa-3D-gUq" id="gsM-Qi-BkP"/>
                         <outlet property="groupView" destination="hUm-Nu-smD" id="wlF-gH-OBF"/>
+                        <outlet property="infoButton" destination="Em0-Gt-IrM" id="bsC-Jo-6g8"/>
+                        <outlet property="infoView" destination="YCh-GK-gpE" id="8Ev-df-Lfg"/>
                         <outlet property="initControlView" destination="pV9-8e-Yxe" id="M0L-Jf-oFw"/>
                         <outlet property="initFavView" destination="Dbj-7I-yLo" id="cn5-uE-nPk"/>
                         <outlet property="initSearchView" destination="oC6-DR-Pqv" id="5e7-wT-R3I"/>
@@ -2134,7 +2250,7 @@ in the search box above.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="951" y="281"/>
+            <point key="canvasLocation" x="884" y="281"/>
         </scene>
         <!--Setting Controller-->
         <scene sceneID="bs6-Wo-ePM">
@@ -3227,7 +3343,7 @@ nudge</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kiC-j0-xFz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1378" y="281"/>
+            <point key="canvasLocation" x="1326" y="281"/>
         </scene>
         <!--Stream Controller-->
         <scene sceneID="DzZ-oD-v4H">
@@ -3396,7 +3512,7 @@ nudge</string>
                                             <inset key="contentEdgeInsets" minX="6" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="4" maxX="168" maxY="2"/>
-                                            <state key="normal" title="Accept friend request" image="icon-accept-group">
+                                            <state key="normal" title="Accept group request" image="icon-accept-group">
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -3407,7 +3523,7 @@ nudge</string>
                                             <inset key="contentEdgeInsets" minX="6" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="3"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="167" maxY="6"/>
-                                            <state key="normal" title="Reject friend request" image="icon-reject-group">
+                                            <state key="normal" title="Reject group request" image="icon-reject-group">
                                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
                                         </button>
@@ -3527,7 +3643,7 @@ nudge</string>
                                             <rect key="frame" x="61" y="8" width="97" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" tag="51" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RPg-qD-6D9">
@@ -4086,6 +4202,7 @@ nudge</string>
         <image name="icon-reject-group" width="33" height="36"/>
         <image name="login-facebook" width="140" height="30"/>
         <image name="logo" width="185" height="68"/>
+        <image name="logo-info" width="158" height="71"/>
         <image name="menu-bg" width="295" height="396"/>
         <image name="menu-img" width="68" height="45"/>
         <image name="menu-item-block" width="21" height="20"/>
@@ -4094,7 +4211,7 @@ nudge</string>
         <image name="menu-nbg" width="211" height="37"/>
         <image name="noti-1" width="96" height="96"/>
         <image name="noti-2" width="96" height="96"/>
-        <image name="search-bg" width="254" height="26"/>
+        <image name="search-bg" width="297" height="29"/>
         <image name="search-fb-sm" width="19" height="17"/>
         <image name="search-logo" width="18" height="27"/>
         <image name="search-logo-sm" width="17" height="25"/>
@@ -4127,6 +4244,6 @@ nudge</string>
         <image name="user-4" width="59" height="59"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VV2-Hv-my7"/>
+        <segue reference="LdT-MX-4gM"/>
     </inferredMetricsTieBreakers>
 </document>

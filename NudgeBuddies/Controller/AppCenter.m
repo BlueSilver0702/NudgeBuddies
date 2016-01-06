@@ -16,7 +16,7 @@
     QBContactList *delegateContactList;
 }
 
-@synthesize pendingArray, contactsArray, notificationArray, favArray, currentUser, currentNudger, isNight, groupArray, fbFriendsArr;
+@synthesize pendingArray, contactsArray, notificationArray, favArray, currentUser, currentNudger, isNight, isCount, groupArray, fbFriendsArr;
 
 #pragma mark - Retrieve Module
 
@@ -36,6 +36,7 @@
     currentNudger.defaultReply = [g_var loadLocalStr:USER_ACKNOWLEDGE];
     
     isNight = [g_var loadLocalBool:USER_NIGHT];
+    isCount = [g_var loadLocalBool:USER_COUNT];
 
     [SVProgressHUD showWithStatus:@"Connecting..."];
     

@@ -26,6 +26,9 @@
 #import "AppCenter.h"
 #import "AppDelegate.h"
 
+#import "NSArray+LinqExtensions.h"
+#import "NSDictionary+LinqExtensions.h"
+#import "UIColor+HexString.h"
 
 
 

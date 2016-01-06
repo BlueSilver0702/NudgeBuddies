@@ -4,6 +4,21 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>DownPicker-DownPicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>DownPicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>LinqToObjectiveC.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-NudgeBuddies.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,17 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>877B66759921A61A5A9CC4AAADF46251</key>
+		<key>5C05FADE30EF910B83CBF24CED9FD2F6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B636D4D9CA6B26727CAA7C12F956FD6B</key>
+		<key>76C81B58D07B7FC309456DCFAA711FFE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E2A46804299CF6365BD59E50823DB913</key>
+		<key>926A84365F6B93264AF882DA49B7E685</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B07AADACEE8AFF7CE1E337AA059CFD8C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CE768BCB83047B1E4E20A31749421952</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E84B8811FCA99973072222CA3E833D26</key>
 		<dict>
 			<key>primary</key>
 			<true/>

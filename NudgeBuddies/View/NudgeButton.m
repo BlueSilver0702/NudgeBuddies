@@ -47,6 +47,12 @@
     if (userInfo.isFavorite) {
         [favBtn setHidden:NO];
         [nameLab setHidden:YES];
+        
+        if (g_center.isCount) {
+            [favBtn setTitle:@"1" forState:UIControlStateNormal];
+        } else {
+            [favBtn setTitle:@"" forState:UIControlStateNormal];
+        }
     }
     if (userInfo.type == NTGroup) {
         [nameLab setText:userInfo.group.gName];

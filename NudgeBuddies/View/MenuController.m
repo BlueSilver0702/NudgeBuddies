@@ -326,6 +326,7 @@
     if (sender.tag == 51) {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         UITextField *sendNudgeTxt = (UITextField *)[cell viewWithTag:100];
+        [sendNudgeTxt resignFirstResponder];
         tUser.defaultNudge = sendNudgeTxt.text;
         [self.delegate onMenuNudged:tUser];
     } else {

@@ -87,7 +87,8 @@
     } else {
         g_center.isCount = NO;
     }
-    [g_var saveLocalBool:g_center.isCount key:USER_NIGHT];
+    [g_var saveLocalBool:g_center.isCount key:USER_COUNT];
+//    [self.delegate onSettingCountHide:YES];
     [self.delegate onSettingUpdate];
 }
 

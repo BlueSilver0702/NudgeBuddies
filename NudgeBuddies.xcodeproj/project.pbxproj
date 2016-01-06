@@ -21,7 +21,9 @@
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
 		4F02E9531C3ACBD6007BBA04 /* Blow.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4F02E9521C3ACBD6007BBA04 /* Blow.aiff */; };
+		4F1034FB1C3D6747002E8268 /* AlertCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1034FA1C3D6747002E8268 /* AlertCtrl.m */; };
 		4F467FD01C34856C00840D82 /* StreamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F467FCF1C34856C00840D82 /* StreamController.m */; };
+		4F46C3CA1C3D7E2200EDBB82 /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */; };
 		4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */; };
 		4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */; };
 		4F7E02B41C2CF704000B7A50 /* effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E02B31C2CF704000B7A50 /* effect.mp3 */; };
@@ -67,8 +69,12 @@
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
 		4F02E9521C3ACBD6007BBA04 /* Blow.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Blow.aiff; path = Resources/Blow.aiff; sourceTree = "<group>"; };
+		4F1034F91C3D6747002E8268 /* AlertCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertCtrl.h; path = Controller/AlertCtrl.h; sourceTree = "<group>"; };
+		4F1034FA1C3D6747002E8268 /* AlertCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertCtrl.m; path = Controller/AlertCtrl.m; sourceTree = "<group>"; };
 		4F467FCE1C34856C00840D82 /* StreamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamController.h; path = View/StreamController.h; sourceTree = "<group>"; };
 		4F467FCF1C34856C00840D82 /* StreamController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StreamController.m; path = View/StreamController.m; sourceTree = "<group>"; };
+		4F46C3C81C3D7E2200EDBB82 /* UIColor+HexString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+HexString.h"; path = "Utils/HexColor/UIColor+HexString.h"; sourceTree = "<group>"; };
+		4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+HexString.m"; path = "Utils/HexColor/UIColor+HexString.m"; sourceTree = "<group>"; };
 		4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBTouchAndHoldButton.h; path = View/Helper/NBTouchAndHoldButton.h; sourceTree = "<group>"; };
 		4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBTouchAndHoldButton.m; path = View/Helper/NBTouchAndHoldButton.m; sourceTree = "<group>"; };
 		4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -134,6 +140,8 @@
 				CFF1365A1C1D201D0001D351 /* Global.m */,
 				4FB519231C271BC000EA06D5 /* AppCenter.h */,
 				4FB519241C271BC000EA06D5 /* AppCenter.m */,
+				4F1034F91C3D6747002E8268 /* AlertCtrl.h */,
+				4F1034FA1C3D6747002E8268 /* AlertCtrl.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -184,6 +192,7 @@
 		294891C11C0F87300086D1BE /* NudgeBuddies */ = {
 			isa = PBXGroup;
 			children = (
+				CFF136691C1D206D0001D351 /* Helper */,
 				290C02941C131E610093D12A /* Model */,
 				290C02931C131E4A0093D12A /* Controller */,
 				CFF136521C1D1ADA0001D351 /* View */,
@@ -225,7 +234,6 @@
 		CFF136521C1D1ADA0001D351 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CFF136691C1D206D0001D351 /* Helper */,
 				CFF1365D1C1D20300001D351 /* SigninController.h */,
 				CFF1365E1C1D20300001D351 /* SigninController.m */,
 				CFF1365F1C1D20300001D351 /* SignupController.h */,
@@ -250,6 +258,8 @@
 		CFF136691C1D206D0001D351 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				4F46C3C81C3D7E2200EDBB82 /* UIColor+HexString.h */,
+				4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */,
 				4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */,
 				4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */,
 				CFF1366A1C1D208E0001D351 /* KICropImageView.h */,
@@ -401,6 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */,
+				4F1034FB1C3D6747002E8268 /* AlertCtrl.m in Sources */,
 				CFF136641C1D20300001D351 /* SigninController.m in Sources */,
 				CFF136751C1D208E0001D351 /* UIImagePickerHelper.m in Sources */,
 				290C02A51C136EE40093D12A /* SearchController.m in Sources */,
@@ -417,6 +428,7 @@
 				CFF136651C1D20300001D351 /* SignupController.m in Sources */,
 				CFF136511C1D1AC50001D351 /* Nudger.m in Sources */,
 				CFF1365B1C1D201D0001D351 /* Global.m in Sources */,
+				4F46C3CA1C3D7E2200EDBB82 /* UIColor+HexString.m in Sources */,
 				4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */,
 				290C029A1C1321440093D12A /* SettingController.m in Sources */,
 				294891C41C0F87300086D1BE /* main.m in Sources */,

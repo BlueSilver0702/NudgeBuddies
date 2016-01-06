@@ -14,6 +14,7 @@
 
 - (void)onSettingDone:(int)status;
 - (void)onSettingUpdate;
+- (void)onSettingCountHide:(BOOL)hide;
 
 @end
 
