@@ -20,13 +20,30 @@
 		29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59381C154A870056BB44 /* FBSDKCoreKit.framework */; };
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
-		4F02E9531C3ACBD6007BBA04 /* Blow.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4F02E9521C3ACBD6007BBA04 /* Blow.aiff */; };
 		4F1034FB1C3D6747002E8268 /* AlertCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1034FA1C3D6747002E8268 /* AlertCtrl.m */; };
 		4F467FD01C34856C00840D82 /* StreamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F467FCF1C34856C00840D82 /* StreamController.m */; };
 		4F46C3CA1C3D7E2200EDBB82 /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */; };
+		4F46C3DF1C3D832200EDBB82 /* Apex.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3CC1C3D832200EDBB82 /* Apex.caf */; };
+		4F46C3E01C3D832200EDBB82 /* Audience Applause.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3CD1C3D832200EDBB82 /* Audience Applause.caf */; };
+		4F46C3E11C3D832200EDBB82 /* aurora.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3CE1C3D832200EDBB82 /* aurora.caf */; };
+		4F46C3E21C3D832200EDBB82 /* Chipmunks.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3CF1C3D832200EDBB82 /* Chipmunks.caf */; };
+		4F46C3E31C3D832200EDBB82 /* circles.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D01C3D832200EDBB82 /* circles.caf */; };
+		4F46C3E41C3D832200EDBB82 /* Crystals.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D11C3D832200EDBB82 /* Crystals.caf */; };
+		4F46C3E51C3D832200EDBB82 /* Descending craft.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D21C3D832200EDBB82 /* Descending craft.caf */; };
+		4F46C3E61C3D832200EDBB82 /* Fractal.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D31C3D832200EDBB82 /* Fractal.caf */; };
+		4F46C3E71C3D832200EDBB82 /* hello.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D41C3D832200EDBB82 /* hello.caf */; };
+		4F46C3E81C3D832200EDBB82 /* input.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D51C3D832200EDBB82 /* input.caf */; };
+		4F46C3E91C3D832200EDBB82 /* Martian Death Ray.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D61C3D832200EDBB82 /* Martian Death Ray.caf */; };
+		4F46C3EA1C3D832200EDBB82 /* Metal Gong.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D71C3D832200EDBB82 /* Metal Gong.caf */; };
+		4F46C3EB1C3D832200EDBB82 /* note.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D81C3D832200EDBB82 /* note.caf */; };
+		4F46C3EC1C3D832200EDBB82 /* Phone Vibrating.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3D91C3D832200EDBB82 /* Phone Vibrating.caf */; };
+		4F46C3ED1C3D832200EDBB82 /* popcorn.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3DA1C3D832200EDBB82 /* popcorn.caf */; };
+		4F46C3EE1C3D832200EDBB82 /* pulse.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3DB1C3D832200EDBB82 /* pulse.caf */; };
+		4F46C3EF1C3D832200EDBB82 /* Stargaze.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3DC1C3D832200EDBB82 /* Stargaze.caf */; };
+		4F46C3F01C3D832200EDBB82 /* Thunder HD.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3DD1C3D832200EDBB82 /* Thunder HD.caf */; };
+		4F46C3F11C3D832200EDBB82 /* UFO Takeoff.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3DE1C3D832200EDBB82 /* UFO Takeoff.caf */; };
 		4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */; };
 		4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */; };
-		4F7E02B41C2CF704000B7A50 /* effect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4F7E02B31C2CF704000B7A50 /* effect.mp3 */; };
 		4F7E02B61C2CF720000B7A50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */; };
 		4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB519241C271BC000EA06D5 /* AppCenter.m */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
@@ -68,7 +85,6 @@
 		29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
-		4F02E9521C3ACBD6007BBA04 /* Blow.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Blow.aiff; path = Resources/Blow.aiff; sourceTree = "<group>"; };
 		4F1034F91C3D6747002E8268 /* AlertCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertCtrl.h; path = Controller/AlertCtrl.h; sourceTree = "<group>"; };
 		4F1034FA1C3D6747002E8268 /* AlertCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertCtrl.m; path = Controller/AlertCtrl.m; sourceTree = "<group>"; };
 		4F467FCE1C34856C00840D82 /* StreamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamController.h; path = View/StreamController.h; sourceTree = "<group>"; };
@@ -78,7 +94,6 @@
 		4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBTouchAndHoldButton.h; path = View/Helper/NBTouchAndHoldButton.h; sourceTree = "<group>"; };
 		4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBTouchAndHoldButton.m; path = View/Helper/NBTouchAndHoldButton.m; sourceTree = "<group>"; };
 		4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		4F7E02B31C2CF704000B7A50 /* effect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = effect.mp3; path = Resources/effect.mp3; sourceTree = "<group>"; };
 		4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FB519231C271BC000EA06D5 /* AppCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCenter.h; path = Controller/AppCenter.h; sourceTree = "<group>"; };
 		4FB519241C271BC000EA06D5 /* AppCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppCenter.m; path = Controller/AppCenter.m; sourceTree = "<group>"; };
@@ -162,8 +177,7 @@
 		290F900C1C1205AD00F345D8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4F02E9521C3ACBD6007BBA04 /* Blow.aiff */,
-				4F7E02B31C2CF704000B7A50 /* effect.mp3 */,
+				4F46C3CB1C3D831000EDBB82 /* Alerts */,
 				290F900D1C1205B900F345D8 /* Default-568h@2x.png */,
 				290F900E1C1205B900F345D8 /* Default.png */,
 				290F900F1C1205B900F345D8 /* Default@2x.png */,
@@ -214,6 +228,32 @@
 				294891C31C0F87300086D1BE /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4F46C3CB1C3D831000EDBB82 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				4F46C3CC1C3D832200EDBB82 /* Apex.caf */,
+				4F46C3CD1C3D832200EDBB82 /* Audience Applause.caf */,
+				4F46C3CE1C3D832200EDBB82 /* aurora.caf */,
+				4F46C3CF1C3D832200EDBB82 /* Chipmunks.caf */,
+				4F46C3D01C3D832200EDBB82 /* circles.caf */,
+				4F46C3D11C3D832200EDBB82 /* Crystals.caf */,
+				4F46C3D21C3D832200EDBB82 /* Descending craft.caf */,
+				4F46C3D31C3D832200EDBB82 /* Fractal.caf */,
+				4F46C3D41C3D832200EDBB82 /* hello.caf */,
+				4F46C3D51C3D832200EDBB82 /* input.caf */,
+				4F46C3D61C3D832200EDBB82 /* Martian Death Ray.caf */,
+				4F46C3D71C3D832200EDBB82 /* Metal Gong.caf */,
+				4F46C3D81C3D832200EDBB82 /* note.caf */,
+				4F46C3D91C3D832200EDBB82 /* Phone Vibrating.caf */,
+				4F46C3DA1C3D832200EDBB82 /* popcorn.caf */,
+				4F46C3DB1C3D832200EDBB82 /* pulse.caf */,
+				4F46C3DC1C3D832200EDBB82 /* Stargaze.caf */,
+				4F46C3DD1C3D832200EDBB82 /* Thunder HD.caf */,
+				4F46C3DE1C3D832200EDBB82 /* UFO Takeoff.caf */,
+			);
+			name = Alerts;
 			sourceTree = "<group>";
 		};
 		AEF3E02EB89A0D5C4C3580CE /* Frameworks */ = {
@@ -344,14 +384,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F7E02B41C2CF704000B7A50 /* effect.mp3 in Resources */,
-				4F02E9531C3ACBD6007BBA04 /* Blow.aiff in Resources */,
 				294891CF1C0F87300086D1BE /* Assets.xcassets in Resources */,
+				4F46C3EF1C3D832200EDBB82 /* Stargaze.caf in Resources */,
+				4F46C3E81C3D832200EDBB82 /* input.caf in Resources */,
+				4F46C3E01C3D832200EDBB82 /* Audience Applause.caf in Resources */,
 				294891CD1C0F87300086D1BE /* Main.storyboard in Resources */,
 				290F90121C1205B900F345D8 /* Default@2x.png in Resources */,
+				4F46C3E51C3D832200EDBB82 /* Descending craft.caf in Resources */,
 				290F90101C1205B900F345D8 /* Default-568h@2x.png in Resources */,
+				4F46C3E41C3D832200EDBB82 /* Crystals.caf in Resources */,
 				290F90111C1205B900F345D8 /* Default.png in Resources */,
+				4F46C3F11C3D832200EDBB82 /* UFO Takeoff.caf in Resources */,
+				4F46C3EB1C3D832200EDBB82 /* note.caf in Resources */,
+				4F46C3EE1C3D832200EDBB82 /* pulse.caf in Resources */,
+				4F46C3E21C3D832200EDBB82 /* Chipmunks.caf in Resources */,
+				4F46C3EC1C3D832200EDBB82 /* Phone Vibrating.caf in Resources */,
 				CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */,
+				4F46C3E71C3D832200EDBB82 /* hello.caf in Resources */,
+				4F46C3EA1C3D832200EDBB82 /* Metal Gong.caf in Resources */,
+				4F46C3DF1C3D832200EDBB82 /* Apex.caf in Resources */,
+				4F46C3E91C3D832200EDBB82 /* Martian Death Ray.caf in Resources */,
+				4F46C3E31C3D832200EDBB82 /* circles.caf in Resources */,
+				4F46C3ED1C3D832200EDBB82 /* popcorn.caf in Resources */,
+				4F46C3E61C3D832200EDBB82 /* Fractal.caf in Resources */,
+				4F46C3E11C3D832200EDBB82 /* aurora.caf in Resources */,
+				4F46C3F01C3D832200EDBB82 /* Thunder HD.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

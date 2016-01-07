@@ -16,6 +16,9 @@
 #import "UIImagePickerHelper.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import "DownPicker.h"
+
+#import "AlertCtrl.h"
 
 @interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate, UIScrollViewDelegate>
 {
@@ -147,6 +150,8 @@
     IBOutlet UIView *menuView;
     NSMutableArray *nudgeButtonArr;
     BOOL stopAccel;
+    
+//    DownPicker        *academyPicker;
 }
 @end
 
@@ -1825,6 +1830,21 @@
 
 - (void)error:(NSString *)err {
     [SVProgressHUD showErrorWithStatus:err];
+}
+
+- (void)setAcademies:(NSArray *)academyArr textField:txtCtrl
+{
+    DownPicker * academyPicker = [[DownPicker alloc] initWithTextField:txtCtrl];
+    [academyPicker setPlaceholder:@"Select Alert Sound."];
+    NSArray *sortArr = [academyArr linq_sort:^id(NSDictionary* academy) {
+        return academy[@"name"];
+    }];
+    
+    NSArray *titleArr = [sortArr linq_select:^id(NSDictionary *dic) {
+        return dic[@"name"];
+    }];
+    
+    [academyPicker setData:titleArr];
 }
 #pragma mark - iAd
 /////////////////////////////// --------- iAd ----------- ///////////////////////////////////////////////
