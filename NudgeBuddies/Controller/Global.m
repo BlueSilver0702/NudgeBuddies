@@ -61,4 +61,13 @@
     return [userDefaults boolForKey:key];
 }
 
+- (void)saveLocalDate:(NSDate *)date key:(NSString *)key {
+    [userDefaults setObject:date forKey:key];
+    [userDefaults synchronize];
+}
+
+- (NSDate *)loadLocalDate:(NSString *)key {
+    return (NSDate *)[userDefaults objectForKey:key];
+}
+
 @end

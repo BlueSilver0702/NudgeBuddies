@@ -42,7 +42,7 @@
             }
         }
     }
-    [self.tableView setFrame:CGRectMake(0, 0, 212, self.tableView.frame.size.height)];
+    [self.tableView setFrame:CGRectMake(0, 0, 252, self.tableView.frame.size.height)];
     [self.tableView reloadData];
     return self.tableView.contentSize;
 }
@@ -52,7 +52,7 @@
     
     menuType = MTNudge;
     
-    [self.tableView setFrame:CGRectMake(0, 0, 212, self.tableView.frame.size.height)];
+    [self.tableView setFrame:CGRectMake(0, 0, 252, self.tableView.frame.size.height)];
     [self.tableView reloadData];
     return self.tableView.contentSize;
 }
@@ -66,11 +66,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (menuType == MTAdd) {
         return 1;
-    } else if (menuType == MTBuddy || menuType == MTGroupStream) {
+    } else if (menuType == MTGroupStream || menuType == MTBuddyStream) {
         return 6;
-    } else if (menuType == MTBuddyStream) {
-        return 7;
-    } else if (menuType == MTGroup) {
+//    } else if () {
+//        return 7;
+    } else if (menuType == MTBuddy || menuType == MTGroup) {
         return 5;
     } else if (menuType == MTNudge) {
         return 1;
@@ -188,11 +188,11 @@
         else [itemLab setHidden:YES];
         [itemBtn setTitle:@"block" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-block"] forState:UIControlStateNormal];
+//    } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.unreadMsg > 0) || (indexPath.row == 4 && tUser.unreadMsg == 0))) {
+//        [itemLab setHidden:YES];
+//        [itemBtn setTitle:@"auto nudge" forState:UIControlStateNormal];
+//        [itemBtn setImage:[UIImage imageNamed:@"menu-item-auto"] forState:UIControlStateNormal];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.unreadMsg > 0) || (indexPath.row == 4 && tUser.unreadMsg == 0))) {
-        [itemLab setHidden:YES];
-        [itemBtn setTitle:@"auto nudge" forState:UIControlStateNormal];
-        [itemBtn setImage:[UIImage imageNamed:@"menu-item-auto"] forState:UIControlStateNormal];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.unreadMsg > 0) || (indexPath.row == 5 && tUser.unreadMsg == 0))) {
         [itemLab setHidden:YES];
         [itemBtn setTitle:@"edit profile" forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:@"menu-item-edit"] forState:UIControlStateNormal];
@@ -297,16 +297,16 @@
             checkView.hidden = NO;
         }
         [self.delegate onMenuClicked:MRBlock nudger:tUser];
+//    } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.unreadMsg > 0) || (indexPath.row == 4 && tUser.unreadMsg == 0))) {
+//        if (tUser.autoNudge) {
+//            tUser.autoNudge = NO;
+//            checkView.hidden = YES;
+//        } else {
+//            tUser.autoNudge = YES;
+//            checkView.hidden = NO;
+//        }
+//        [self.delegate onMenuClicked:MRAuto nudger:tUser];
     } else if (tUser.type == NTIndividual && ((indexPath.row == 5 && tUser.unreadMsg > 0) || (indexPath.row == 4 && tUser.unreadMsg == 0))) {
-        if (tUser.autoNudge) {
-            tUser.autoNudge = NO;
-            checkView.hidden = YES;
-        } else {
-            tUser.autoNudge = YES;
-            checkView.hidden = NO;
-        }
-        [self.delegate onMenuClicked:MRAuto nudger:tUser];
-    } else if (tUser.type == NTIndividual && ((indexPath.row == 6 && tUser.unreadMsg > 0) || (indexPath.row == 5 && tUser.unreadMsg == 0))) {
         [self.delegate onMenuClicked:MREdit nudger:tUser];
     }
 }

@@ -31,6 +31,7 @@
 @property (nonatomic, retain) NSString *metaID;
 @property (nonatomic, retain) NSString *dialogID;
 @property (nonatomic, retain) NSData *picData;
+@property (nonatomic) NSInteger alertSound;
 @property (nonatomic) BOOL accept;
 
 - (id)initWithUser:(QBUUser *)userInfo;

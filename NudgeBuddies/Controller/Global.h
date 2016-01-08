@@ -105,6 +105,8 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 - (NSInteger)loadLocalVal:(NSString *)key;
 - (void)saveLocalBool:(BOOL)truth key:(NSString *)key;
 - (BOOL)loadLocalBool:(NSString *)key;
+- (void)saveLocalDate:(NSDate *)date key:(NSString *)key;
+- (NSDate *)loadLocalDate:(NSString *)key;
 
 @end
 
@@ -137,6 +139,9 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define USER_ACKNOWLEDGE                            @"user_acknowledge"
 #define USER_NIGHT                                  @"user_night"
 #define USER_COUNT                                  @"user_count"
+#define USER_ALERT                                  @"user_alert"
+#define USER_NIGHT_FROM                             @"user_night_from"
+#define USER_NIGHT_TO                               @"user_night_to"
 
 #define FAV_1                                       CGPointMake(116, 128)
 #define FAV_2                                       CGPointMake(15, 20)

@@ -25,6 +25,7 @@
     // general
     QBUUser *currentUser;
     AVAudioPlayer *audioPlayer;
+    NSArray *alertSoundArr;
     
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
@@ -41,6 +42,7 @@
     IBOutlet UITextField *groupNudgeTxt;
     IBOutlet UITextField *groupAcknowledgeTxt;
     IBOutlet UITextField *groupNameTxt;
+    IBOutlet UITextField *groupDropTxt;
     IBOutlet UIButton *groupPicBtn;
     IBOutlet UILabel *groupNameLab;
     IBOutlet UIButton *groupNudgeBtn;
@@ -111,6 +113,7 @@
     IBOutlet UILabel *nProfileName;
     IBOutlet UITextField *nProfileNudgeTxt;
     IBOutlet UITextField *nProfileReplyTxt;
+    IBOutlet UITextField *nProfileDropTxt;
     IBOutlet UIButton *nProfileNudgeBtn;
     IBOutlet UIButton *nProfileRumbleBtn;
     IBOutlet UIButton *nProfileSilentBtn;
@@ -141,6 +144,8 @@
     IBOutlet UITextField *startAcknowledgeTxt;
     NSInteger startTag;
     
+    IBOutlet UITextField *startDropText;
+    
     // Info module
     IBOutlet UIView *infoView;
     IBOutlet UIButton *infoButton;
@@ -151,7 +156,7 @@
     NSMutableArray *nudgeButtonArr;
     BOOL stopAccel;
     
-//    DownPicker        *academyPicker;
+    DownPicker        *downPicker;
 }
 @end
 
@@ -166,10 +171,12 @@
     
     stopAccel = NO;
     iPH = [[UIImagePickerHelper alloc] init];
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"effect" ofType:@"mp3"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"Apex" ofType:@"caf"];
     NSURL *file = [NSURL fileURLWithPath:path];
     audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];
     [audioPlayer prepareToPlay];
+    
+    alertSoundArr = [AlertCtrl initWithAlerts];
     // **********  alert page  ************
     alertView.hidden = YES;
     
@@ -1176,6 +1183,9 @@
 #pragma mark - Add Group
 //////////////////////////////////// --------- Add Group View ----------- //////////////////////////////////////////
 - (IBAction)onGropOpen:(id)sender {
+    [self setAcademies:alertSoundArr textField:groupDropTxt];
+    [downPicker setValueAtIndex:-1];
+    
     [self hide:VTGroup];
     if (groupView.hidden == NO) {
         [self onGroupClose:nil];
@@ -1257,7 +1267,7 @@
     
     [self onGroupClose:nil];
     [SVProgressHUD show];
-//    return;
+
     QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypeGroup];
     chatDialog.name = groupNameTxt.text;
 
@@ -1281,6 +1291,7 @@
         [object.fields setObject:[NSNumber numberWithBool:openGroup.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.block] forKey:@"Block"];
         [object.fields setObject:[NSNumber numberWithBool:YES] forKey:@"Accept"];
+        [object.fields setObject:[NSNumber numberWithInteger:downPicker.selectedIndex] forKey:@"Alert"];
         Group *nGroup = [Group new];
         nGroup.gID = createdDialog.ID;
         nGroup.gName = groupNameTxt.text;
@@ -1299,6 +1310,7 @@
                         [self onGroupClose:nil];
                         openGroup.isNew = NO;
                         openGroup.shouldAnimate = NO;
+                        openGroup.alertSound = downPicker.selectedIndex;
                         [g_center add:openGroup];
                         [self sendGroupInvite:createdDialog];
                     } errorBlock:^(QBResponse *response) {
@@ -1318,6 +1330,7 @@
                 [self onGroupClose:nil];
                 openGroup.isNew = NO;
                 openGroup.shouldAnimate = NO;
+                openGroup.alertSound = downPicker.selectedIndex;
                 [g_center add:openGroup];
                 [self sendGroupInvite:createdDialog];
             } errorBlock:^(QBResponse *response) {
@@ -1515,6 +1528,8 @@
 #pragma mark - nProfile
 /////////////////////////////////// --------- nProfile View ----------- ///////////////////////////////////////////
 - (IBAction)onNPOpen:(id)sender {
+    [self setAcademies:alertSoundArr textField:nProfileDropTxt];
+    [downPicker setValueAtIndex:openNP.alertSound];
     [self hide:VTNP];
     if (nProfileView.hidden == NO) {
         [self onNPClose:nil];
@@ -1593,6 +1608,7 @@
     openNP.defaultReply = nProfileReplyTxt.text;
     openNP.silent = nProfileSilentSwitch.on;
     openNP.block = nProfileBlockSwitch.on;
+    openNP.alertSound = downPicker.selectedIndex;
 
     [SVProgressHUD show];
     
@@ -1610,6 +1626,8 @@
         [object.fields setObject:[NSNumber numberWithInteger:openNP.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
+        [object.fields setObject:[NSNumber numberWithInteger:openNP.alertSound] forKey:@"Alert"];
+        
         [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             [SVProgressHUD dismiss];
             [self onNPClose:nil];
@@ -1630,6 +1648,7 @@
         [object.fields setObject:[NSNumber numberWithInteger:openNP.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
+        [object.fields setObject:[NSNumber numberWithInteger:openNP.alertSound] forKey:@"Alert"];
         
         [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             [SVProgressHUD dismiss];
@@ -1732,6 +1751,8 @@
     [UIView transitionWithView:self.view duration:1.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         startView.hidden = NO;
     } completion:nil];
+
+    [self setAcademies:alertSoundArr textField:startDropText];
 }
 
 - (IBAction)onStartClose:(id)sender {
@@ -1753,10 +1774,12 @@
     }
     g_center.currentNudger.defaultNudge = startNudgeTxt.text;
     g_center.currentNudger.defaultReply = startAcknowledgeTxt.text;
+    g_center.currentNudger.alertSound =   downPicker.selectedIndex;
     
     [g_var saveLocalVal:g_center.currentNudger.response key:USER_RESPONSE];
     [g_var saveLocalStr:g_center.currentNudger.defaultNudge key:USER_NUDGE];
     [g_var saveLocalStr:g_center.currentNudger.defaultReply key:USER_ACKNOWLEDGE];
+    [g_var saveLocalVal:g_center.currentNudger.alertSound key:USER_ALERT];
 }
 
 - (IBAction)onStartNudge:(id)sender {
@@ -1834,8 +1857,8 @@
 
 - (void)setAcademies:(NSArray *)academyArr textField:txtCtrl
 {
-    DownPicker * academyPicker = [[DownPicker alloc] initWithTextField:txtCtrl];
-    [academyPicker setPlaceholder:@"Select Alert Sound."];
+    downPicker = [[DownPicker alloc] initWithTextField:txtCtrl];
+    [downPicker setPlaceholder:@"Select Alert Sound."];
     NSArray *sortArr = [academyArr linq_sort:^id(NSDictionary* academy) {
         return academy[@"name"];
     }];
@@ -1844,7 +1867,7 @@
         return dic[@"name"];
     }];
     
-    [academyPicker setData:titleArr];
+    [downPicker setData:titleArr];
 }
 #pragma mark - iAd
 /////////////////////////////// --------- iAd ----------- ///////////////////////////////////////////////

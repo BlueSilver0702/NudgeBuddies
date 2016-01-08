@@ -34,6 +34,7 @@
     currentNudger.response = [g_var loadLocalVal:USER_RESPONSE];
     currentNudger.defaultNudge = [g_var loadLocalStr:USER_NUDGE];
     currentNudger.defaultReply = [g_var loadLocalStr:USER_ACKNOWLEDGE];
+    currentNudger.alertSound = [g_var loadLocalVal:USER_ALERT];
     
     isNight = [g_var loadLocalBool:USER_NIGHT];
     isCount = [g_var loadLocalBool:USER_COUNT];
@@ -140,6 +141,7 @@
                     contactUser.silent = [cObject.fields[@"Silent"] boolValue];
                     contactUser.block = [cObject.fields[@"Block"] boolValue];
                     contactUser.metaID = cObject.ID;
+                    contactUser.alertSound = [cObject.fields[@"Alert"] integerValue];
                     found = YES;
                     break;
                 }
@@ -155,6 +157,7 @@
                         contactUser.block = [cObject.fields[@"Block"] boolValue];
                         contactUser.metaID = cObject.ID;
                         contactUser.accept = [cObject.fields[@"Accept"] boolValue];
+                        contactUser.alertSound = [cObject.fields[@"Alert"] integerValue];
                         break;
                     }
                 }
@@ -445,6 +448,7 @@
         [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.accept] forKey:@"Accept"];
+        [object.fields setObject:[NSNumber numberWithInteger:buddy.alertSound] forKey:@"Alert"];
         [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             success(YES);
             buddy.shouldAnimate = NO;
@@ -469,6 +473,7 @@
         [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.accept] forKey:@"Accept"];
+        [object.fields setObject:[NSNumber numberWithInteger:buddy.alertSound] forKey:@"Alert"];
         [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             buddy.metaID = object.ID;
             success(YES);

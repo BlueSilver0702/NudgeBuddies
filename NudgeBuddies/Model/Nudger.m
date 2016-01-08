@@ -33,6 +33,7 @@
         self.metaID = nil;
         self.dialogID = nil;
         self.unreadMsg = 0;
+        self.alertSound = -1;
     }
     return self;
 }
@@ -60,6 +61,7 @@
         self.metaID = nil;
         self.dialogID = nil;
         self.unreadMsg = 0;
+        self.alertSound = -1;
     }
     return self;
 }
