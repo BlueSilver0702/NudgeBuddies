@@ -1059,9 +1059,18 @@
     
     for (Nudger *group in g_center.notificationArray) {
         if (group.type == NTGroup && group.status == NSFriend) {
-            [gSelectGroupArr addObject:group];
+            BOOL isActive = [group.group.gUsers linq_any:^BOOL(id item) {
+                return [item isEqualToNumber:[NSNumber numberWithInteger:gSelectNudger.user.ID]];
+            }];
+            if (isActive) {
+                group.other = 1;
+                [gSelectActiveArr addObject:group];
+            } else {
+                [gSelectGroupArr addObject:group];
+            }
         }
     }
+    
     
     [self initGroupSelect];
     [UIView transitionWithView:self.view duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
@@ -1075,6 +1084,7 @@
     [[gSelectActiveScroll subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     for (int i=0; i<gSelectGroupArr.count; i++) {
         Nudger *group = [gSelectGroupArr objectAtIndex:i];
+        
         int row = (int)i/3.0;
         int cell = i%3;
         int page = (int)i/6.0;
@@ -1113,13 +1123,13 @@
             [grBtn setImage:[UIImage imageWithData:[g_var loadFile:group.group.gBlobID]] forState:UIControlStateNormal];
         }
         [grBtn setTag:i];
-        [grBtn addTarget:self action:@selector(removeGSelect:) forControlEvents:UIControlEventTouchUpInside];
+        if (group.other != 1) [grBtn addTarget:self action:@selector(removeGSelect:) forControlEvents:UIControlEventTouchUpInside];
         [gView addSubview:grBtn];
         UIImageView *plusImg = [[UIImageView alloc] initWithFrame:CGRectMake(55, 6, 18, 18)];
         [plusImg setImage:[UIImage imageNamed:@"icon-minus"]];
         grBtn.layer.masksToBounds = YES;
         grBtn.layer.cornerRadius = 24.0;
-        [gView addSubview:plusImg];
+        if (group.other != 1) [gView addSubview:plusImg];
         UILabel *gLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 57, 83, 21)];
         gLabel.text = group.group.gName;
         gLabel.textAlignment = NSTextAlignmentCenter;
@@ -1154,6 +1164,9 @@
 - (IBAction)onGroupSelectSave:(id)sender {
     [SVProgressHUD show];
     for (Nudger *group in gSelectActiveArr) {
+        if (group.other == 1) {
+            continue;
+        }
         QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.group.gID type:QBChatDialogTypeGroup];
         updateDialog.pushOccupantsIDs = @[[NSString stringWithFormat:@"%lu",gSelectNudger.user.ID]];
 
@@ -1273,7 +1286,7 @@
 
     NSMutableArray *contactIDs = [NSMutableArray new];
     for (Nudger *nudger in groupContacts) {
-        [contactIDs addObject:[NSString stringWithFormat:@"%lu", nudger.user.ID]];
+        [contactIDs addObject:[NSNumber numberWithInteger:nudger.user.ID]];
     }
     chatDialog.occupantIDs = (NSArray *)contactIDs;
     

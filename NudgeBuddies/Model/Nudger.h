@@ -34,6 +34,8 @@
 @property (nonatomic) NSInteger alertSound;
 @property (nonatomic) BOOL accept;
 
+@property (nonatomic) int other;
+
 - (id)initWithUser:(QBUUser *)userInfo;
 - (id)initWithGroup:(Group *)groupInfo;
 - (BOOL)isEqualNudger:(Nudger *)newNudger;
