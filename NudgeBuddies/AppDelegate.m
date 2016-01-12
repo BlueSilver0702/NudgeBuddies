@@ -12,11 +12,14 @@
 #import "ViewController.h"
 
 @interface AppDelegate ()
-
+{
+    NSTimer *timer;
+}
 @end
 
 Global *g_var;
 AppCenter *g_center;
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -116,16 +119,22 @@ AppCenter *g_center;
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[QBChat instance] disconnectWithCompletionBlock:^(NSError * _Nullable error) {
-        
-    }];
+    timer = [NSTimer scheduledTimerWithTimeInterval:30 target:[QBChat instance] selector:@selector(sendPresence) userInfo:nil repeats:YES];
+//    [[QBChat instance] disconnectWithCompletionBlock:^(NSError * _Nullable error) {
+//        
+//    }];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[QBChat instance] connectWithUser:g_center.currentUser  completion:^(NSError * _Nullable error) {
-        
-    }];
+    if (timer == nil) {
+        [[QBChat instance] connectWithUser:g_center.currentUser  completion:^(NSError * _Nullable error) {
+            
+        }];
+    } else {
+        [timer invalidate];
+        timer = nil;
+    }
 }
 
 @end

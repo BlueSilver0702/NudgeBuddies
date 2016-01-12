@@ -28,7 +28,9 @@ typedef NS_ENUM(NSInteger, ResponseType) {
     RTNudge,
     RTRumble,
     RTSilent,
-    RTAnnoy
+    RTAnnoy,
+    RTAnnoyRumble,
+    RTAnnoySilent
 };
 
 typedef NS_ENUM(NSInteger, MenuType) {
@@ -47,6 +49,8 @@ typedef NS_ENUM(NSInteger, MenuReturn) {
     MRRumble,
     MRRumbleSilent,
     MRAnnoy,
+    MRAnnoyRumble,
+    MRAnnoySilent,
     MRStreamGroup,
     MRStream,
     MRAddGroup,
@@ -151,5 +155,8 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define FAV_6                                       CGPointMake(0, 120)
 #define FAV_7                                       CGPointMake(230, 120)
 #define FAV_8                                       CGPointMake(116, 43)
+
+#define IAP1                                        @"iap_admob";
+#define IAP2                                        @"iap_sound_1";
 
 #define err_later                                         @"An error occured. Please try later."

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		290C029A1C1321440093D12A /* SettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 290C02991C1321440093D12A /* SettingController.m */; };
-		290C029C1C1367270093D12A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 290C029B1C1367270093D12A /* iAd.framework */; };
 		290C02A51C136EE40093D12A /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 290C02A41C136EE40093D12A /* SearchController.m */; };
 		290F90101C1205B900F345D8 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 290F900D1C1205B900F345D8 /* Default-568h@2x.png */; };
 		290F90111C1205B900F345D8 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 290F900E1C1205B900F345D8 /* Default.png */; };
@@ -20,6 +19,30 @@
 		29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59381C154A870056BB44 /* FBSDKCoreKit.framework */; };
 		29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE59391C154A870056BB44 /* FBSDKLoginKit.framework */; };
 		29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */; };
+		4F04F9331C44E905008E42FD /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9321C44E905008E42FD /* GoogleMobileAds.framework */; };
+		4F04F9351C44E946008E42FD /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9341C44E946008E42FD /* AdSupport.framework */; };
+		4F04F9371C44E961008E42FD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9361C44E961008E42FD /* CoreGraphics.framework */; };
+		4F04F9391C44E96B008E42FD /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9381C44E96B008E42FD /* CoreMedia.framework */; };
+		4F04F93B1C44E981008E42FD /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F93A1C44E981008E42FD /* CoreTelephony.framework */; };
+		4F04F93D1C44E98F008E42FD /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F93C1C44E98F008E42FD /* EventKit.framework */; };
+		4F04F93F1C44E99C008E42FD /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F93E1C44E99C008E42FD /* EventKitUI.framework */; };
+		4F04F9411C44E9AC008E42FD /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9401C44E9AC008E42FD /* MessageUI.framework */; };
+		4F04F9431C44E9B6008E42FD /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9421C44E9B6008E42FD /* StoreKit.framework */; };
+		4F04F9451C44E9C2008E42FD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F04F9441C44E9C2008E42FD /* SystemConfiguration.framework */; };
+		4F04F94B1C453D6D008E42FD /* DNSInAppPurchaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F04F94A1C453D6D008E42FD /* DNSInAppPurchaseManager.m */; };
+		4F04F95A1C454E41008E42FD /* Alarm Rooster.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F94D1C454E41008E42FD /* Alarm Rooster.caf */; };
+		4F04F95B1C454E41008E42FD /* Creepy Laugh - Adam Webb.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F94E1C454E41008E42FD /* Creepy Laugh - Adam Webb.caf */; };
+		4F04F95C1C454E41008E42FD /* Crow Call 2 -JimBob.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F94F1C454E41008E42FD /* Crow Call 2 -JimBob.caf */; };
+		4F04F95D1C454E41008E42FD /* Dark Laugh - HopeinAwe.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9501C454E41008E42FD /* Dark Laugh - HopeinAwe.caf */; };
+		4F04F95E1C454E41008E42FD /* Evil Laugh 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9511C454E41008E42FD /* Evil Laugh 2.caf */; };
+		4F04F95F1C454E41008E42FD /* Evil Laugh Male 6 - Himan.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9521C454E41008E42FD /* Evil Laugh Male 6 - Himan.caf */; };
+		4F04F9601C454E41008E42FD /* Evil laugh Male 9 - Himan.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9531C454E41008E42FD /* Evil laugh Male 9 - Himan.caf */; };
+		4F04F9611C454E41008E42FD /* Incoming Suspense - Maximilien.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9541C454E41008E42FD /* Incoming Suspense - Maximilien.caf */; };
+		4F04F9621C454E41008E42FD /* Psychotic_laugh_female - Mike Koenig.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9551C454E41008E42FD /* Psychotic_laugh_female - Mike Koenig.caf */; };
+		4F04F9631C454E41008E42FD /* Sqeaking door - Sarasprella.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9561C454E41008E42FD /* Sqeaking door - Sarasprella.caf */; };
+		4F04F9641C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9571C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf */; };
+		4F04F9651C454E41008E42FD /* Thunder - Mike Koenig.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9581C454E41008E42FD /* Thunder - Mike Koenig.caf */; };
+		4F04F9661C454E41008E42FD /* Thunder- Mark DiAngelo.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9591C454E41008E42FD /* Thunder- Mark DiAngelo.caf */; };
 		4F1034FB1C3D6747002E8268 /* AlertCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1034FA1C3D6747002E8268 /* AlertCtrl.m */; };
 		4F467FD01C34856C00840D82 /* StreamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F467FCF1C34856C00840D82 /* StreamController.m */; };
 		4F46C3CA1C3D7E2200EDBB82 /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */; };
@@ -44,6 +67,8 @@
 		4F46C3F11C3D832200EDBB82 /* UFO Takeoff.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F46C3DE1C3D832200EDBB82 /* UFO Takeoff.caf */; };
 		4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */; };
 		4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */; };
+		4F613EC01C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F613EBD1C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.m */; };
+		4F613EC11C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F613EBF1C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m */; };
 		4F7E02B61C2CF720000B7A50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */; };
 		4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB519241C271BC000EA06D5 /* AppCenter.m */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
@@ -85,6 +110,31 @@
 		29EE593A1C154A870056BB44 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.release.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.release.xcconfig"; sourceTree = "<group>"; };
 		3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NudgeBuddies.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NudgeBuddies/Pods-NudgeBuddies.debug.xcconfig"; sourceTree = "<group>"; };
+		4F04F9321C44E905008E42FD /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
+		4F04F9341C44E946008E42FD /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		4F04F9361C44E961008E42FD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4F04F9381C44E96B008E42FD /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		4F04F93A1C44E981008E42FD /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		4F04F93C1C44E98F008E42FD /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		4F04F93E1C44E99C008E42FD /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		4F04F9401C44E9AC008E42FD /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		4F04F9421C44E9B6008E42FD /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		4F04F9441C44E9C2008E42FD /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4F04F9491C453D6D008E42FD /* DNSInAppPurchaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DNSInAppPurchaseManager.h; path = Utils/DNSInAppPurchase/DNSInAppPurchaseManager.h; sourceTree = "<group>"; };
+		4F04F94A1C453D6D008E42FD /* DNSInAppPurchaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DNSInAppPurchaseManager.m; path = Utils/DNSInAppPurchase/DNSInAppPurchaseManager.m; sourceTree = "<group>"; };
+		4F04F94D1C454E41008E42FD /* Alarm Rooster.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Alarm Rooster.caf"; path = "Resources/Default_Alerts/Pack1/Alarm Rooster.caf"; sourceTree = "<group>"; };
+		4F04F94E1C454E41008E42FD /* Creepy Laugh - Adam Webb.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Creepy Laugh - Adam Webb.caf"; path = "Resources/Default_Alerts/Pack1/Creepy Laugh - Adam Webb.caf"; sourceTree = "<group>"; };
+		4F04F94F1C454E41008E42FD /* Crow Call 2 -JimBob.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Crow Call 2 -JimBob.caf"; path = "Resources/Default_Alerts/Pack1/Crow Call 2 -JimBob.caf"; sourceTree = "<group>"; };
+		4F04F9501C454E41008E42FD /* Dark Laugh - HopeinAwe.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Dark Laugh - HopeinAwe.caf"; path = "Resources/Default_Alerts/Pack1/Dark Laugh - HopeinAwe.caf"; sourceTree = "<group>"; };
+		4F04F9511C454E41008E42FD /* Evil Laugh 2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Evil Laugh 2.caf"; path = "Resources/Default_Alerts/Pack1/Evil Laugh 2.caf"; sourceTree = "<group>"; };
+		4F04F9521C454E41008E42FD /* Evil Laugh Male 6 - Himan.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Evil Laugh Male 6 - Himan.caf"; path = "Resources/Default_Alerts/Pack1/Evil Laugh Male 6 - Himan.caf"; sourceTree = "<group>"; };
+		4F04F9531C454E41008E42FD /* Evil laugh Male 9 - Himan.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Evil laugh Male 9 - Himan.caf"; path = "Resources/Default_Alerts/Pack1/Evil laugh Male 9 - Himan.caf"; sourceTree = "<group>"; };
+		4F04F9541C454E41008E42FD /* Incoming Suspense - Maximilien.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Incoming Suspense - Maximilien.caf"; path = "Resources/Default_Alerts/Pack1/Incoming Suspense - Maximilien.caf"; sourceTree = "<group>"; };
+		4F04F9551C454E41008E42FD /* Psychotic_laugh_female - Mike Koenig.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Psychotic_laugh_female - Mike Koenig.caf"; path = "Resources/Default_Alerts/Pack1/Psychotic_laugh_female - Mike Koenig.caf"; sourceTree = "<group>"; };
+		4F04F9561C454E41008E42FD /* Sqeaking door - Sarasprella.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sqeaking door - Sarasprella.caf"; path = "Resources/Default_Alerts/Pack1/Sqeaking door - Sarasprella.caf"; sourceTree = "<group>"; };
+		4F04F9571C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sqeaking door 2 -Sarasprella.caf"; path = "Resources/Default_Alerts/Pack1/Sqeaking door 2 -Sarasprella.caf"; sourceTree = "<group>"; };
+		4F04F9581C454E41008E42FD /* Thunder - Mike Koenig.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Thunder - Mike Koenig.caf"; path = "Resources/Default_Alerts/Pack1/Thunder - Mike Koenig.caf"; sourceTree = "<group>"; };
+		4F04F9591C454E41008E42FD /* Thunder- Mark DiAngelo.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Thunder- Mark DiAngelo.caf"; path = "Resources/Default_Alerts/Pack1/Thunder- Mark DiAngelo.caf"; sourceTree = "<group>"; };
 		4F1034F91C3D6747002E8268 /* AlertCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertCtrl.h; path = Controller/AlertCtrl.h; sourceTree = "<group>"; };
 		4F1034FA1C3D6747002E8268 /* AlertCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertCtrl.m; path = Controller/AlertCtrl.m; sourceTree = "<group>"; };
 		4F467FCE1C34856C00840D82 /* StreamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamController.h; path = View/StreamController.h; sourceTree = "<group>"; };
@@ -113,6 +163,11 @@
 		4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBTouchAndHoldButton.h; path = View/Helper/NBTouchAndHoldButton.h; sourceTree = "<group>"; };
 		4F4AB06C1C2BED08005B91AE /* NBTouchAndHoldButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBTouchAndHoldButton.m; path = View/Helper/NBTouchAndHoldButton.m; sourceTree = "<group>"; };
 		4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4F613EBB1C42C74B0088C8DF /* SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SVPullToRefresh.h; path = Utils/SVPullToRefresh/SVPullToRefresh.h; sourceTree = "<group>"; };
+		4F613EBC1C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SVInfiniteScrolling.h"; path = "Utils/SVPullToRefresh/UIScrollView+SVInfiniteScrolling.h"; sourceTree = "<group>"; };
+		4F613EBD1C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SVInfiniteScrolling.m"; path = "Utils/SVPullToRefresh/UIScrollView+SVInfiniteScrolling.m"; sourceTree = "<group>"; };
+		4F613EBE1C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIScrollView+SVPullToRefresh.h"; path = "Utils/SVPullToRefresh/UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
+		4F613EBF1C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+SVPullToRefresh.m"; path = "Utils/SVPullToRefresh/UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
 		4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FB519231C271BC000EA06D5 /* AppCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCenter.h; path = Controller/AppCenter.h; sourceTree = "<group>"; };
 		4FB519241C271BC000EA06D5 /* AppCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppCenter.m; path = Controller/AppCenter.m; sourceTree = "<group>"; };
@@ -153,10 +208,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F04F9451C44E9C2008E42FD /* SystemConfiguration.framework in Frameworks */,
+				4F04F9431C44E9B6008E42FD /* StoreKit.framework in Frameworks */,
+				4F04F9411C44E9AC008E42FD /* MessageUI.framework in Frameworks */,
+				4F04F93F1C44E99C008E42FD /* EventKitUI.framework in Frameworks */,
+				4F04F93D1C44E98F008E42FD /* EventKit.framework in Frameworks */,
+				4F04F93B1C44E981008E42FD /* CoreTelephony.framework in Frameworks */,
+				4F04F9391C44E96B008E42FD /* CoreMedia.framework in Frameworks */,
+				4F04F9371C44E961008E42FD /* CoreGraphics.framework in Frameworks */,
+				4F04F9351C44E946008E42FD /* AdSupport.framework in Frameworks */,
+				4F04F9331C44E905008E42FD /* GoogleMobileAds.framework in Frameworks */,
 				4F7E02B61C2CF720000B7A50 /* AVFoundation.framework in Frameworks */,
 				4F4AB06F1C2C9D49005B91AE /* AudioToolbox.framework in Frameworks */,
 				CFD8EEF21C161BCE00F47D45 /* CoreMotion.framework in Frameworks */,
-				290C029C1C1367270093D12A /* iAd.framework in Frameworks */,
 				29EE593B1C154A870056BB44 /* FBSDKCoreKit.framework in Frameworks */,
 				29EE593D1C154A870056BB44 /* FBSDKShareKit.framework in Frameworks */,
 				29EE593C1C154A870056BB44 /* FBSDKLoginKit.framework in Frameworks */,
@@ -249,9 +313,39 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4F04F9481C453D58008E42FD /* DNSIAP */ = {
+			isa = PBXGroup;
+			children = (
+				4F04F9491C453D6D008E42FD /* DNSInAppPurchaseManager.h */,
+				4F04F94A1C453D6D008E42FD /* DNSInAppPurchaseManager.m */,
+			);
+			name = DNSIAP;
+			sourceTree = "<group>";
+		};
+		4F04F94C1C454DFD008E42FD /* Pack1 */ = {
+			isa = PBXGroup;
+			children = (
+				4F04F94D1C454E41008E42FD /* Alarm Rooster.caf */,
+				4F04F94E1C454E41008E42FD /* Creepy Laugh - Adam Webb.caf */,
+				4F04F94F1C454E41008E42FD /* Crow Call 2 -JimBob.caf */,
+				4F04F9501C454E41008E42FD /* Dark Laugh - HopeinAwe.caf */,
+				4F04F9511C454E41008E42FD /* Evil Laugh 2.caf */,
+				4F04F9521C454E41008E42FD /* Evil Laugh Male 6 - Himan.caf */,
+				4F04F9531C454E41008E42FD /* Evil laugh Male 9 - Himan.caf */,
+				4F04F9541C454E41008E42FD /* Incoming Suspense - Maximilien.caf */,
+				4F04F9551C454E41008E42FD /* Psychotic_laugh_female - Mike Koenig.caf */,
+				4F04F9561C454E41008E42FD /* Sqeaking door - Sarasprella.caf */,
+				4F04F9571C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf */,
+				4F04F9581C454E41008E42FD /* Thunder - Mike Koenig.caf */,
+				4F04F9591C454E41008E42FD /* Thunder- Mark DiAngelo.caf */,
+			);
+			name = Pack1;
+			sourceTree = "<group>";
+		};
 		4F46C3CB1C3D831000EDBB82 /* Alerts */ = {
 			isa = PBXGroup;
 			children = (
+				4F04F94C1C454DFD008E42FD /* Pack1 */,
 				4F46C3CC1C3D832200EDBB82 /* Apex.caf */,
 				4F46C3CD1C3D832200EDBB82 /* Audience Applause.caf */,
 				4F46C3CE1C3D832200EDBB82 /* aurora.caf */,
@@ -275,9 +369,31 @@
 			name = Alerts;
 			sourceTree = "<group>";
 		};
+		4F613EBA1C42C6FF0088C8DF /* TableScrollLoadMore */ = {
+			isa = PBXGroup;
+			children = (
+				4F613EBB1C42C74B0088C8DF /* SVPullToRefresh.h */,
+				4F613EBC1C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.h */,
+				4F613EBD1C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.m */,
+				4F613EBE1C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.h */,
+				4F613EBF1C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m */,
+			);
+			name = TableScrollLoadMore;
+			sourceTree = "<group>";
+		};
 		AEF3E02EB89A0D5C4C3580CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4F04F9441C44E9C2008E42FD /* SystemConfiguration.framework */,
+				4F04F9421C44E9B6008E42FD /* StoreKit.framework */,
+				4F04F9401C44E9AC008E42FD /* MessageUI.framework */,
+				4F04F93E1C44E99C008E42FD /* EventKitUI.framework */,
+				4F04F93C1C44E98F008E42FD /* EventKit.framework */,
+				4F04F93A1C44E981008E42FD /* CoreTelephony.framework */,
+				4F04F9381C44E96B008E42FD /* CoreMedia.framework */,
+				4F04F9361C44E961008E42FD /* CoreGraphics.framework */,
+				4F04F9341C44E946008E42FD /* AdSupport.framework */,
+				4F04F9321C44E905008E42FD /* GoogleMobileAds.framework */,
 				4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */,
 				4F4AB06E1C2C9D49005B91AE /* AudioToolbox.framework */,
 				CFD8EEF11C161BCE00F47D45 /* CoreMotion.framework */,
@@ -317,6 +433,8 @@
 		CFF136691C1D206D0001D351 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				4F04F9481C453D58008E42FD /* DNSIAP */,
+				4F613EBA1C42C6FF0088C8DF /* TableScrollLoadMore */,
 				4F46C3C81C3D7E2200EDBB82 /* UIColor+HexString.h */,
 				4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */,
 				4F4AB06B1C2BED08005B91AE /* NBTouchAndHoldButton.h */,
@@ -403,17 +521,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F04F95F1C454E41008E42FD /* Evil Laugh Male 6 - Himan.caf in Resources */,
 				294891CF1C0F87300086D1BE /* Assets.xcassets in Resources */,
+				4F04F9611C454E41008E42FD /* Incoming Suspense - Maximilien.caf in Resources */,
+				4F04F95B1C454E41008E42FD /* Creepy Laugh - Adam Webb.caf in Resources */,
 				4F46C3EF1C3D832200EDBB82 /* Stargaze.caf in Resources */,
 				4F46C3E81C3D832200EDBB82 /* input.caf in Resources */,
 				4F46C3E01C3D832200EDBB82 /* Audience Applause.caf in Resources */,
+				4F04F9651C454E41008E42FD /* Thunder - Mike Koenig.caf in Resources */,
 				294891CD1C0F87300086D1BE /* Main.storyboard in Resources */,
 				290F90121C1205B900F345D8 /* Default@2x.png in Resources */,
+				4F04F9601C454E41008E42FD /* Evil laugh Male 9 - Himan.caf in Resources */,
 				4F46C3E51C3D832200EDBB82 /* Descending craft.caf in Resources */,
 				290F90101C1205B900F345D8 /* Default-568h@2x.png in Resources */,
+				4F04F9661C454E41008E42FD /* Thunder- Mark DiAngelo.caf in Resources */,
+				4F04F95D1C454E41008E42FD /* Dark Laugh - HopeinAwe.caf in Resources */,
 				4F46C3E41C3D832200EDBB82 /* Crystals.caf in Resources */,
 				290F90111C1205B900F345D8 /* Default.png in Resources */,
 				4F46C3F11C3D832200EDBB82 /* UFO Takeoff.caf in Resources */,
+				4F04F9641C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf in Resources */,
+				4F04F95E1C454E41008E42FD /* Evil Laugh 2.caf in Resources */,
+				4F04F95C1C454E41008E42FD /* Crow Call 2 -JimBob.caf in Resources */,
 				4F46C3EB1C3D832200EDBB82 /* note.caf in Resources */,
 				4F46C3EE1C3D832200EDBB82 /* pulse.caf in Resources */,
 				4F46C3E21C3D832200EDBB82 /* Chipmunks.caf in Resources */,
@@ -421,12 +549,15 @@
 				CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */,
 				4F46C3E71C3D832200EDBB82 /* hello.caf in Resources */,
 				4F46C3EA1C3D832200EDBB82 /* Metal Gong.caf in Resources */,
+				4F04F9621C454E41008E42FD /* Psychotic_laugh_female - Mike Koenig.caf in Resources */,
 				4F46C3DF1C3D832200EDBB82 /* Apex.caf in Resources */,
 				4F46C3E91C3D832200EDBB82 /* Martian Death Ray.caf in Resources */,
 				4F46C3E31C3D832200EDBB82 /* circles.caf in Resources */,
 				4F46C3ED1C3D832200EDBB82 /* popcorn.caf in Resources */,
+				4F04F95A1C454E41008E42FD /* Alarm Rooster.caf in Resources */,
 				4F46C3E61C3D832200EDBB82 /* Fractal.caf in Resources */,
 				4F46C3E11C3D832200EDBB82 /* aurora.caf in Resources */,
+				4F04F9631C454E41008E42FD /* Sqeaking door - Sarasprella.caf in Resources */,
 				4F46C3F01C3D832200EDBB82 /* Thunder HD.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,7 +622,9 @@
 				CFF136641C1D20300001D351 /* SigninController.m in Sources */,
 				CFF136751C1D208E0001D351 /* UIImagePickerHelper.m in Sources */,
 				290C02A51C136EE40093D12A /* SearchController.m in Sources */,
+				4F04F94B1C453D6D008E42FD /* DNSInAppPurchaseManager.m in Sources */,
 				CFF136551C1D1BEE0001D351 /* Group.m in Sources */,
+				4F613EC01C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				CFF1367B1C1D7D110001D351 /* MenuController.m in Sources */,
 				4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */,
 				294891C71C0F87300086D1BE /* AppDelegate.m in Sources */,
@@ -505,6 +638,7 @@
 				CFF136511C1D1AC50001D351 /* Nudger.m in Sources */,
 				CFF1365B1C1D201D0001D351 /* Global.m in Sources */,
 				4F46C3CA1C3D7E2200EDBB82 /* UIColor+HexString.m in Sources */,
+				4F613EC11C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m in Sources */,
 				4F4AB06D1C2BED08005B91AE /* NBTouchAndHoldButton.m in Sources */,
 				290C029A1C1321440093D12A /* SettingController.m in Sources */,
 				294891C41C0F87300086D1BE /* main.m in Sources */,
@@ -542,10 +676,10 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wayne Peterson (7R5T68FXP8)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -562,10 +696,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
+				PROVISIONING_PROFILE = "73ed6550-51e9-4c29-b626-b81f3dca2f0e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -588,10 +722,10 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wayne Peterson (AC4TYWGNFR)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Wayne Peterson (7R5T68FXP8)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -602,9 +736,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
+				PROVISIONING_PROFILE = "73ed6550-51e9-4c29-b626-b81f3dca2f0e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -616,8 +750,6 @@
 			baseConfigurationReference = 3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -630,7 +762,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "73ed6550-51e9-4c29-b626-b81f3dca2f0e";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -640,8 +772,6 @@
 			baseConfigurationReference = 35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -654,7 +784,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "73ed6550-51e9-4c29-b626-b81f3dca2f0e";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

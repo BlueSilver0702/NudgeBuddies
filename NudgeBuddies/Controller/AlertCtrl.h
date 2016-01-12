@@ -11,4 +11,5 @@
 @interface AlertCtrl : NSObject
 
 + (NSArray *)initWithAlerts;
+
 @end

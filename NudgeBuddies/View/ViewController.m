@@ -11,7 +11,6 @@
 #import "MenuController.h"
 #import "SearchController.h"
 #import "StreamController.h"
-#import <iAd/iAd.h>
 #import <CoreMotion/CoreMotion.h>
 #import "UIImagePickerHelper.h"
 #import <AudioToolbox/AudioToolbox.h>
@@ -20,12 +19,16 @@
 
 #import "AlertCtrl.h"
 
-@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, ADBannerViewDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate, UIScrollViewDelegate>
+@import GoogleMobileAds;
+
+@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate, UIScrollViewDelegate, StreamControllerDelegate>
 {
     // general
     QBUUser *currentUser;
     AVAudioPlayer *audioPlayer;
     NSArray *alertSoundArr;
+    
+    IBOutlet GADBannerView *bannerView;
     
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
@@ -84,9 +87,6 @@
     SettingController *settingCtrl;
     IBOutlet UIView *settingView;
     IBOutlet UIView *settingCoverView;
-    
-    // iAD page
-    ADBannerView *bannerView;
     
     // alert page
     IBOutlet UIView *alertView;
@@ -190,12 +190,15 @@
     settingCtrl.delegate = self;
     
     // **********  iAD module  ************
-    bannerView = [[ADBannerView alloc]initWithFrame:
-                  CGRectMake(0, 518, 320, 50)];
-    // Optional to set background color to clear color
-    [bannerView setBackgroundColor:[UIColor clearColor]];
+//    bannerView = [[ADBannerView alloc]initWithFrame:
+//                  CGRectMake(0, 518, 320, 50)];
+//    // Optional to set background color to clear color
+//    [bannerView setBackgroundColor:[UIColor clearColor]];
 //    [self.view addSubview: bannerView];
 //    [self performSelector:@selector(removeIAD) withObject:nil afterDelay:15];
+    bannerView.adUnitID = @"ca-app-pub-4438140575166637/7856806905";
+    bannerView.rootViewController = self;
+    [bannerView loadRequest:[GADRequest request]];
     
     // **********  search module  ************
     searchDoneButton.hidden = YES;
@@ -234,6 +237,7 @@
     streamCtrl = (StreamController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"streamCtrl"];
     [self addChildViewController:streamCtrl];
     [streamTableContainer addSubview:streamCtrl.view];
+    streamCtrl.delegate = self;
     
     // **********  nProfile module  ************
     nProfileView.hidden = YES;
@@ -396,6 +400,10 @@
 - (void)onceNudged:(Nudger *)nudger {
     [self onceNudgeReceived:nudger];
     [self display];
+    [g_center getUnreadMessages:^(NSInteger unreadCount, NSDictionary *dialogs) {
+        NSLog(@"%lu, %@", unreadCount, dialogs);
+        [UIApplication sharedApplication].applicationIconBadgeNumber = unreadCount;
+    }];
 }
 
 - (void)onceNudgeReceived:(Nudger *)nudger {
@@ -409,7 +417,7 @@
         return;
     }
     if (nudger.response == RTNudge) {
-        if (!g_center.isNight && !g_center.currentNudger.silent) {
+        if (!g_center.isNight && !nudger.silent) {
             [audioPlayer play];
         }
     } else if (nudger.response == RTSilent) {
@@ -418,12 +426,12 @@
         }
     } else if (nudger.response == RTAnnoy) {
         if (!g_center.isNight) {
-            if (!g_center.currentNudger.silent) [audioPlayer play];
+            if (!nudger.silent) [audioPlayer play];
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         }
     } else {
         if (!g_center.isNight) {
-            if (!g_center.currentNudger.silent) [audioPlayer play];
+            if (!nudger.silent) [audioPlayer play];
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         }
     }
@@ -719,6 +727,7 @@
         NSLog(@"MRAuto");
     } else if (menuReturn == MRBlock) {
         NSLog(@"MRBlock");
+        [g_center updateContact:nudger];
     } else if (menuReturn == MREdit) {
         [self onMenuClose];
         menuCtrl.isOpen = NO;
@@ -733,6 +742,7 @@
         [self onNPOpen:nil];
     } else if (menuReturn == MRSilent) {
         NSLog(@"MRSilent");
+        [g_center updateContact:nudger];
     } else if (menuReturn == MRStream || menuReturn == MRStreamGroup) {
         [self onMenuClose];
         menuCtrl.isOpen = NO;
@@ -752,9 +762,7 @@
         if (nudger.type == NTGroup) {
             [SVProgressHUD show];
             nudger.accept = YES;
-            [g_center updateContact:nudger success:^(BOOL success) {
-                
-            }];
+            [g_center updateContact:nudger];
         } else {
             [g_center addBuddy:nudger success:^(BOOL success){
                 if (!success) {
@@ -786,13 +794,19 @@
     if (nudger != nil) {
 //        NSLog(@"%@", nudger);
 //    AudioServicesPlaySystemSound(1103);
-        [g_center sendMessage:nudger txt:nil success:^(BOOL success) {
-            if (success) {
-                [audioPlayer play];
-                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-                [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];
+        [g_center isBlock:nudger success:^(BOOL isBlock) {
+            if (isBlock) {
+                [self showAlert:@"Your nudge was unable to be delivered due to the blocked status."];
             } else {
-                [SVProgressHUD showErrorWithStatus:@"Failed to send nudge. Please try later."];
+                [g_center sendMessage:nudger txt:nil success:^(BOOL success) {
+                    if (success) {
+                        [audioPlayer play];
+                        AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+                        [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];
+                    } else {
+                        [SVProgressHUD showErrorWithStatus:@"Failed to send nudge. Please try later."];
+                    }
+                }];
             }
         }];
     }
@@ -1169,6 +1183,8 @@
         }
         QBChatDialog *updateDialog = [[QBChatDialog alloc] initWithDialogID:group.group.gID type:QBChatDialogTypeGroup];
         updateDialog.pushOccupantsIDs = @[[NSString stringWithFormat:@"%lu",gSelectNudger.user.ID]];
+        
+        [group.group.gUsers addObject:[NSNumber numberWithInteger:gSelectNudger.user.ID]];
 
         [QBRequest updateDialog:updateDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
 
@@ -1705,6 +1721,14 @@
 
 #pragma mark - Stream
 /////////////////////////////////// --------- Stream View ----------- ///////////////////////////////////////////
+- (void)onUnreadCount:(NSInteger)count {
+    [streamCountBtn setTitle:[NSString stringWithFormat:@"%lu", count] forState:UIControlStateNormal];
+    streamNudger.unreadMsg = count;
+    if (count == 0) {
+        streamCountBtn.hidden = YES;
+    }
+}
+
 - (IBAction)onStreamOpen:(id)sender {
     [self hide:VTStream];
     if (streamView.hidden == NO) {
@@ -1731,9 +1755,17 @@
 }
 
 - (IBAction)onStreamClose:(id)sender {
-    streamNudger.unreadMsg = 0;
+    //streamNudger.unreadMsg = 0;
     streamNudger.isNew = YES;
     streamNudger.shouldAnimate = NO;
+    [g_center getUnreadMessages:^(NSInteger unreadCount, NSDictionary *dialogs) {
+        NSLog(@"%lu, %@", unreadCount, dialogs);
+        [UIApplication sharedApplication].applicationIconBadgeNumber = unreadCount;
+        for (Nudger *nudger in g_center.notificationArray) {
+            nudger.unreadMsg = [[dialogs valueForKey:nudger.dialogID] integerValue];
+        }
+        [self display];
+    }];
 //    [self display:NO];
     [UIView transitionWithView:streamView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         streamView.hidden = YES;
@@ -1845,7 +1877,7 @@
     if (viewTag != VTGroupSelect) [self onGroupSelectClose:nil];
     if (viewTag != VTNP) [self onNPClose:nil];
     if (viewTag != VTViewGroup) [self onVGroupClose:nil];
-    if (viewTag != VTStream) [self onStreamClose:nil];
+    if (viewTag != VTStream && viewTag != VTMenu) [self onStreamClose:nil];
     if (viewTag != VTInfo) [self onInfoClose:nil];
 }
 
@@ -1882,23 +1914,36 @@
     
     [downPicker setData:titleArr];
 }
-#pragma mark - iAd
-/////////////////////////////// --------- iAd ----------- ///////////////////////////////////////////////
--(void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error{
-    NSLog(@"Error loading");
+
+- (NSString *)relativeDateStringForDate:(NSDate *)date
+{
+    NSCalendarUnit units = NSCalendarUnitDay | NSCalendarUnitWeekOfYear |
+    NSCalendarUnitMonth | NSCalendarUnitYear;
+    
+    // if `date` is before "now" (i.e. in the past) then the components will be positive
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:units
+                                                                   fromDate:date
+                                                                     toDate:[NSDate date]
+                                                                    options:0];
+    
+    if (components.year > 0) {
+        return [NSString stringWithFormat:@"%ld years ago", (long)components.year];
+    } else if (components.month > 0) {
+        return [NSString stringWithFormat:@"%ld months ago", (long)components.month];
+    } else if (components.weekOfYear > 0) {
+        return [NSString stringWithFormat:@"%ld weeks ago", (long)components.weekOfYear];
+    } else if (components.day > 0) {
+        if (components.day > 1) {
+            return [NSString stringWithFormat:@"%ld days ago", (long)components.day];
+        } else {
+            return @"Yesterday";
+        }
+    } else {
+        return @"Today";
+    }
 }
 
--(void)bannerViewDidLoadAd:(ADBannerView *)banner{
-    NSLog(@"Ad loaded");
-}
--(void)bannerViewWillLoadAd:(ADBannerView *)banner{
-    NSLog(@"Ad will load");
-}
--(void)bannerViewActionDidFinish:(ADBannerView *)banner{
-    NSLog(@"Ad did finish");
-}
-
--(void)removeIAD {
+- (void)onSettingADPurchased {
     bannerView.hidden = YES;
 }
 

@@ -8,7 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol StreamControllerDelegate <NSObject>
+
+@optional
+
+- (void)onUnreadCount:(NSInteger)count;
+
+@end
+
 @interface StreamController : UITableViewController
+
+@property(weak) id <StreamControllerDelegate> delegate;
 
 - (void)streamResult:(Nudger *)selectedNudger;
 

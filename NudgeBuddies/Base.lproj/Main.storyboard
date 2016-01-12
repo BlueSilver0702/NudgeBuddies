@@ -246,7 +246,7 @@
                                         </connections>
                                     </button>
                                     <view hidden="YES" contentMode="scaleToFill" id="sJC-ci-qxx">
-                                        <rect key="frame" x="15" y="53" width="290" height="461"/>
+                                        <rect key="frame" x="15" y="54" width="290" height="461"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" id="Jxu-3f-E6q">
@@ -385,7 +385,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view hidden="YES" contentMode="scaleToFill" id="hUm-Nu-smD">
-                                        <rect key="frame" x="15" y="53" width="290" height="507"/>
+                                        <rect key="frame" x="15" y="54" width="290" height="507"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-img" id="kDm-5x-VNv">
@@ -1442,7 +1442,7 @@ nudge</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view hidden="YES" contentMode="scaleToFill" id="2zF-6a-WjD">
-                                        <rect key="frame" x="15" y="53" width="290" height="461"/>
+                                        <rect key="frame" x="15" y="54" width="290" height="461"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-img" id="vze-1s-hhd">
@@ -2183,7 +2183,7 @@ in the search box above.</string>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.83385817309999999" colorSpace="calibratedRGB"/>
                                     </view>
-                                    <view hidden="YES" contentMode="scaleToFill" id="grF-pj-lye">
+                                    <view contentMode="scaleToFill" id="grF-pj-lye">
                                         <rect key="frame" x="15" y="59" width="290" height="272"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -2197,6 +2197,11 @@ in the search box above.</string>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </imageView>
+                                            <view contentMode="scaleToFill" id="RCu-yQ-JD5">
+                                                <rect key="frame" x="14" y="64" width="262" height="162"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="noti-1" id="3Vn-QA-dSe">
                                                 <rect key="frame" x="97" y="-10" width="95" height="96"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2264,12 +2269,12 @@ in the search box above.</string>
                                                     <action selector="onStreamSend:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9er-gV-fKB"/>
                                                 </connections>
                                             </button>
-                                            <view contentMode="scaleToFill" id="RCu-yQ-JD5">
-                                                <rect key="frame" x="14" y="83" width="262" height="143"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            </view>
                                         </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" id="4sN-TH-WdO" customClass="GADBannerView">
+                                        <rect key="frame" x="0.0" y="473" width="320" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
@@ -2285,6 +2290,7 @@ in the search box above.</string>
                         <outlet property="addView" destination="fZy-YG-L3C" id="y2w-kV-Wgd"/>
                         <outlet property="alertLab" destination="gB1-8R-Sb9" id="vD8-IY-TfJ"/>
                         <outlet property="alertView" destination="AWN-Hd-avL" id="2Kf-RJ-Dui"/>
+                        <outlet property="bannerView" destination="4sN-TH-WdO" id="Wvp-Tn-yic"/>
                         <outlet property="email" destination="vJf-pI-3jK" id="HM5-V0-9m3"/>
                         <outlet property="gSelectActiveScroll" destination="wfx-6u-CLS" id="8Od-vB-HvS"/>
                         <outlet property="gSelectPageCtrl" destination="iGo-7y-Wdt" id="8bA-4r-LOe"/>
@@ -2382,7 +2388,7 @@ in the search box above.</string>
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" id="dRA-6O-Jg2">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="297"/>
+                                        <rect key="frame" x="0.0" y="22" width="320" height="334"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" id="GtW-Nx-5Gd">
@@ -2626,7 +2632,7 @@ in the search box above.</string>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" id="xTT-on-3zO">
-                                                        <rect key="frame" x="0.0" y="36" width="320" height="1"/>
+                                                        <rect key="frame" x="45" y="36" width="275" height="1"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     </view>
@@ -2643,6 +2649,40 @@ in the search box above.</string>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <connections>
                                                             <action selector="onProfile:" destination="F32-Vs-DBF" eventType="touchUpInside" id="fzW-LQ-fNg"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" id="NcT-82-cEs">
+                                                <rect key="frame" x="0.0" y="297" width="320" height="37"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In-App purchases" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HGl-Di-lGM">
+                                                        <rect key="frame" x="45" y="8" width="128" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" id="7BP-zj-fok">
+                                                        <rect key="frame" x="0.0" y="36" width="320" height="1"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </view>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting-purchase" id="5Xn-dW-f0K">
+                                                        <rect key="frame" x="11" y="6" width="25" height="25"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting-next" id="1mS-L4-8VN">
+                                                        <rect key="frame" x="303" y="12" width="7" height="12"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5x9-EN-RKs">
+                                                        <rect key="frame" x="-4" y="-2" width="328" height="41"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <connections>
+                                                            <action selector="onPurchase:" destination="F32-Vs-DBF" eventType="touchUpInside" id="967-lG-Lzb"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -3434,6 +3474,104 @@ nudge</string>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
+                                    <view contentMode="scaleToFill" id="eIU-0W-fjz">
+                                        <rect key="frame" x="320" y="22" width="320" height="221"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" id="TFI-F1-iAu">
+                                                <rect key="frame" x="0.0" y="24" width="320" height="197"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In-App Purchases" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JlX-kw-BRj">
+                                                        <rect key="frame" x="45" y="8" width="170" height="21"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting-purchase" id="DZb-UE-48C">
+                                                        <rect key="frame" x="11" y="6" width="25" height="25"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remove Advertising" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZSS-OL-r7O">
+                                                        <rect key="frame" x="59" y="37" width="123" height="19"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" red="0.94117647059999998" green="0.40000000000000002" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchase to remove banner advertisements" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0Hc-3m-xrE">
+                                                        <rect key="frame" x="59" y="46" width="146" height="38"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                        <color key="textColor" red="0.1308728448" green="0.13165409480000001" blue="0.13855064659999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sound Pack 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6yr-Qm-qmw">
+                                                        <rect key="frame" x="59" y="92" width="94" height="19"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                        <color key="textColor" red="0.94117647059999998" green="0.40000000000000002" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iKG-NY-tfm">
+                                                        <rect key="frame" x="211" y="41" width="70" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" red="0.94117647059999998" green="0.40000000000000002" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <state key="normal" title="Purchase">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="onPurchaseAdvertise:" destination="F32-Vs-DBF" eventType="touchUpInside" id="ovz-Nd-PoE"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="U3p-Eu-lJo">
+                                                        <rect key="frame" x="211" y="95" width="70" height="22"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" red="0.94117647059999998" green="0.40000000000000002" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                        <state key="normal" title="Purchase">
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="onPurchaseAudio:" destination="F32-Vs-DBF" eventType="touchUpInside" id="Mwm-ok-u2c"/>
+                                                        </connections>
+                                                    </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZYB-RT-bTD">
+                                                        <rect key="frame" x="59" y="101" width="146" height="81"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <string key="text">Creepy alerts sound pack
+Featuring 12 creapy alerts
+including:
+Evil and creepy laughs,
+Thunder, suspense and
+squeaking doors</string>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                        <color key="textColor" red="0.1308728448" green="0.13165409480000001" blue="0.13855064659999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting-back" id="Aqw-YQ-Wks">
+                                                <rect key="frame" x="17" y="13" width="5" height="8"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tyj-uQ-UPl">
+                                                <rect key="frame" x="21" y="5" width="92" height="22"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="10"/>
+                                                <state key="normal" title="back to settings">
+                                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="onBack:" destination="F32-Vs-DBF" eventType="touchUpInside" id="2he-0H-Tkw"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -3466,6 +3604,9 @@ nudge</string>
                         <outlet property="profileLab" destination="lij-0l-SgC" id="Qye-2I-Hdv"/>
                         <outlet property="profilePwdTxt" destination="KsA-fg-pd5" id="dTW-vF-6J3"/>
                         <outlet property="profileView" destination="Ke4-tG-unZ" id="vQy-dd-Xdd"/>
+                        <outlet property="purchase1Btn" destination="iKG-NY-tfm" id="Nei-F5-dwZ"/>
+                        <outlet property="purchase2Btn" destination="U3p-Eu-lJo" id="VAC-Mu-MNK"/>
+                        <outlet property="purchaseView" destination="eIU-0W-fjz" id="MFI-Hs-38v"/>
                         <outlet property="removeCountSwitch" destination="fUw-sa-bst" id="Nuh-vt-UEF"/>
                         <outlet property="responseBtn1" destination="fuc-dL-9L2" id="dw5-93-sGu"/>
                         <outlet property="responseBtn2" destination="Npj-nc-zdY" id="cYm-YX-3nm"/>
@@ -3577,7 +3718,7 @@ nudge</string>
         <scene sceneID="DzZ-oD-v4H">
             <objects>
                 <tableViewController storyboardIdentifier="streamCtrl" id="DEt-o6-74U" customClass="StreamController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="56" sectionHeaderHeight="28" sectionFooterHeight="28" id="tUe-iO-6Az">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="54" sectionHeaderHeight="28" sectionFooterHeight="28" id="tUe-iO-6Az">
                         <rect key="frame" x="0.0" y="0.0" width="262" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3585,14 +3726,14 @@ nudge</string>
                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="cell-stream" id="Fy2-VU-vU1">
-                                <rect key="frame" x="0.0" y="28" width="262" height="56"/>
+                                <rect key="frame" x="0.0" y="28" width="262" height="54"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fy2-VU-vU1" id="7rg-Av-GQ9">
-                                    <rect key="frame" x="0.0" y="0.0" width="262" height="56"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="262" height="54"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty" id="1iA-Az-Bc7">
-                                            <rect key="frame" x="0.0" y="8" width="39" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="39" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
@@ -3602,21 +3743,21 @@ nudge</string>
                                             </userDefinedRuntimeAttributes>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Going to the movies at 6pm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fQ8-Jh-WfQ">
-                                            <rect key="frame" x="47" y="29" width="215" height="21"/>
+                                            <rect key="frame" x="47" y="21" width="215" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.29108614350000001" green="0.29812109110000001" blue="0.2951725194" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jess" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pUe-R7-yJQ">
-                                            <rect key="frame" x="47" y="10" width="127" height="21"/>
+                                            <rect key="frame" x="47" y="2" width="127" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                             <color key="textColor" red="0.13087284482758621" green="0.13165409482758619" blue="0.13855064655172414" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.22 am" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JwA-SU-Q93">
-                                            <rect key="frame" x="195" y="9" width="67" height="21"/>
+                                            <rect key="frame" x="127" y="1" width="135" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="10"/>
                                             <color key="textColor" red="0.1308728448" green="0.13165409480000001" blue="0.13855064659999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -4461,6 +4602,7 @@ nudge</string>
         <image name="setting-integration" width="29" height="29"/>
         <image name="setting-next" width="8" height="13"/>
         <image name="setting-night-icon" width="29" height="29"/>
+        <image name="setting-purchase" width="25" height="25"/>
         <image name="setting-remove-icon" width="29" height="29"/>
         <image name="setting-twitter" width="28" height="27"/>
         <image name="start-1" width="44" height="43"/>

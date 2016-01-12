@@ -15,6 +15,8 @@
 - (void)onSettingDone:(int)status;
 - (void)onSettingUpdate;
 - (void)onSettingCountHide:(BOOL)hide;
+- (void)onSettingADPurchased;
+- (void)onSettingSoundPurchased;
 
 @end
 

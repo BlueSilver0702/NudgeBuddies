@@ -41,12 +41,19 @@
 - (void)add:(Nudger *)user;
 - (void)remove:(Nudger *)user;
 - (void)addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success;
-- (void)updateContact:(Nudger *)buddy success:(void (^)(BOOL))success;
+- (void)updateContact:(Nudger *)buddy;
 - (void)removeGroup:(Nudger *)group success:(void (^)(BOOL))success;
 - (void)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
 
 - (void)sendMessage:(Nudger *)nudger txt:(NSString *)text success:(void (^)(BOOL))success;
-- (void)getUnreadMessages;
+- (void)getUnreadMessages:(void (^)(NSInteger, NSDictionary *))unreadCount;
+- (void)getUnreadMessage:(NSString *)dialogID success:(void (^)(NSInteger))unreadCount;
 - (void)connectGroupChat;
+
+- (void)isBlock:(Nudger *)receiver success:(void (^)(BOOL))success;
+- (void)setBlock:(Nudger *)nudger set:(BOOL)value;
+
+- (void)isSilent:(Nudger *)receiver success:(void (^)(BOOL))success;
+- (void)setSilent:(Nudger *)nudger set:(BOOL)value;
 
 @end

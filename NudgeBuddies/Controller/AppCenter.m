@@ -431,7 +431,7 @@
 
 #pragma mark - Update Contact Module
 
-- (void)updateContact:(Nudger *)buddy success:(void (^)(BOOL))success {
+- (void)updateContact:(Nudger *)buddy {
     if (buddy.metaID) {
         QBCOCustomObject *object = [QBCOCustomObject customObject];
         object.className = @"NudgerBuddy"; // your Class name
@@ -450,13 +450,12 @@
         [object.fields setObject:[NSNumber numberWithBool:buddy.accept] forKey:@"Accept"];
         [object.fields setObject:[NSNumber numberWithInteger:buddy.alertSound] forKey:@"Alert"];
         [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-            success(YES);
             buddy.shouldAnimate = NO;
             buddy.isNew = NO;
             buddy.status = NSFriend;
-            [self add:buddy];
+//            [self add:buddy];
         } errorBlock:^(QBResponse *response) {
-            success(NO);
+
         }];
     } else {
         QBCOCustomObject *object = [QBCOCustomObject customObject];
@@ -476,13 +475,11 @@
         [object.fields setObject:[NSNumber numberWithInteger:buddy.alertSound] forKey:@"Alert"];
         [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             buddy.metaID = object.ID;
-            success(YES);
             buddy.isNew = NO;
             buddy.shouldAnimate = NO;
             buddy.status = NSFriend;
-            [self add:buddy];
+//            [self add:buddy];
         } errorBlock:^(QBResponse *response) {
-            success(NO);
         }];
     }
 }
@@ -677,7 +674,7 @@
     }];
 }
 
-- (void)getUnreadMessages {
+- (void)getUnreadMessages:(void (^)(NSInteger, NSDictionary *))unreadCount {
     NSMutableArray *mySet = [NSMutableArray new];
     for (Nudger *dNudger in notificationArray) {
         if (dNudger.dialogID) {
@@ -688,6 +685,21 @@
     [QBRequest totalUnreadMessageCountForDialogsWithIDs:dialogsIDs successBlock:^(QBResponse *response, NSUInteger count, NSDictionary *dialogs) {
         NSLog(@"Success, total count of messages:%lu", (unsigned long)count);
         NSLog(@"Success, dialogs:%@", dialogs);
+        unreadCount(count, dialogs);
+    } errorBlock:^(QBResponse *response) {
+        
+    }];
+}
+
+- (void)getUnreadMessage:(NSString *)dialogID success:(void (^)(NSInteger))unreadCount {
+    NSMutableArray *mySet = [NSMutableArray new];
+
+    [mySet addObject:dialogID];
+    NSSet *dialogsIDs = [NSSet setWithArray:(NSArray *)mySet];
+    [QBRequest totalUnreadMessageCountForDialogsWithIDs:dialogsIDs successBlock:^(QBResponse *response, NSUInteger count, NSDictionary *dialogs) {
+        NSInteger unread = [[dialogs objectForKey:dialogID] integerValue];
+        unreadCount(unread);
+        
     } errorBlock:^(QBResponse *response) {
         
     }];
@@ -707,6 +719,32 @@
             }];
         }
     }
+}
+
+- (void)isBlock:(Nudger *)receiver success:(void (^)(BOOL))success {
+    
+    if (receiver.type == NTGroup) {
+        success(YES);
+        return;
+    }
+    
+    NSMutableDictionary *getRequest = [NSMutableDictionary dictionary];
+    [getRequest setObject:[NSString stringWithFormat:@"%lu",receiver.user.ID] forKey:@"user_id"];
+    [getRequest setObject:[NSString stringWithFormat:@"%lu",currentUser.ID] forKey:@"_parent_id"];
+    [QBRequest objectsWithClassName:@"NudgerBuddy" extendedRequest:getRequest successBlock:^(QBResponse *response, NSArray *objects, QBResponsePage *page) {
+        if (objects == nil || objects.count == 0) {
+            success(NO);
+        } else {
+            QBCOCustomObject *cObject = [objects objectAtIndex:0];
+            success([cObject.fields[@"Block"] boolValue]);
+        }
+    } errorBlock:^(QBResponse *response) {
+        [self.delegate onceErr];
+    }];
+}
+
+- (void)isSilent:(Nudger *)receiver success:(void (^)(BOOL))success {
+    
 }
 
 @end
