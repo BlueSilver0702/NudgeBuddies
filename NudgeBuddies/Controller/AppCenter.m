@@ -7,6 +7,7 @@
 //
 
 #import "AppCenter.h"
+#import "AlertCtrl.h"
 
 @implementation AppCenter {
     NSUInteger loadCount;
@@ -135,6 +136,7 @@
             for (Nudger *contactUser in contactsArray) {
                 if ([desID integerValue] == contactUser.user.ID) {
                     contactUser.isFavorite = [cObject.fields[@"Favorite"] boolValue];
+                    contactUser.favCount = [cObject.fields[@"FavCount"] integerValue];
                     contactUser.response = (ResponseType)[cObject.fields[@"NudgerType"] integerValue];
                     contactUser.defaultNudge = cObject.fields[@"NudgeTxt"];
                     contactUser.defaultReply = cObject.fields[@"AcknowledgeTxt"];
@@ -150,6 +152,7 @@
                 for (Nudger *contactUser in groupArray) {
                     if ([desID isEqualToString:contactUser.group.gID]) {
                         contactUser.isFavorite = [cObject.fields[@"Favorite"] boolValue];
+                        contactUser.favCount = [cObject.fields[@"FavCount"] integerValue];
                         contactUser.response = (ResponseType)[cObject.fields[@"NudgerType"] integerValue];
                         contactUser.defaultNudge = cObject.fields[@"NudgeTxt"];
                         contactUser.defaultReply = cObject.fields[@"AcknowledgeTxt"];
@@ -431,7 +434,7 @@
 
 #pragma mark - Update Contact Module
 
-- (void)updateContact:(Nudger *)buddy {
+- (void)updateContact:(Nudger *)buddy success:(void (^)(BOOL))success {
     if (buddy.metaID) {
         QBCOCustomObject *object = [QBCOCustomObject customObject];
         object.className = @"NudgerBuddy"; // your Class name
@@ -444,6 +447,7 @@
         [object.fields setObject:buddy.defaultNudge forKey:@"NudgeTxt"];
         [object.fields setObject:buddy.defaultReply forKey:@"AcknowledgeTxt"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:buddy.favCount] forKey:@"FavCount"];
         [object.fields setObject:[NSNumber numberWithInteger:buddy.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
@@ -453,9 +457,10 @@
             buddy.shouldAnimate = NO;
             buddy.isNew = NO;
             buddy.status = NSFriend;
+            success(YES);
 //            [self add:buddy];
         } errorBlock:^(QBResponse *response) {
-
+            success(NO);
         }];
     } else {
         QBCOCustomObject *object = [QBCOCustomObject customObject];
@@ -468,6 +473,7 @@
         [object.fields setObject:buddy.defaultNudge forKey:@"NudgeTxt"];
         [object.fields setObject:buddy.defaultReply forKey:@"AcknowledgeTxt"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:buddy.favCount] forKey:@"FavCount"];
         [object.fields setObject:[NSNumber numberWithInteger:buddy.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:buddy.block] forKey:@"Block"];
@@ -479,7 +485,9 @@
             buddy.shouldAnimate = NO;
             buddy.status = NSFriend;
 //            [self add:buddy];
+            success(YES);
         } errorBlock:^(QBResponse *response) {
+            success(NO);
         }];
     }
 }
@@ -570,11 +578,39 @@
                         //
                         NSMutableDictionary *params = [NSMutableDictionary dictionary];
                         params[@"save_to_history"] = @YES;
+                        params[@"respose_type"] = [NSNumber numberWithInteger:nudger.response];
                         [message setCustomParameters:params];
                         //
                         [groupChatDialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
                             success(YES);
                             [SVProgressHUD dismiss];
+                            
+                            QBMEvent *event = [QBMEvent event];
+                            event.notificationType = QBMNotificationTypePush;
+                            event.usersIDs = [groupChatDialog.occupantIDs componentsJoinedByString:@","];
+                            event.type = QBMEventTypeOneShot;
+
+                            NSMutableDictionary  *dictPush = [NSMutableDictionary  dictionary];
+                            [dictPush setObject:[NSString stringWithFormat:@"%@: %@",currentUser.fullName, message] forKey:@"message"];
+//                            [dictPush setObject:@"1" forKey:@"ios_badge"];
+                            NSString *alertSound = @"popcorn.caf";
+                            if (nudger.alertSound > 0) alertSound = (NSString *)[[[AlertCtrl initWithAlerts] objectAtIndex:nudger.alertSound] objectForKey:@"file"];
+                            [dictPush setObject:alertSound forKey:@"ios_sound"];
+                            
+                            // custom params
+//                            [dictPush setObject:@"234" forKey:@"user_id"];
+//                            [dictPush setObject:@"144" forKey:@"thread_id"];
+                            
+                            NSError *errorPush = nil;
+                            NSData *sendData = [NSJSONSerialization dataWithJSONObject:dictPush options:NSJSONWritingPrettyPrinted error:&errorPush];
+                            NSString *jsonString = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
+                            //
+                            event.message = jsonString;
+                            
+                            [QBRequest createEvent:event successBlock:nil errorBlock:^(QBResponse *response) {
+                                // Handle error
+                                NSLog(@"%@", response);
+                            }];
                         }];
                     }
                 }];
@@ -609,13 +645,42 @@
                 
                 NSMutableDictionary *params = [NSMutableDictionary dictionary];
                 params[@"save_to_history"] = @YES;
+                params[@"respose_type"] = [NSNumber numberWithInteger:nudger.response];
                 [message setCustomParameters:params];
                 
                 [createdDialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
                     [SVProgressHUD dismiss];
                     if (error) success(NO);
                     else success(YES);
+                    
+                    QBMEvent *event = [QBMEvent event];
+                    event.notificationType = QBMNotificationTypePush;
+                    event.usersIDs = [NSString stringWithFormat:@"%lu", nudger.user.ID];
+                    event.type = QBMEventTypeOneShot;
+                    
+                    NSMutableDictionary  *dictPush = [NSMutableDictionary  dictionary];
+                    [dictPush setObject:[NSString stringWithFormat:@"%@: %@",currentUser.fullName, message] forKey:@"message"];
+                    //                            [dictPush setObject:@"1" forKey:@"ios_badge"];
+                    NSString *alertSound = @"popcorn.caf";
+                    if (nudger.alertSound > 0) alertSound = (NSString *)[[[AlertCtrl initWithAlerts] objectAtIndex:nudger.alertSound] objectForKey:@"file"];
+                    [dictPush setObject:alertSound forKey:@"ios_sound"];
+                    
+                    // custom params
+                    //                            [dictPush setObject:@"234" forKey:@"user_id"];
+                    //                            [dictPush setObject:@"144" forKey:@"thread_id"];
+                    
+                    NSError *errorPush = nil;
+                    NSData *sendData = [NSJSONSerialization dataWithJSONObject:dictPush options:NSJSONWritingPrettyPrinted error:&errorPush];
+                    NSString *jsonString = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
+                    //
+                    event.message = jsonString;
+                    
+                    [QBRequest createEvent:event successBlock:nil errorBlock:^(QBResponse *response) {
+                        // Handle error
+                        NSLog(@"%@", response);
+                    }];
                 }];
+                
             } errorBlock:^(QBResponse *response) {
                 success(NO);
             }];
@@ -624,13 +689,13 @@
 }
 
 - (void)chatDidReceiveMessage:(QBChatMessage *)message{
-    NSLog(@":::");
+//    NSLog(@":::");
     for (Nudger *nudger in notificationArray) {
         if (nudger.type == NTIndividual && message.senderID == nudger.user.ID) {
             nudger.unreadMsg ++;
             nudger.isNew = YES;
             nudger.shouldAnimate = YES;
-            [self.delegate onceNudged:nudger];
+            [self.delegate onceNudged:nudger responseType:[[message.customParameters objectForKey:@"response_type"] integerValue]];
             break;
         }
     }
@@ -653,7 +718,7 @@
                         nudger.unreadMsg = dialog.unreadMessagesCount;
                         nudger.isNew = YES;
                         nudger.shouldAnimate = YES;
-                        [self.delegate onceNudged:nudger];
+                        [self.delegate onceNudged:nudger responseType:[[message.customParameters objectForKey:@"response_type"] integerValue]];
                         break;
                     }
                 }
@@ -663,7 +728,7 @@
                         nudger.unreadMsg = dialog.unreadMessagesCount;
                         nudger.isNew = YES;
                         nudger.shouldAnimate = YES;
-                        [self.delegate onceNudged:nudger];
+                        [self.delegate onceNudged:nudger responseType:[[message.customParameters objectForKey:@"response_type"] integerValue]];
                         break;
                     }
                 }

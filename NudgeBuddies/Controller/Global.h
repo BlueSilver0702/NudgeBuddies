@@ -156,7 +156,7 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define FAV_7                                       CGPointMake(230, 120)
 #define FAV_8                                       CGPointMake(116, 43)
 
-#define IAP1                                        @"iap_admob";
-#define IAP2                                        @"iap_sound_1";
+#define IAP1                                        @"com.nudgebuddies.nudgebuddies.iap1";
+#define IAP2                                        @"com.nudgebuddies.nudgebuddies.iap2";
 
 #define err_later                                         @"An error occured. Please try later."

@@ -16,7 +16,7 @@
 - (void)onceAccepted:(NSString *)from;
 - (void)onceRejected:(NSUInteger)from;
 - (void)onceDisconnected;
-- (void)onceNudged:(Nudger *)nudger;
+- (void)onceNudged:(Nudger *)nudger responseType:(ResponseType)type;
 - (void)onceErr;
 @end
 
@@ -41,7 +41,7 @@
 - (void)add:(Nudger *)user;
 - (void)remove:(Nudger *)user;
 - (void)addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success;
-- (void)updateContact:(Nudger *)buddy;
+- (void)updateContact:(Nudger *)buddy success:(void (^)(BOOL))success;
 - (void)removeGroup:(Nudger *)group success:(void (^)(BOOL))success;
 - (void)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
 
@@ -51,9 +51,9 @@
 - (void)connectGroupChat;
 
 - (void)isBlock:(Nudger *)receiver success:(void (^)(BOOL))success;
-- (void)setBlock:(Nudger *)nudger set:(BOOL)value;
+//- (void)setBlock:(Nudger *)nudger set:(BOOL)value;
 
 - (void)isSilent:(Nudger *)receiver success:(void (^)(BOOL))success;
-- (void)setSilent:(Nudger *)nudger set:(BOOL)value;
+//- (void)setSilent:(Nudger *)nudger set:(BOOL)value;
 
 @end

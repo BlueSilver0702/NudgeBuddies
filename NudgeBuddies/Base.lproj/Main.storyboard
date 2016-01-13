@@ -3733,7 +3733,7 @@ squeaking doors</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty" id="1iA-Az-Bc7">
-                                            <rect key="frame" x="0.0" y="0.0" width="39" height="39"/>
+                                            <rect key="frame" x="0.0" y="3" width="39" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>

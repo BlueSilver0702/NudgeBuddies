@@ -17,8 +17,8 @@
 @property (nonatomic, retain) NSString *defaultReply;
 @property (nonatomic, retain) QBUUser *user;
 @property (nonatomic) BOOL isFavorite;
-@property (nonatomic) int favCount;
-@property (nonatomic) int alarmCount;
+@property (nonatomic) NSInteger favCount;
+@property (nonatomic) NSInteger alarmCount;
 @property (nonatomic, retain) Group *group;
 @property (nonatomic, retain) NSMutableArray *stream;
 @property (nonatomic) BOOL block;

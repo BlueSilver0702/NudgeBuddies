@@ -121,13 +121,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NudgeBuddies/View/NudgeButton.m"
-            timestampString = "473782549.499733"
+            filePath = "NudgeBuddies/Utils/DNSInAppPurchase/DNSInAppPurchaseManager.m"
+            timestampString = "474315737.54077"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "-onFavTouch:"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "-productsRequest:didReceiveResponse:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "NudgeBuddies/Utils/DNSInAppPurchase/DNSInAppPurchaseManager.m"
+            timestampString = "474315749.822953"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "-request:didFailWithError:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

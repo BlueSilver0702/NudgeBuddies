@@ -516,7 +516,8 @@ static NSString * const kIAPFailAlertShown = @"IAPFailAlertShown";
     //Note: If you're getting an invalid product ID, make sure that you
     //have set up banking and tax info in iTunes Connect.
     //http://stackoverflow.com/questions/12736712/ios-in-app-purchases-sandbox-invalid-product-id
-    [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"IAP Retrieval Error", @"Error button title for failed IAP retreival")];
+    //[SVProgressHUD showErrorWithStatus:NSLocalizedString(@"IAP Retrieval Error", @"Error button title for failed IAP retreival")];
+    NSLog(NSLocalizedString(@"IAP Retrieval Error", @"Error button title for failed IAP retreival"));
 }
 
 -(void)productsRetrieved:(NSArray *)products

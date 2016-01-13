@@ -196,10 +196,12 @@
 //    [bannerView setBackgroundColor:[UIColor clearColor]];
 //    [self.view addSubview: bannerView];
 //    [self performSelector:@selector(removeIAD) withObject:nil afterDelay:15];
+
     bannerView.adUnitID = @"ca-app-pub-4438140575166637/7856806905";
     bannerView.rootViewController = self;
     [bannerView loadRequest:[GADRequest request]];
     
+    [bannerView setHidden:YES];
     // **********  search module  ************
     searchDoneButton.hidden = YES;
     searchView.hidden = YES;
@@ -365,14 +367,14 @@
 - (void)onceAccepted:(NSString *)from {
     [SVProgressHUD dismiss];
     [self showAlert:[NSString stringWithFormat:@"%@ accepted your buddy invite", from]];
-    [self onceNudgeReceived:nil];
+    [self onceNudgeReceived:nil responseType:RTNil];
 }
 
 - (void)onceRejected:(NSUInteger)fromID {
     [QBRequest userWithID:fromID successBlock:^(QBResponse *response, QBUUser *user) {
         [SVProgressHUD dismiss];
         [self showAlert:[NSString stringWithFormat:@"%@ has rejected your nudgebuddy request.", user.fullName]];
-        [self onceNudgeReceived:nil];
+        [self onceNudgeReceived:nil responseType:RTNil];
     } errorBlock:^(QBResponse *response) {
     }];
 }
@@ -397,8 +399,8 @@
     [SVProgressHUD dismiss];
 }
 
-- (void)onceNudged:(Nudger *)nudger {
-    [self onceNudgeReceived:nudger];
+- (void)onceNudged:(Nudger *)nudger responseType:(ResponseType)type {
+    [self onceNudgeReceived:nudger responseType:type];
     [self display];
     [g_center getUnreadMessages:^(NSInteger unreadCount, NSDictionary *dialogs) {
         NSLog(@"%lu, %@", unreadCount, dialogs);
@@ -406,7 +408,7 @@
     }];
 }
 
-- (void)onceNudgeReceived:(Nudger *)nudger {
+- (void)onceNudgeReceived:(Nudger *)nudger responseType:(ResponseType)type {
     if (nudger == nil) {
         if (g_center.isNight) {
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -416,19 +418,19 @@
         }
         return;
     }
-    if (nudger.response == RTNudge) {
+    if (type == RTNudge || type == RTAnnoy) {
         if (!g_center.isNight && !nudger.silent) {
             [audioPlayer play];
         }
-    } else if (nudger.response == RTSilent) {
+    } else if (type == RTSilent || type == RTAnnoySilent) {
         if (!g_center.isNight) {
             AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         }
-    } else if (nudger.response == RTAnnoy) {
-        if (!g_center.isNight) {
-            if (!nudger.silent) [audioPlayer play];
-            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-        }
+//    } else if (type == RTAnnoy || type ==) {
+//        if (!g_center.isNight) {
+//            if (!nudger.silent) [audioPlayer play];
+//            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+//        }
     } else {
         if (!g_center.isNight) {
             if (!nudger.silent) [audioPlayer play];
@@ -591,50 +593,8 @@
 - (void)onSendNudge:(Nudger *)nudger frame:(CGRect)rect {
 
     [self onMenuNudged:nudger];
-    
-//    [self hide:VTMenu];
-//    if (menuCtrl.isOpen && [menuCtrl.tUser isEqualNudger:nudger]) {
-//        [self onMenuClose];
-//        return;
-//    }
-///*    AudioServicesPlaySystemSound(1103);
-//      [audioPlayer play];
-//      AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-//      [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];*/
-//    openNP = nudger;
-//    menuCtrl.isOpen = YES;
-//    [nudgebuddiesBar setScrollEnabled:NO];
-//    CGSize size = [menuCtrl createSendMenu:nudger];
-//    CGRect newRect;
-//    
-//    if (nudger.menuPos == 0) {
-//        newRect = CGRectMake(rect.origin.x, rect.origin.y+notificationView.frame.origin.y, rect.size.width, rect.size.height);
-//    } else if (nudger.menuPos == 1) {
-//        newRect = CGRectMake(rect.origin.x-nudgebuddiesBar.contentOffset.x, rect.origin.y+nudgebuddiesBar.frame.origin.y, rect.size.width, rect.size.height);
-//    } else {
-//        newRect = CGRectMake(rect.origin.x, rect.origin.y+initFavView.frame.origin.y, rect.size.width, rect.size.height);
-//    }
-//    Menu *menu = [self getMenu:newRect menuSize:size];
-//    if (nudger.menuPos == 0) {
-//        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
-//    } else if (nudger.menuPos == 1){
-//        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y-15, size.width, size.height+15)];
-//    } else {
-//        [menuView setFrame:CGRectMake(menu.menuPoint.x, menu.menuPoint.y, size.width, size.height+15)];
-//    }
-//    UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
-//    if (menu.triDirection) {
-//        [triImg setImage:[UIImage imageNamed:@"menu-tri"]];
-//        [menuCtrl.view setFrame:CGRectMake(0, triImg.frame.size.height, size.width, size.height)];
-//        [triImg setFrame:CGRectMake(menu.triPoint.x, 0, triImg.frame.size.width, triImg.frame.size.height)];
-//    } else {
-//        [triImg setImage:[UIImage imageNamed:@"menu-tri-down"]];
-//        [menuCtrl.view setFrame:CGRectMake(0, 0, size.width, size.height)];
-//        [triImg setFrame:CGRectMake(menu.triPoint.x, size.height, triImg.frame.size.width, triImg.frame.size.height)];
-//    }
-//    [UIView transitionWithView:self.view duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-//        [menuView setHidden:NO];
-//    } completion:nil];
+//    nudger.favCount += 30;
+//    [self display];
     
 }
 
@@ -727,7 +687,7 @@
         NSLog(@"MRAuto");
     } else if (menuReturn == MRBlock) {
         NSLog(@"MRBlock");
-        [g_center updateContact:nudger];
+        [g_center updateContact:nudger success:nil];
     } else if (menuReturn == MREdit) {
         [self onMenuClose];
         menuCtrl.isOpen = NO;
@@ -742,7 +702,7 @@
         [self onNPOpen:nil];
     } else if (menuReturn == MRSilent) {
         NSLog(@"MRSilent");
-        [g_center updateContact:nudger];
+        [g_center updateContact:nudger success:nil];
     } else if (menuReturn == MRStream || menuReturn == MRStreamGroup) {
         [self onMenuClose];
         menuCtrl.isOpen = NO;
@@ -762,7 +722,12 @@
         if (nudger.type == NTGroup) {
             [SVProgressHUD show];
             nudger.accept = YES;
-            [g_center updateContact:nudger];
+            [g_center updateContact:nudger success:^(BOOL success) {
+                nudger.type = NTGroup;
+                nudger.shouldAnimate = NO;
+                nudger.isNew = NO;
+                [g_center add:nudger];
+            }];
         } else {
             [g_center addBuddy:nudger success:^(BOOL success){
                 if (!success) {
@@ -803,6 +768,18 @@
                         [audioPlayer play];
                         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
                         [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];
+                        
+                        nudger.favCount ++;
+                        QBCOCustomObject *object = [QBCOCustomObject customObject];
+                        object.className = @"NudgerBuddy"; // your Class name
+                        object.ID = nudger.metaID;
+                        
+                        [object.fields setObject:[NSNumber numberWithInteger:nudger.favCount] forKey:@"FavCount"];
+                        [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
+                            if (nudger.isFavorite) [self display];
+                        } errorBlock:^(QBResponse *response) {
+                            NSLog(@"Empty Meta");
+                        }];
                     } else {
                         [SVProgressHUD showErrorWithStatus:@"Failed to send nudge. Please try later."];
                     }
@@ -1316,6 +1293,7 @@
         [object.fields setObject:openGroup.defaultNudge forKey:@"NudgeTxt"];
         [object.fields setObject:openGroup.defaultReply forKey:@"AcknowledgeTxt"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:openGroup.favCount] forKey:@"FavCount"];
         [object.fields setObject:[NSNumber numberWithInteger:openGroup.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openGroup.block] forKey:@"Block"];
@@ -1652,6 +1630,7 @@
         [object.fields setObject:openNP.defaultNudge forKey:@"NudgeTxt"];
         [object.fields setObject:openNP.defaultReply forKey:@"AcknowledgeTxt"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:openNP.favCount] forKey:@"FavCount"];
         [object.fields setObject:[NSNumber numberWithInteger:openNP.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
@@ -1674,6 +1653,7 @@
         [object.fields setObject:openNP.defaultNudge forKey:@"NudgeTxt"];
         [object.fields setObject:openNP.defaultReply forKey:@"AcknowledgeTxt"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.isFavorite] forKey:@"Favorite"];
+        [object.fields setObject:[NSNumber numberWithInteger:openNP.favCount] forKey:@"FavCount"];
         [object.fields setObject:[NSNumber numberWithInteger:openNP.response] forKey:@"NudgerType"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
         [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];

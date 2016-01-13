@@ -49,7 +49,9 @@
         [nameLab setHidden:YES];
         
         if (g_center.isCount) {
-            [favBtn setTitle:@"1" forState:UIControlStateNormal];
+            if (user.favCount > 0) {
+                [favBtn setTitle:[NSString stringWithFormat:@"%lu", user.favCount] forState:UIControlStateNormal];
+            } else [favBtn setTitle:@"1" forState:UIControlStateNormal];
         } else {
             [favBtn setTitle:@"" forState:UIControlStateNormal];
         }
@@ -91,6 +93,16 @@
     }
     
     if (user.shouldAnimate) [self notify];
+    
+    if (user.isFavorite) {
+        CGFloat addVal = user.favCount*50/4092.0;
+        if (addVal > 50.0) {
+            addVal = 50.0;
+        }
+        [self.view setFrame:CGRectMake(self.view.frame.origin.x-addVal/2.0, self.view.frame.origin.y-addVal/2.0, self.view.frame.size.width + addVal, self.view.frame.size.height + addVal)];
+        imgBtn.layer.cornerRadius = self.view.frame.size.width / 4.0;
+        favBtn.frame = CGRectMake(favBtn.frame.origin.x, imgBtn.frame.origin.y+imgBtn.frame.size.height-4, favBtn.frame.size.width, favBtn.frame.size.height);
+    }
     
 //    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
 //    [imgBtn addGestureRecognizer:longPress];
