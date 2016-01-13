@@ -2273,7 +2273,7 @@ in the search box above.</string>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" id="4sN-TH-WdO" customClass="GADBannerView">
-                                        <rect key="frame" x="0.0" y="473" width="320" height="50"/>
+                                        <rect key="frame" x="0.0" y="518" width="320" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
@@ -2290,8 +2290,8 @@ in the search box above.</string>
                         <outlet property="addView" destination="fZy-YG-L3C" id="y2w-kV-Wgd"/>
                         <outlet property="alertLab" destination="gB1-8R-Sb9" id="vD8-IY-TfJ"/>
                         <outlet property="alertView" destination="AWN-Hd-avL" id="2Kf-RJ-Dui"/>
-                        <outlet property="bannerView" destination="4sN-TH-WdO" id="Wvp-Tn-yic"/>
                         <outlet property="email" destination="vJf-pI-3jK" id="HM5-V0-9m3"/>
+                        <outlet property="gBannerView" destination="4sN-TH-WdO" id="wLA-YW-54L"/>
                         <outlet property="gSelectActiveScroll" destination="wfx-6u-CLS" id="8Od-vB-HvS"/>
                         <outlet property="gSelectPageCtrl" destination="iGo-7y-Wdt" id="8bA-4r-LOe"/>
                         <outlet property="gSelectScroll" destination="amp-G5-7UL" id="sT7-KR-IB8"/>

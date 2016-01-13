@@ -21,14 +21,14 @@
 
 @import GoogleMobileAds;
 
-@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate, UIScrollViewDelegate, StreamControllerDelegate>
+@interface ViewController () <SettingControllerDelegate, SearchControllerDelegate, UITextFieldDelegate, MenuControllerDelegate, NudgeButtonDelegate, AppCenterDelegate, UIScrollViewDelegate, StreamControllerDelegate, GADBannerViewDelegate>
 {
     // general
     QBUUser *currentUser;
     AVAudioPlayer *audioPlayer;
     NSArray *alertSoundArr;
     
-    IBOutlet GADBannerView *bannerView;
+    IBOutlet GADBannerView *gBannerView;
     
     // nudgebuddies
     IBOutlet UIScrollView *nudgebuddiesBar;
@@ -197,11 +197,16 @@
 //    [self.view addSubview: bannerView];
 //    [self performSelector:@selector(removeIAD) withObject:nil afterDelay:15];
 
-    bannerView.adUnitID = @"ca-app-pub-4438140575166637/7856806905";
-    bannerView.rootViewController = self;
-    [bannerView loadRequest:[GADRequest request]];
+    gBannerView.adUnitID = @"ca-app-pub-4438140575166637/7856806905";
+    gBannerView.rootViewController = self;
+    [gBannerView loadRequest:[GADRequest request]];
+    gBannerView.delegate = self;
+    gBannerView.hidden = YES;
+    UIButton *removeBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 32, 18, 18)];
+    [removeBtn setBackgroundImage:[UIImage imageNamed:@"icon-admob"] forState:UIControlStateNormal];
+    [gBannerView addSubview:removeBtn];
+    [removeBtn addTarget:self action:@selector(hideAD:) forControlEvents:UIControlEventTouchUpInside];
     
-    [bannerView setHidden:YES];
     // **********  search module  ************
     searchDoneButton.hidden = YES;
     searchView.hidden = YES;
@@ -1924,7 +1929,26 @@
 }
 
 - (void)onSettingADPurchased {
-    bannerView.hidden = YES;
+    gBannerView.hidden = YES;
+}
+
+- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
+    NSString *str = IAP1;
+    if (![g_var loadLocalBool:str]) {
+        gBannerView.hidden = NO;
+    }
+}
+
+- (void)hideAD:(id)sender {
+    gBannerView.hidden = YES;
+    [self performSelector:@selector(showAD:) withObject:nil afterDelay:60];
+}
+
+- (void)showAD:(id)sender {
+    NSString *str = IAP1;
+    if (![g_var loadLocalBool:str]) {
+        gBannerView.hidden = NO;
+    }
 }
 
 @end

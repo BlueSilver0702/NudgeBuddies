@@ -136,6 +136,20 @@ static NSString * const kIAPFailAlertShown = @"IAPFailAlertShown";
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    if ([g_var loadLocalBool:USER_NIGHT]) {
+        [nightSwitch setOn:YES];
+    } else {
+        [nightSwitch setOn:NO];
+    }
+    
+    if ([g_var loadLocalBool:USER_COUNT]) {
+        [removeCountSwitch setOn:YES];
+    } else {
+        [removeCountSwitch setOn:NO];
+    }
+}
+
 - (void)nightChanged:(UISwitch *)switchState {
     if ([switchState isOn]) {
         g_center.isNight = YES;

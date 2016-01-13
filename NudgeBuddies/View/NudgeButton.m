@@ -48,7 +48,7 @@
         [favBtn setHidden:NO];
         [nameLab setHidden:YES];
         
-        if (g_center.isCount) {
+        if (!g_center.isCount) {
             if (user.favCount > 0) {
                 [favBtn setTitle:[NSString stringWithFormat:@"%lu", user.favCount] forState:UIControlStateNormal];
             } else [favBtn setTitle:@"1" forState:UIControlStateNormal];
@@ -121,10 +121,11 @@
 }
 
 - (IBAction)onNudgeSelected:(id)sender {
-    if (userInfo.status == NSInvited) {
+    if (userInfo.status == NSInvited && !isLong) {
         [self longPress];
         userInfo.isNew = NO;
         userInfo.shouldAnimate = NO;
+        NSLog(@"shortTouch");
         return;
     }
     
