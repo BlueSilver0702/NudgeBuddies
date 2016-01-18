@@ -301,6 +301,10 @@ static NSString * const kIAPFailAlertShown = @"IAPFailAlertShown";
     } completion:nil];
 }
 
+- (IBAction)onLogout:(id)sender {
+    [self.delegate onSettingDone:2];
+}
+
 - (IBAction)onProfileSave:(id)sender {
     [SVProgressHUD show];
     if (profilePictureUpdate) {

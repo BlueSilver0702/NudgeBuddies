@@ -43,6 +43,7 @@
 		4F04F9641C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9571C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf */; };
 		4F04F9651C454E41008E42FD /* Thunder - Mike Koenig.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9581C454E41008E42FD /* Thunder - Mike Koenig.caf */; };
 		4F04F9661C454E41008E42FD /* Thunder- Mark DiAngelo.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4F04F9591C454E41008E42FD /* Thunder- Mark DiAngelo.caf */; };
+		4F056B5E1C4C895700F1720F /* ResetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F056B5D1C4C895700F1720F /* ResetController.m */; };
 		4F1034FB1C3D6747002E8268 /* AlertCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1034FA1C3D6747002E8268 /* AlertCtrl.m */; };
 		4F467FD01C34856C00840D82 /* StreamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F467FCF1C34856C00840D82 /* StreamController.m */; };
 		4F46C3CA1C3D7E2200EDBB82 /* UIColor+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F46C3C91C3D7E2200EDBB82 /* UIColor+HexString.m */; };
@@ -135,6 +136,8 @@
 		4F04F9571C454E41008E42FD /* Sqeaking door 2 -Sarasprella.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Sqeaking door 2 -Sarasprella.caf"; path = "Resources/Default_Alerts/Pack1/Sqeaking door 2 -Sarasprella.caf"; sourceTree = "<group>"; };
 		4F04F9581C454E41008E42FD /* Thunder - Mike Koenig.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Thunder - Mike Koenig.caf"; path = "Resources/Default_Alerts/Pack1/Thunder - Mike Koenig.caf"; sourceTree = "<group>"; };
 		4F04F9591C454E41008E42FD /* Thunder- Mark DiAngelo.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Thunder- Mark DiAngelo.caf"; path = "Resources/Default_Alerts/Pack1/Thunder- Mark DiAngelo.caf"; sourceTree = "<group>"; };
+		4F056B5C1C4C895700F1720F /* ResetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ResetController.h; path = View/ResetController.h; sourceTree = "<group>"; };
+		4F056B5D1C4C895700F1720F /* ResetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ResetController.m; path = View/ResetController.m; sourceTree = "<group>"; };
 		4F1034F91C3D6747002E8268 /* AlertCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlertCtrl.h; path = Controller/AlertCtrl.h; sourceTree = "<group>"; };
 		4F1034FA1C3D6747002E8268 /* AlertCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AlertCtrl.m; path = Controller/AlertCtrl.m; sourceTree = "<group>"; };
 		4F467FCE1C34856C00840D82 /* StreamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StreamController.h; path = View/StreamController.h; sourceTree = "<group>"; };
@@ -413,6 +416,8 @@
 				CFF1365E1C1D20300001D351 /* SigninController.m */,
 				CFF1365F1C1D20300001D351 /* SignupController.h */,
 				CFF136601C1D20300001D351 /* SignupController.m */,
+				4F056B5C1C4C895700F1720F /* ResetController.h */,
+				4F056B5D1C4C895700F1720F /* ResetController.m */,
 				CFF136611C1D20300001D351 /* ViewController.h */,
 				CFF136621C1D20300001D351 /* ViewController.m */,
 				290C02981C1321440093D12A /* SettingController.h */,
@@ -630,6 +635,7 @@
 				294891C71C0F87300086D1BE /* AppDelegate.m in Sources */,
 				CF7D9A0E1C1F3EE30084D555 /* Menu.m in Sources */,
 				4F467FD01C34856C00840D82 /* StreamController.m in Sources */,
+				4F056B5E1C4C895700F1720F /* ResetController.m in Sources */,
 				CFF136661C1D20300001D351 /* ViewController.m in Sources */,
 				CFF136731C1D208E0001D351 /* UIImage+KIAdditions.m in Sources */,
 				CFF136741C1D208E0001D351 /* UIImageCropper.m in Sources */,
@@ -676,7 +682,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
@@ -699,7 +705,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
+				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -722,7 +728,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -738,7 +744,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
+				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -750,8 +756,8 @@
 			baseConfigurationReference = 3724D57CA18C7673B0FEA6D4 /* Pods-NudgeBuddies.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -764,7 +770,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -774,8 +780,8 @@
 			baseConfigurationReference = 35F20AC1DEFCD4873386B2B2 /* Pods-NudgeBuddies.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -788,7 +794,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

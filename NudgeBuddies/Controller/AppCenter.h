@@ -16,7 +16,7 @@
 - (void)onceAccepted:(NSString *)from;
 - (void)onceRejected:(NSUInteger)from;
 - (void)onceDisconnected;
-- (void)onceNudged:(Nudger *)nudger responseType:(ResponseType)type;
+- (void)onceNudged:(Nudger *)nudger responseType:(ResponseType)type message:(NSString *)message;
 - (void)onceErr;
 @end
 
@@ -55,5 +55,7 @@
 
 - (void)isSilent:(Nudger *)receiver success:(void (^)(BOOL))success;
 //- (void)setSilent:(Nudger *)nudger set:(BOOL)value;
+
+- (void)logout:(void (^)(BOOL))success;
 
 @end

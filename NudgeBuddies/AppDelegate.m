@@ -30,6 +30,7 @@ AppCenter *g_center;
     g_center = [AppCenter new];
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+
     [QBSettings setApplicationID:kQBApplicationID];
     [QBSettings setAuthKey:      kQBRegisterServiceKey];
     [QBSettings setAuthSecret:   kQBRegisterServiceSecret];
@@ -37,15 +38,9 @@ AppCenter *g_center;
     
     [QBSettings setAutoReconnectEnabled:YES];
     
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    ViewController *viewCtrl = (ViewController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"viewCtrl"];
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if ([userDefaults boolForKey:@"remember"]) {
-        self.window.rootViewController = viewCtrl;
-        [self.window makeKeyAndVisible];
-        [self initialApp];
-    }
-    
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
+    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
+        
     return YES;
 }
 
@@ -92,17 +87,25 @@ AppCenter *g_center;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *loginEmail = (NSString *)[userDefaults objectForKey:@"email"];
     NSString *loginPwd = (NSString *)[userDefaults objectForKey:@"pwd"];
-    
+    [SVProgressHUD showWithStatus:@"Signing..."];
     [QBRequest logInWithUserEmail:loginEmail password:loginPwd successBlock:^(QBResponse *response, QBUUser *user) {
         // Success, do something
         user.password = loginPwd;
         [g_center initCenter:user];
+        [SVProgressHUD setStatus:@"Loading..."];
         
     } errorBlock:^(QBResponse *response) {
         // error handling
         NSLog(@"error: %@", response.error);
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [SVProgressHUD dismiss];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alertView show];
+        [userDefaults setBool:NO forKey:@"remember"];
+        [userDefaults synchronize];
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        SigninController *viewCtrl = (SigninController *)[mainStoryboard instantiateViewControllerWithIdentifier: @"signinCtrl"];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:viewCtrl];
+//        [self.window.rootViewController presentViewController:viewCtrl animated:YES completion:nil];
     }];
 }
 

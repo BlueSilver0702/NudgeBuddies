@@ -21,6 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//        [self initialApp];
+
     // Do any additional setup after loading the view.
     userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults boolForKey:@"remember"]) {
@@ -28,12 +31,11 @@
         email.text = (NSString *)[userDefaults objectForKey:@"email"];
         passwd.text = (NSString *)[userDefaults objectForKey:@"pwd"];
         uncheckBtn.hidden = YES;
-        [self onLgoin:nil];
+        [self performSegueWithIdentifier:@"segue-init" sender:nil];
+//        [self onLgoin:nil];
     } else {
         uncheckBtn.hidden = NO;
     }
-    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
-    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -49,10 +51,9 @@
 - (IBAction)onLgoin:(id)sender {
     
     [SVProgressHUD showWithStatus:@"Logging in..."];
-    //    user.
     
     [QBRequest logInWithUserEmail:email.text password:passwd.text successBlock:^(QBResponse *response, QBUUser *user) {
-        // Success, do something
+        // Success
         user.password = passwd.text;
         [g_center initCenter:user];
         [SVProgressHUD dismiss];
@@ -61,7 +62,7 @@
             [userDefaults setObject:passwd.text forKey:@"pwd"];
             [userDefaults synchronize];
         }
-        [self performSegueWithIdentifier:@"segue-login" sender:nil];
+        [self performSegueWithIdentifier:@"segue-norm" sender:nil];
     } errorBlock:^(QBResponse *response) {
         // error handling
         NSLog(@"error: %@", response.error);
@@ -81,6 +82,113 @@
     uncheckBtn.hidden = NO;
     [userDefaults setBool:NO forKey:@"remember"];
     [userDefaults synchronize];
+}
+
+- (IBAction)onFacebook:(id)sender {
+    
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login
+     logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"]
+     fromViewController:self
+     handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+         if (error) {
+             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You can't change facebook account on this device." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+             [alertView show];
+         } else if (result.isCancelled) {
+                          [SVProgressHUD dismiss];
+         } else {
+             NSLog(@"Logged in");
+             if ([FBSDKAccessToken currentAccessToken]) {
+                 
+                 [SVProgressHUD showWithStatus:@"Signing..."];
+                 
+                 [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : [NSString stringWithFormat:@"id,name,email,picture.width(%d).height(%d)", RESIZE_WIDTH, RESIZE_HEIGHT]}]startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                     if (!error) {
+                         NSString *imageStringOfLoginUser = [[[result valueForKey:@"picture"] valueForKey:@"data"] valueForKey:@"url"];
+                         NSURL *url = [NSURL URLWithString:imageStringOfLoginUser];
+                         NSData *imgData = [NSData dataWithContentsOfURL:url];
+                         
+                         QBUUser *user = [QBUUser user];
+                         user.login = [result valueForKey:@"id"];
+                         user.fullName = [result valueForKey:@"name"];
+                         user.password = COMMON_PWD;
+                         user.email = [result valueForKey:@"email"];
+                         user.facebookID = [result valueForKey:@"id"];
+                         
+                         g_var.profileImg = imgData;
+                         
+                         [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
+                             // Success, do something
+                             [userDefaults setObject:user.email forKey:@"email"];
+                             [userDefaults setObject:COMMON_PWD forKey:@"pwd"];
+                             [userDefaults synchronize];
+                             
+                             [QBRequest logInWithUserEmail:user.email password:COMMON_PWD successBlock:^(QBResponse *response, QBUUser *user) {
+                                 // Success, do something
+                                 user.password = COMMON_PWD;
+                                 [g_center initCenter:user];
+                                 if ([g_var loadFile:user.blobID]) {
+                                     [SVProgressHUD dismiss];
+                                     [self performSegueWithIdentifier:@"segue-norm" sender:nil];
+                                     [userDefaults setObject:user.email forKey:@"email"];
+                                     [userDefaults setObject:COMMON_PWD forKey:@"pwd"];
+                                     [userDefaults setBool:YES forKey:@"remember"];
+                                     [userDefaults synchronize];
+                                 } else {
+                                     [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+                                         [g_var saveFile:g_var.profileImg uid:blob.ID];
+                                         QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
+                                         updateParameters.blobID = blob.ID;
+                                         [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
+                                             [SVProgressHUD dismiss];
+                                             [self performSegueWithIdentifier:@"segue-norm" sender:nil];
+                                             [userDefaults setObject:user.email forKey:@"email"];
+                                             [userDefaults setObject:COMMON_PWD forKey:@"pwd"];
+                                             [userDefaults setBool:YES forKey:@"remember"];
+                                             [userDefaults synchronize];
+                                         } errorBlock:^(QBResponse *response) {
+                                             NSLog(@"error: %@", response.error);
+                                         }];
+                                     } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+                                         // handle progress
+                                         NSLog(@"profile status err");
+                                     } errorBlock:^(QBResponse *response) {
+                                         NSLog(@"error: %@", response.error);
+                                     }];
+                                 }
+                             } errorBlock:^(QBResponse *response) {
+                                 // error handling
+                                 NSLog(@"error: %@", response.error);
+                                 [SVProgressHUD dismiss];
+                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                 [alertView show];
+                             }];
+                         } errorBlock:^(QBResponse *response) {
+                             // error handling
+                             [QBRequest logInWithUserEmail:user.email password:COMMON_PWD successBlock:^(QBResponse *response, QBUUser *user) {
+                                 // Success, do something
+                                 user.password = COMMON_PWD;
+                                 [g_center initCenter:user];
+                                 [SVProgressHUD dismiss];
+                                 [userDefaults setObject:user.email forKey:@"email"];
+                                 [userDefaults setObject:COMMON_PWD forKey:@"pwd"];
+                                 [userDefaults setBool:YES forKey:@"remember"];
+                                 [userDefaults synchronize];
+                                 [self performSegueWithIdentifier:@"segue-norm" sender:nil];
+                             } errorBlock:^(QBResponse *response) {
+                                 // error handling
+                                 NSLog(@"error: %@", response.error);
+                                 [SVProgressHUD dismiss];
+                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                 [alertView show];
+                             }];
+                         }];
+                     }
+                 }];
+             }
+
+         }
+     }];
 }
 
 @end

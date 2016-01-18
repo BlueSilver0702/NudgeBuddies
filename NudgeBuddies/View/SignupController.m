@@ -27,8 +27,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     userDefaults = [NSUserDefaults standardUserDefaults];
-    [SVProgressHUD setBackgroundColor:[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6]];
-    [SVProgressHUD setForegroundColor:[UIColor colorWithRed:250/255.0 green:132/255.0 blue:64/255.0 alpha:1.0]];
 }
 
 - (IBAction)onAlreadyHaveAccount:(id)sender {

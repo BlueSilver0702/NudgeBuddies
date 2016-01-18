@@ -165,6 +165,14 @@
     [self.delegate onFavClicked:userInfo];
 }
 
+- (void)removeFav {
+    [favBtn removeFromSuperview];
+}
+
+- (void)removeNudgeCount {
+    [favBtn setTitle:@"" forState:UIControlStateNormal];
+}
+
 - (void)removeNoti {
     [UIView animateWithDuration:1.0 animations:^(){
         noti1Img.alpha = 0.0f;
@@ -172,6 +180,14 @@
     }];
     userInfo.shouldAnimate = NO;
     isAnimating = NO;
+}
+
+- (void)addFav {
+    favBtn.hidden = NO;
+}
+
+- (void)addNudgeCount {
+    [favBtn setTitle:[NSString stringWithFormat:@"%lu", userInfo.favCount] forState:UIControlStateNormal];
 }
 
 @end

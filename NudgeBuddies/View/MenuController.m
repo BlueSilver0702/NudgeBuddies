@@ -57,6 +57,16 @@
     return self.tableView.contentSize;
 }
 
+- (CGSize)createNudgedMenu:(Nudger *)nudger {
+    tUser = nudger;
+    
+    menuType = MTNudged;
+    
+    [self.tableView setFrame:CGRectMake(0, 0, 252, self.tableView.frame.size.height)];
+    [self.tableView reloadData];
+    return self.tableView.contentSize;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -78,6 +88,17 @@
     return 0;
 }
 
+- (void)customizeTxt:(UITextField *)textField {
+    NSLog(@"all are selected");
+//    [textField becomeFirstResponder];
+    UITextRange *range = [textField textRangeFromPosition:textField.beginningOfDocument toPosition:textField.endOfDocument];
+//    [textField setSelectedTextRange:range];
+//
+//    [textField selectAll:nil];
+    textField.selectedTextRange = range;
+    [textField performSelector:@selector(selectAll:) withObject:nil afterDelay:0.0];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
     
@@ -88,12 +109,13 @@
         UIButton *silentBtn = (UIButton *)[cell viewWithTag:5];
         UIButton *annoyBtn = (UIButton *)[cell viewWithTag:6];
         UITextField *sendNudgeTxt = (UITextField *)[cell viewWithTag:100];
+        [sendNudgeTxt addTarget:self action:@selector(customizeTxt:) forControlEvents:UIControlEventEditingDidBegin];
         UIButton *sendNudgeBtn = (UIButton *)[cell viewWithTag:51];
         UIButton *cancelNudgeBtn = (UIButton *)[cell viewWithTag:52];
         [sendNudgeBtn addTarget:self action:@selector(nudgeEvent:) forControlEvents:UIControlEventTouchUpInside];
         [cancelNudgeBtn addTarget:self action:@selector(nudgeEvent:) forControlEvents:UIControlEventTouchUpInside];
         
-        sendNudgeTxt.text = tUser.defaultNudge;
+        sendNudgeTxt.text = @"";//tUser.defaultNudge;
 
         [nudgeBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
         [rumbleBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
@@ -165,7 +187,8 @@
     UIButton *sendNudgeBtn = (UIButton *)[cell viewWithTag:51];
     sendNudgeBtn.layer.borderWidth = 1.0;
     sendNudgeBtn.layer.borderColor = [[UIColor colorWithRed:240/255.0 green:102/255.0 blue:48/255.0 alpha:1.0] CGColor];
-    sendNudgeTxt.text = tUser.defaultNudge;
+    sendNudgeTxt.text = @"";//tUser.defaultNudge;
+    [sendNudgeTxt addTarget:self action:@selector(customizeTxt:) forControlEvents:UIControlEventEditingDidBegin];
     [sendNudgeBtn addTarget:self action:@selector(nudgeEvent:) forControlEvents:UIControlEventTouchUpInside];
     [nudgeBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
     [rumbleBtn addTarget:self action:@selector(onResponseType:) forControlEvents:UIControlEventTouchUpInside];
@@ -404,6 +427,8 @@
         return 120;
     } else if (menuType == MTNudge) {
         return 140;
+    } else if (menuType == MTNudged) {
+        return 160;
     } else if (indexPath.row == 0) {
         return 72;
     }

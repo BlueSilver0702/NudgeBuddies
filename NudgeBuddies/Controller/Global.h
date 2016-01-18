@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, MenuType) {
     MTGroupStream,
     MTAdd,
     MTNudge,
+    MTNudged,
 };
 
 typedef NS_ENUM(NSInteger, MenuReturn) {
@@ -79,6 +80,13 @@ typedef NS_ENUM(NSInteger, ViewTag) {
     VTViewGroup,
     VTStream,
     VTInfo,
+    VTNudged,
+};
+
+typedef NS_ENUM(NSInteger, DisplayType) {
+    DTNil = 0,
+    DTMessage,
+    DTNOContactChanged,
 };
 
 @interface Global : NSObject
@@ -147,14 +155,14 @@ typedef NS_ENUM(NSInteger, ViewTag) {
 #define USER_NIGHT_FROM                             @"user_night_from"
 #define USER_NIGHT_TO                               @"user_night_to"
 
-#define FAV_1                                       CGPointMake(116, 128)
-#define FAV_2                                       CGPointMake(15, 20)
-#define FAV_3                                       CGPointMake(200, 221)
-#define FAV_4                                       CGPointMake(38, 221)
-#define FAV_5                                       CGPointMake(220, 20)
-#define FAV_6                                       CGPointMake(0, 120)
-#define FAV_7                                       CGPointMake(230, 120)
-#define FAV_8                                       CGPointMake(116, 43)
+#define FAV_1                                       CGPointMake(116, 128+82)
+#define FAV_2                                       CGPointMake(15, 20+82)
+#define FAV_3                                       CGPointMake(200, 221+82)
+#define FAV_4                                       CGPointMake(38, 221+82)
+#define FAV_5                                       CGPointMake(220, 20+82)
+#define FAV_6                                       CGPointMake(0, 120+82)
+#define FAV_7                                       CGPointMake(230, 120+82)
+#define FAV_8                                       CGPointMake(116, 43+82)
 
 #define IAP1                                        @"com.nudgebuddies.nudgebuddies.iap1";
 #define IAP2                                        @"com.nudgebuddies.nudgebuddies.iap2";

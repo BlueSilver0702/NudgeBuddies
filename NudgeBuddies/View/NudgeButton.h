@@ -26,5 +26,9 @@
 
 - (void)initNudge:(Nudger *)user;
 - (void)notify;
+- (void)removeFav;
+- (void)removeNudgeCount;
+- (void)addFav;
+- (void)addNudgeCount;
 
 @end
