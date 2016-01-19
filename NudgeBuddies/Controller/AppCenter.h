@@ -45,7 +45,8 @@
 - (void)removeGroup:(Nudger *)group success:(void (^)(BOOL))success;
 - (void)createChatNotificationForGroupChatCreation:(QBChatDialog *)dialog;
 
-- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text success:(void (^)(BOOL))success;
+- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text success:(void (^)(QBChatMessage *))success;
+- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text attachment:(NSData *)attach success:(void (^)(QBChatMessage *))success;
 - (void)getUnreadMessages:(void (^)(NSInteger, NSDictionary *))unreadCount;
 - (void)getUnreadMessage:(NSString *)dialogID success:(void (^)(NSInteger))unreadCount;
 - (void)connectGroupChat;

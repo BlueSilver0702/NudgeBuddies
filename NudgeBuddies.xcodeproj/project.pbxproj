@@ -72,6 +72,8 @@
 		4F613EC11C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F613EBF1C42C74B0088C8DF /* UIScrollView+SVPullToRefresh.m */; };
 		4F7E02B61C2CF720000B7A50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */; };
 		4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FB519241C271BC000EA06D5 /* AppCenter.m */; };
+		4FFDC2811C4D75C70048D383 /* UILabel+UILabelDynamicHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC2801C4D75C70048D383 /* UILabel+UILabelDynamicHeight.m */; };
+		4FFDC2841C4E15CF0048D383 /* UIImagePickerStreamHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC2831C4E15CF0048D383 /* UIImagePickerStreamHelper.m */; };
 		A701259BD35DE625F1AA06A0 /* libPods-NudgeBuddies.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4AF5678EEAF894A5D9F370 /* libPods-NudgeBuddies.a */; };
 		CF5AA1381C1EBA6C00B86FD2 /* NudgeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */; };
 		CF5AA1391C1EBA6C00B86FD2 /* NudgeButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */; };
@@ -174,6 +176,10 @@
 		4F7E02B51C2CF720000B7A50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4FB519231C271BC000EA06D5 /* AppCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppCenter.h; path = Controller/AppCenter.h; sourceTree = "<group>"; };
 		4FB519241C271BC000EA06D5 /* AppCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppCenter.m; path = Controller/AppCenter.m; sourceTree = "<group>"; };
+		4FFDC27F1C4D75C70048D383 /* UILabel+UILabelDynamicHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+UILabelDynamicHeight.h"; path = "View/Helper/UILabel+UILabelDynamicHeight.h"; sourceTree = "<group>"; };
+		4FFDC2801C4D75C70048D383 /* UILabel+UILabelDynamicHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+UILabelDynamicHeight.m"; path = "View/Helper/UILabel+UILabelDynamicHeight.m"; sourceTree = "<group>"; };
+		4FFDC2821C4E15CF0048D383 /* UIImagePickerStreamHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImagePickerStreamHelper.h; path = View/Helper/UIImagePickerStreamHelper.h; sourceTree = "<group>"; };
+		4FFDC2831C4E15CF0048D383 /* UIImagePickerStreamHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImagePickerStreamHelper.m; path = View/Helper/UIImagePickerStreamHelper.m; sourceTree = "<group>"; };
 		CF5AA1351C1EBA6C00B86FD2 /* NudgeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NudgeButton.h; path = View/NudgeButton.h; sourceTree = "<group>"; };
 		CF5AA1361C1EBA6C00B86FD2 /* NudgeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NudgeButton.m; path = View/NudgeButton.m; sourceTree = "<group>"; };
 		CF5AA1371C1EBA6C00B86FD2 /* NudgeButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NudgeButton.xib; path = View/NudgeButton.xib; sourceTree = "<group>"; };
@@ -438,6 +444,8 @@
 		CFF136691C1D206D0001D351 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				4FFDC2821C4E15CF0048D383 /* UIImagePickerStreamHelper.h */,
+				4FFDC2831C4E15CF0048D383 /* UIImagePickerStreamHelper.m */,
 				4F04F9481C453D58008E42FD /* DNSIAP */,
 				4F613EBA1C42C6FF0088C8DF /* TableScrollLoadMore */,
 				4F46C3C81C3D7E2200EDBB82 /* UIColor+HexString.h */,
@@ -452,6 +460,8 @@
 				CFF1366F1C1D208E0001D351 /* UIImageCropper.m */,
 				CFF136701C1D208E0001D351 /* UIImagePickerHelper.h */,
 				CFF136711C1D208E0001D351 /* UIImagePickerHelper.m */,
+				4FFDC27F1C4D75C70048D383 /* UILabel+UILabelDynamicHeight.h */,
+				4FFDC2801C4D75C70048D383 /* UILabel+UILabelDynamicHeight.m */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -631,6 +641,7 @@
 				CFF136551C1D1BEE0001D351 /* Group.m in Sources */,
 				4F613EC01C42C74B0088C8DF /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				CFF1367B1C1D7D110001D351 /* MenuController.m in Sources */,
+				4FFDC2811C4D75C70048D383 /* UILabel+UILabelDynamicHeight.m in Sources */,
 				4FB519251C271BC000EA06D5 /* AppCenter.m in Sources */,
 				294891C71C0F87300086D1BE /* AppDelegate.m in Sources */,
 				CF7D9A0E1C1F3EE30084D555 /* Menu.m in Sources */,
@@ -638,6 +649,7 @@
 				4F056B5E1C4C895700F1720F /* ResetController.m in Sources */,
 				CFF136661C1D20300001D351 /* ViewController.m in Sources */,
 				CFF136731C1D208E0001D351 /* UIImage+KIAdditions.m in Sources */,
+				4FFDC2841C4E15CF0048D383 /* UIImagePickerStreamHelper.m in Sources */,
 				CFF136741C1D208E0001D351 /* UIImageCropper.m in Sources */,
 				CFF136721C1D208E0001D351 /* KICropImageView.m in Sources */,
 				CFF136651C1D20300001D351 /* SignupController.m in Sources */,
@@ -705,7 +717,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
+				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -744,7 +756,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
+				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -770,7 +782,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
+				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -794,7 +806,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nudgebuddies.nudgebuddies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0b471823-fe45-4d76-8c04-8d060ce1309b";
+				PROVISIONING_PROFILE = "54adab36-33f0-42ab-8653-f8f1636c7c87";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

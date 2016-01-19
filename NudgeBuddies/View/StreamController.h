@@ -13,6 +13,7 @@
 @optional
 
 - (void)onUnreadCount:(NSInteger)count;
+- (void)tableContentHeight:(CGFloat)contentHeight;
 
 @end
 
@@ -21,5 +22,6 @@
 @property(weak) id <StreamControllerDelegate> delegate;
 
 - (void)streamResult:(Nudger *)selectedNudger;
+- (void)sentNudge:(Nudger *)nudger msg:(QBChatMessage *)msg;
 
 @end

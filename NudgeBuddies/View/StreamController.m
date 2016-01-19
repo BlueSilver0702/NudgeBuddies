@@ -22,13 +22,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.tableView setFrame:CGRectMake(0, 0, 262, 162)];
+    [self.tableView setFrame:CGRectMake(0, 0, 262, 256)];
 
     __weak StreamController *weakSelf = self;
     
     [self.tableView addPullToRefreshWithActionHandler:^{
         [weakSelf insertRowAtTop];
     }];
+    
+//    self.tableView.rowHeight = UITableViewAutomaticDimension;
+//    self.tableView.estimatedRowHeight = 54.0;
     
     skip = 0;
 }
@@ -69,9 +72,18 @@
     });
 }
 
-- (void)streamResult:(Nudger *)selectedNudger {
-    [SVProgressHUD show];
+- (void)sentNudge:(Nudger *)nudger msg:(QBChatMessage *)msg {
     
+    [self.tableView beginUpdates];
+    [streamArr addObject:msg];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:streamArr.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+    [self.tableView endUpdates];
+    
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:streamArr.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)streamResult:(Nudger *)selectedNudger {
+
     nudger = selectedNudger;
     streamArr = [NSMutableArray new];
 //    [QBRequest countOfMessagesForDialogID:nudger.dialogID extendedRequest:nil
@@ -87,9 +99,9 @@
         for (int i=0; i<messages.count; i++) {
             [streamArr insertObject:[messages objectAtIndex:i] atIndex:0];
         }
-        [SVProgressHUD dismiss];
         [self.tableView reloadData];
         
+        [self.delegate tableContentHeight:self.tableView.contentSize.height];
         NSIndexPath *ipath = [NSIndexPath indexPathForRow:messages.count-1 inSection:0];
         [self.tableView scrollToRowAtIndexPath:ipath atScrollPosition:UITableViewScrollPositionTop animated:YES];
         
@@ -120,19 +132,54 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell-stream" forIndexPath:indexPath];
+    UITableViewCell *cell;
     QBChatMessage *msg = [streamArr objectAtIndex:indexPath.row];
+
+    if (msg.senderID == g_center.currentUser.ID) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell-stream1" forIndexPath:indexPath];
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell-stream" forIndexPath:indexPath];
+    }
+    
     UIImageView *profileImg = (UIImageView *)[cell viewWithTag:1];
     UILabel *nameLab = (UILabel *)[cell viewWithTag:2];
     UILabel *msgLab = (UILabel *)[cell viewWithTag:3];
     UILabel *timeLab = (UILabel *)[cell viewWithTag:4];
+    UILabel *mmLab = (UILabel *)[cell viewWithTag:5];
+    UILabel *dayLab = (UILabel *)[cell viewWithTag:6];
+    UIImageView *attachImg = (UIImageView *)[cell viewWithTag:7];
+    
     [profileImg setImage:[UIImage imageNamed:@"empty"]];
     nameLab.text = @"";
     msgLab.text = msg.text;
+    CGSize size = [msgLab sizeOfMultiLineLabel];
+    [msgLab setFrame:CGRectMake(msgLab.frame.origin.x, msgLab.frame.origin.y, 160.0, size.height)];
+    
+    if (msg.attachments.count > 0) {
+        QBChatAttachment *attachment = msg.attachments[0];
+        NSData *saveFile = [g_var loadFile:[attachment.ID integerValue]];
+        if (saveFile) {
+            [attachImg setImage:[UIImage imageWithData:saveFile]];
+        } else {
+            [QBRequest downloadFileWithID:[attachment.ID integerValue] successBlock:^(QBResponse *response, NSData *fileData) {
+                [attachImg setImage:[UIImage imageWithData:fileData]];
+                [g_var saveFile:fileData uid:[attachment.ID integerValue]];
+            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+                // handle progress
+            } errorBlock:^(QBResponse *response) {
+                NSLog(@"error: %@", response.error);
+            }];
+        }
+        [attachImg setFrame:CGRectMake(attachImg.frame.origin.x, msgLab.frame.origin.y+msgLab.frame.size.height+8, attachImg.frame.size.width, 150.0)];
+    }
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"hh.mm a"];
-    NSString *related = [self relativeDateStringForDate:msg.dateSent];
-    timeLab.text = [NSString stringWithFormat:@"%@ %@",related,[formatter stringFromDate:msg.dateSent]];
+    [formatter setDateFormat:@"hh.mm"];
+    dayLab.text = [self relativeDateStringForDate:msg.dateSent];
+    timeLab.text = [formatter stringFromDate:msg.dateSent];
+    [formatter setDateFormat:@"a"];
+    mmLab.text = [formatter stringFromDate:msg.dateSent];
+    
     for (Nudger *contact in g_center.contactsArray) {
         if (contact.user.ID == msg.senderID) {
             [profileImg setImage:[UIImage imageWithData:[g_var loadFile:contact.user.blobID]]];
@@ -165,6 +212,21 @@
     return cell;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    UILabel *msgLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 160, 21)];
+    QBChatMessage *msg = [streamArr objectAtIndex:indexPath.row];
+    msgLab.text = msg.text;
+    CGSize size = [msgLab sizeOfMultiLineLabel];
+    if (msg.attachments.count > 0) {
+        return size.height + 130.0;
+    }
+    if (size.height < 54-18) {
+        return 54.0;
+    }
+    return size.height + 18.0;
+}
+
 - (NSString *)relativeDateStringForDate:(NSDate *)date
 {
     NSCalendarUnit units = NSCalendarUnitDay | NSCalendarUnitWeekOfYear |
@@ -191,6 +253,10 @@
     } else {
         return @"Today";
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 @end

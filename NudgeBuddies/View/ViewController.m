@@ -18,6 +18,7 @@
 #import "DownPicker.h"
 
 #import "AlertCtrl.h"
+#import "UIImagePickerStreamHelper.h"
 
 @import GoogleMobileAds;
 
@@ -140,6 +141,8 @@
     IBOutlet UIButton *streamCountBtn;
     Nudger *streamNudger;
     StreamController *streamCtrl;
+    BOOL streamAttached;
+    UIImagePickerStreamHelper *iPHStream;
     
     // start page
     IBOutlet UIView *startView;
@@ -177,6 +180,7 @@
     
     stopAccel = NO;
     iPH = [[UIImagePickerHelper alloc] init];
+    iPHStream = [[UIImagePickerStreamHelper alloc] init];
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Apex" ofType:@"caf"];
     NSURL *file = [NSURL fileURLWithPath:path];
     audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:file error:nil];
@@ -338,6 +342,17 @@
         }
     }];
 
+    if (currentUser.blobID > 0) {
+        NSData *profileData = [g_var loadFile:currentUser.blobID];
+        if (profileData == nil) {
+            [QBRequest downloadFileWithID:currentUser.blobID successBlock:^(QBResponse *response, NSData *fileData) {
+                [g_var saveFile:fileData uid:currentUser.blobID];
+            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+            } errorBlock:^(QBResponse *response) {
+            }];
+        }
+    }
+    
     [SVProgressHUD dismiss];
 }
 
@@ -717,6 +732,12 @@
 }
 
 - (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger{
+    [self onMenuClose];
+    menuCtrl.isOpen = NO;
+    streamNudger = nudger;
+    [self onStreamOpen:nil];
+    return;
+    /////////
     if (menuReturn == MRNudge) {
         NSLog(@"MRNudge");
         nudger.response = RTNudge;
@@ -817,7 +838,7 @@
             if (isBlock) {
                 [self showAlert:@"Your nudge was unable to be delivered due to the blocked status."];
             } else {
-                [g_center sendMessage:nudger txt:nil success:^(BOOL success) {
+                [g_center sendMessage:nudger txt:nil success:^(QBChatMessage * success) {
                     
                     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
                     [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];
@@ -855,7 +876,7 @@
                 AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
                 [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",nudger.type==NTGroup?nudger.group.gName:nudger.user.fullName]];
                 
-                [g_center sendMessage:nudger txt:text success:^(BOOL success) {
+                [g_center sendMessage:nudger txt:text success:^(QBChatMessage *success) {
                     if (success) {
                         nudger.favCount ++;
                         QBCOCustomObject *object = [QBCOCustomObject customObject];
@@ -1835,6 +1856,7 @@
         return;
     }
     
+    streamAttached = NO;
     NSUInteger fileID = streamNudger.type==NTGroup?streamNudger.group.gBlobID:streamNudger.user.blobID;
     [streamPicBtn setTitle:[streamNudger getName] forState:UIControlStateNormal];
     [streamPicBtn setBackgroundColor:[UIColor colorWithRed:78/255.0 green:96/255.0 blue:110/255.0 alpha:1.0]];
@@ -1843,14 +1865,10 @@
     else if (streamNudger.type == NTGroup) [streamPicBtn setImage:[UIImage imageNamed:@"user-group"] forState:UIControlStateNormal];
     
     [streamCountBtn setTitle:[NSString stringWithFormat:@"%lu", streamNudger.unreadMsg] forState:UIControlStateNormal];
-    streamResponseTxt.text = streamNudger.defaultReply;
+    streamResponseTxt.text = @"";
     [streamCtrl streamResult:streamNudger];
+    [SVProgressHUD show];
     
-    [UIView transitionWithView:streamView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        streamView.hidden = NO;
-    } completion:^(BOOL success){
-        
-    }];
 }
 
 - (IBAction)onStreamClose:(id)sender {
@@ -1866,28 +1884,115 @@
         }
         [self display:DTNil];
     }];
+    streamAttached = NO;
 //    [self display:NO];
     [UIView transitionWithView:streamView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        streamView.hidden = YES;
-        
+        streamView.hidden = YES; 
     } completion:^(BOOL success){
         
     }];
 }
 
 - (IBAction)onStreamSend:(id)sender {
-    [g_center sendMessage:streamNudger txt:streamResponseTxt.text success:^(BOOL success) {
-        if (success) {
-            [audioPlayer play];
-            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-            [self showAlert:[NSString stringWithFormat:@"You sent nudge to %@",streamNudger.type==NTGroup?streamNudger.group.gName:streamNudger.user.fullName]];
-        } else {
-            [SVProgressHUD showErrorWithStatus:@"Failed to send nudge. Please try later."];
-        }
-    }];
+    [SVProgressHUD show];
+    if (streamAttached) {
+        UIImageView *imageView = (UIImageView *)[streamView viewWithTag:22];
+        NSData *imageData = UIImageJPEGRepresentation(imageView.image, 1.0f);
+        
+        [g_center sendMessage:streamNudger txt:streamResponseTxt.text attachment:imageData success:^(QBChatMessage *success) {
+            if (success) {
+                [streamCtrl sentNudge:nil msg:success];
+            }
+        }];
+    } else {
+        [g_center sendMessage:streamNudger txt:streamResponseTxt.text success:^(QBChatMessage *success) {
+            if (success) {
+                [streamCtrl sentNudge:nil msg:success];
+            }
+        }];
+    }
+    
+    CGFloat contentHeight = 256;
 
-    [self onStreamClose:nil];
-    menuCtrl.isOpen = NO;
+    [UIView transitionWithView:streamView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [streamView setFrame:CGRectMake(streamView.frame.origin.x, streamView.frame.origin.y, streamView.frame.size.width, contentHeight + 131)];
+        [streamTableContainer setFrame:CGRectMake(streamTableContainer.frame.origin.x, streamTableContainer.frame.origin.y, streamTableContainer.frame.size.width, contentHeight)];
+        [streamCtrl.view setFrame:CGRectMake(0,0, streamTableContainer.frame.size.width, streamTableContainer.frame.size.height)];
+        
+        UIView *container1 = [streamView viewWithTag:20];
+        UIView *container2 = [streamView viewWithTag:21];
+        UIImageView *imageView = (UIImageView *)[streamView viewWithTag:22];
+        [container1 setFrame:CGRectMake(container1.frame.origin.x, streamTableContainer.frame.origin.y+streamTableContainer.frame.size.height+4, 268, 54)];
+        [container2 setFrame:CGRectMake(0, 0, 220, 54)];
+        [imageView setFrame:CGRectMake(58, 25, 156, 20)];
+        imageView.image = nil;
+        streamResponseTxt.text = @"";
+    } completion:^(BOOL success){
+        
+    }];
+}
+
+- (IBAction)onStreamPic:(id)sender {
+    [iPHStream imagePickerInView:self WithSuccess:^(UIImage *image) {
+        streamAttached = YES;
+        
+        CGFloat imgSize = 120.0;
+        UIView *container1 = [streamView viewWithTag:20];
+        UIView *container2 = [streamView viewWithTag:21];
+        UIImageView *imageView = (UIImageView *)[streamView viewWithTag:22];
+
+        float actualHeight = image.size.height;
+        float actualWidth = image.size.width;
+        float imgRatio = actualWidth/actualHeight;
+        
+        actualHeight = imgSize;
+        actualWidth = imgSize*imgRatio;
+
+        CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
+        UIGraphicsBeginImageContext(rect.size);
+        [image drawInRect:rect];
+        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [imageView setFrame:CGRectMake(container2.frame.size.width - actualWidth - 8, imageView.frame.origin.y, actualWidth, imgSize)];
+        [imageView setImage:img];
+        
+        [container2 setFrame:CGRectMake(container2.frame.origin.x, container2.frame.origin.y, container2.frame.size.width, actualHeight + 30)];
+        [container1 setFrame:CGRectMake(container1.frame.origin.x, container1.frame.origin.y-actualHeight+25, container1.frame.size.width, actualHeight + 30)];
+        
+        [streamTableContainer setFrame:CGRectMake(streamTableContainer.frame.origin.x, streamTableContainer.frame.origin.y, streamTableContainer.frame.size.width, streamTableContainer.frame.size.height-actualHeight+25)];
+        [streamCtrl.view setFrame:CGRectMake(0,0, streamTableContainer.frame.size.width, streamTableContainer.frame.size.height)];
+    } failure:^(NSError *error) {
+        [self error:err_later];
+    }];
+}
+
+- (void)tableContentHeight:(CGFloat)contentHeight {
+    [SVProgressHUD dismiss];
+    if (streamAttached) {
+        
+    } else {
+        if (contentHeight > 256) {
+            contentHeight = 256;
+        }
+        [streamView setFrame:CGRectMake(streamView.frame.origin.x, streamView.frame.origin.y, streamView.frame.size.width, contentHeight + 131)];
+        [streamTableContainer setFrame:CGRectMake(streamTableContainer.frame.origin.x, streamTableContainer.frame.origin.y, streamTableContainer.frame.size.width, contentHeight)];
+        [streamCtrl.view setFrame:CGRectMake(0,0, streamTableContainer.frame.size.width, streamTableContainer.frame.size.height)];
+        
+        UIView *container1 = [streamView viewWithTag:20];
+        UIView *container2 = [streamView viewWithTag:21];
+        UIImageView *imageView = (UIImageView *)[streamView viewWithTag:22];
+        [container1 setFrame:CGRectMake(container1.frame.origin.x, streamTableContainer.frame.origin.y+streamTableContainer.frame.size.height+4, 268, 54)];
+        [container2 setFrame:CGRectMake(0, 0, 220, 54)];
+        [imageView setFrame:CGRectMake(58, 25, 156, 20)];
+        imageView.image = nil;
+    }
+    
+    [UIView transitionWithView:streamView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        streamView.hidden = NO;
+    } completion:^(BOOL success){
+        
+    }];
 }
 
 #pragma mark - Start

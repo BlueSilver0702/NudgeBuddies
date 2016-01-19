@@ -430,7 +430,7 @@
     } else if (menuType == MTNudged) {
         return 160;
     } else if (indexPath.row == 0) {
-        return 72;
+        return 100;
     }
     return 36;
 }

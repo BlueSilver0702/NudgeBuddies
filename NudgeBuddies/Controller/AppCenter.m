@@ -550,7 +550,7 @@
 
 #pragma mark - Message Module
 
-- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text success:(void (^)(BOOL))success {
+- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text success:(void (^)(QBChatMessage *))success {
 //    [SVProgressHUD show];
     if (nudger.type == NTGroup) {
 //        QBChatDialog *groupChatDialog = [[QBChatDialog alloc] initWithDialogID:nudger.group.gID type:QBChatDialogTypeGroup];
@@ -566,7 +566,7 @@
                 QBChatDialog *groupChatDialog = dialogObjects[0];
                 [groupChatDialog joinWithCompletionBlock:^(NSError * _Nullable error) {
                     if (error) {
-                        success(NO);
+                        success(nil);
                     } else {
                         QBChatMessage *message = [QBChatMessage message];
 //                        message.r
@@ -582,7 +582,7 @@
                         [message setCustomParameters:params];
                         //
                         [groupChatDialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
-                            success(YES);
+                            success(message);
                             [SVProgressHUD dismiss];
                             
                             QBMEvent *event = [QBMEvent event];
@@ -617,7 +617,7 @@
             }
         } errorBlock:^(QBResponse *response) {
             [SVProgressHUD dismiss];
-            success(NO);
+            success(nil);
         }];
     } else {
 //        if (nudger.dialogID) {
@@ -654,8 +654,8 @@
                 
                 [createdDialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
                     [SVProgressHUD dismiss];
-                    if (error) success(NO);
-                    else success(YES);
+                    if (error) success(nil);
+                    else success(message);
                     
                     QBMEvent *event = [QBMEvent event];
                     event.notificationType = QBMNotificationTypePush;
@@ -686,9 +686,158 @@
                 }];
                 
             } errorBlock:^(QBResponse *response) {
-                success(NO);
+                success(nil);
             }];
 //        }
+    }
+}
+
+- (void)sendMessage:(Nudger *)nudger txt:(NSString *)text attachment:(NSData *)attach success:(void (^)(QBChatMessage *))success {
+    
+    if (nudger.type == NTGroup) {
+        
+        NSMutableDictionary *extendedRequest = @{@"_id" : nudger.group.gID}.mutableCopy;
+        
+        QBResponsePage *page = [QBResponsePage responsePageWithLimit:1 skip:0];
+        
+        [QBRequest dialogsForPage:page extendedRequest:extendedRequest successBlock:^(QBResponse *response, NSArray *dialogObjects, NSSet *dialogsUsersIDs, QBResponsePage *page) {
+            if (dialogObjects.count > 0) {
+                QBChatDialog *groupChatDialog = dialogObjects[0];
+                [groupChatDialog joinWithCompletionBlock:^(NSError * _Nullable error) {
+                    if (error) {
+                        success(nil);
+                    } else {
+                        
+                        [QBRequest TUploadFile:attach fileName:@"attach.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *uploadedBlob) {
+                            NSUInteger uploadedFileID = uploadedBlob.ID;
+                            
+                            QBChatMessage *message = [QBChatMessage message];
+                            //                        message.r
+                            if (text) {
+                                [message setText:text];
+                            } else {
+                                [message setText:nudger.defaultNudge];
+                            }
+                            //
+                            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                            params[@"save_to_history"] = @YES;
+                            params[@"respose_type"] = [NSNumber numberWithInteger:nudger.response];
+                            [message setCustomParameters:params];
+                            
+                            QBChatAttachment *attachment = QBChatAttachment.new;
+                            attachment.type = @"image";
+                            attachment.ID = [NSString stringWithFormat:@"%lu", uploadedFileID];
+                            [message setAttachments:@[attachment]];
+                            [g_var saveFile:attach uid:uploadedFileID];
+                            
+                            [groupChatDialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
+                                success(message);
+                                [SVProgressHUD dismiss];
+                                
+                                QBMEvent *event = [QBMEvent event];
+                                event.notificationType = QBMNotificationTypePush;
+                                event.usersIDs = [groupChatDialog.occupantIDs componentsJoinedByString:@","];
+                                event.type = QBMEventTypeOneShot;
+                                
+                                NSMutableDictionary  *dictPush = [NSMutableDictionary  dictionary];
+                                [dictPush setObject:[NSString stringWithFormat:@"%@: %@",currentUser.fullName, message.text] forKey:@"message"];
+                                //                            [dictPush setObject:@"1" forKey:@"ios_badge"];
+                                NSString *alertSound = @"popcorn.caf";
+                                if (nudger.alertSound > 0) alertSound = (NSString *)[[[AlertCtrl initWithAlerts] objectAtIndex:nudger.alertSound] objectForKey:@"file"];
+                                [dictPush setObject:alertSound forKey:@"ios_sound"];
+                                
+                                NSError *errorPush = nil;
+                                NSData *sendData = [NSJSONSerialization dataWithJSONObject:dictPush options:NSJSONWritingPrettyPrinted error:&errorPush];
+                                NSString *jsonString = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
+                                //
+                                event.message = jsonString;
+                                
+                                [QBRequest createEvent:event successBlock:nil errorBlock:^(QBResponse *response) {
+                                    // Handle error
+                                    NSLog(@"%@", response);
+                                }];
+                            }];
+                        } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+                            // handle progress
+                        } errorBlock:^(QBResponse *response) {
+                            [SVProgressHUD showErrorWithStatus:@"Failed to attach"];
+                            success(nil);
+                        }];
+                    }
+                }];
+            }
+        } errorBlock:^(QBResponse *response) {
+            [SVProgressHUD dismiss];
+            success(nil);
+        }];
+    } else {
+
+        QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypePrivate];
+        chatDialog.occupantIDs = @[@(nudger.user.ID)];
+        
+        [QBRequest createDialog:chatDialog successBlock:^(QBResponse *response, QBChatDialog *createdDialog) {
+            nudger.dialogID = createdDialog.ID;
+            
+            [QBRequest TUploadFile:attach fileName:@"attach.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *uploadedBlob) {
+                NSUInteger uploadedFileID = uploadedBlob.ID;
+                
+                QBChatMessage *message = [QBChatMessage message];
+                if (text) {
+                    [message setText:text];
+                } else {
+                    [message setText:nudger.defaultNudge];
+                }
+                
+                QBChatAttachment *attachment = QBChatAttachment.new;
+                attachment.type = @"image";
+                attachment.ID = [NSString stringWithFormat:@"%lu", uploadedFileID];
+                [message setAttachments:@[attachment]];
+                
+                [g_var saveFile:attach uid:uploadedFileID];
+                
+                NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                params[@"save_to_history"] = @YES;
+                params[@"respose_type"] = [NSNumber numberWithInteger:nudger.response];
+                [message setCustomParameters:params];
+                
+                [createdDialog sendMessage:message completionBlock:^(NSError * _Nullable error) {
+                    [SVProgressHUD dismiss];
+                    if (error) success(nil);
+                    else success(message);
+                    
+                    QBMEvent *event = [QBMEvent event];
+                    event.notificationType = QBMNotificationTypePush;
+                    event.usersIDs = [NSString stringWithFormat:@"%lu", nudger.user.ID];
+                    event.type = QBMEventTypeOneShot;
+                    
+                    NSMutableDictionary  *dictPush = [NSMutableDictionary  dictionary];
+                    [dictPush setObject:[NSString stringWithFormat:@"%@: %@",currentUser.fullName, message.text] forKey:@"message"];
+                    //                            [dictPush setObject:@"1" forKey:@"ios_badge"];
+                    NSString *alertSound = @"popcorn.caf";
+                    if (nudger.alertSound > 0) alertSound = (NSString *)[[[AlertCtrl initWithAlerts] objectAtIndex:nudger.alertSound] objectForKey:@"file"];
+                    [dictPush setObject:alertSound forKey:@"ios_sound"];
+                    
+                    NSError *errorPush = nil;
+                    NSData *sendData = [NSJSONSerialization dataWithJSONObject:dictPush options:NSJSONWritingPrettyPrinted error:&errorPush];
+                    NSString *jsonString = [[NSString alloc] initWithData:sendData encoding:NSUTF8StringEncoding];
+                    //
+                    event.message = jsonString;
+                    
+                    [QBRequest createEvent:event successBlock:nil errorBlock:^(QBResponse *response) {
+                        // Handle error
+                        NSLog(@"%@", response);
+                    }];
+                }];
+            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+                // handle progress
+            } errorBlock:^(QBResponse *response) {
+                [SVProgressHUD showErrorWithStatus:@"Failed to attach"];
+                success(nil);
+            }];
+            
+        } errorBlock:^(QBResponse *response) {
+            success(nil);
+        }];
     }
 }
 
@@ -822,6 +971,7 @@
         [QBRequest logOutWithSuccessBlock:^(QBResponse *response) {
             // Successful logout
             [SVProgressHUD dismiss];
+            contactLoaded = NO;
             success(YES);
         } errorBlock:^(QBResponse *response) {
             // Handle error

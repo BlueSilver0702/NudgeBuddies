@@ -29,6 +29,7 @@
 #import "NSArray+LinqExtensions.h"
 #import "NSDictionary+LinqExtensions.h"
 #import "UIColor+HexString.h"
+#import "UILabel+UILabelDynamicHeight.h"
 
 
 
