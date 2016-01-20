@@ -18,6 +18,7 @@
     NSUserDefaults *userDefaults;
     UIImagePickerHelper *iPH;
     NSData *profileImgData;
+    BOOL profileImgChanged;
 }
 @end
 
@@ -27,6 +28,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     userDefaults = [NSUserDefaults standardUserDefaults];
+    profileImgChanged = NO;
+    [profileBtn setBackgroundImage:nil forState:UIControlStateNormal];
 }
 
 - (IBAction)onAlreadyHaveAccount:(id)sender {
@@ -45,9 +48,10 @@
         UIGraphicsEndImageContext();
         
         [profileBtn setBackgroundImage:newImage forState:UIControlStateNormal];
-        
+        profileImgChanged = YES;
         profileImgData = UIImageJPEGRepresentation(newImage, 1.0f);
-        g_var.profileImg = profileImgData;
+        
+        
     } failure:^(NSError *error) {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alertView show];
@@ -62,9 +66,18 @@
     user.password = passwd.text;
     user.email = email.text;
     
+    if (passwd.text.length < 8) {
+        [[[UIAlertView alloc] initWithTitle:@"Warning" message:@"Account Password should be longer than 8 characters!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        return;
+    }
+    
     [SVProgressHUD showWithStatus:@"Registering..."];
     [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
         // Success, do something
+        if (profileImgChanged) {
+            g_var.profileImg = @{@"ID":[NSString stringWithFormat:@"%lu", user.ID], @"file":profileImgData};
+        } else g_var.profileImg = nil;
+        
         NSLog(@"Success");
         [SVProgressHUD dismiss];
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Successfully Registered!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -73,6 +86,7 @@
         [userDefaults setObject:passwd.text forKey:@"pwd"];
         [userDefaults setBool:YES forKey:@"register"];
         [userDefaults synchronize];
+        
     } errorBlock:^(QBResponse *response) {
         // error handling
         [SVProgressHUD dismiss];
@@ -95,103 +109,6 @@
     return ^(QBResponse *response) {
         // Handle error
     };
-}
-
-- (IBAction)onFacebook:(id)sender {
-    
-    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login
-     logInWithReadPermissions: @[@"public_profile", @"email", @"user_friends"]
-     fromViewController:self
-     handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-         if (error) {
-             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You can't change facebook account on this device." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-             [alertView show];
-         } else if (result.isCancelled) {
-//             [SVProgressHUD dismiss];
-         } else {
-             NSLog(@"Logged in");
-             if ([FBSDKAccessToken currentAccessToken]) {
-                 
-                 [SVProgressHUD showWithStatus:@"Signing..."];
-                 
-                 [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:@{ @"fields" : [NSString stringWithFormat:@"id,name,email,picture.width(%d).height(%d)", RESIZE_WIDTH, RESIZE_HEIGHT]}]startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                     if (!error) {
-                         NSString *imageStringOfLoginUser = [[[result valueForKey:@"picture"] valueForKey:@"data"] valueForKey:@"url"];
-                         NSURL *url = [NSURL URLWithString:imageStringOfLoginUser];
-                         NSData *imgData = [NSData dataWithContentsOfURL:url];
-                         
-                         QBUUser *user = [QBUUser user];
-                         user.login = [result valueForKey:@"id"];
-                         user.fullName = [result valueForKey:@"name"];
-                         user.password = COMMON_PWD;
-                         user.email = [result valueForKey:@"email"];
-                         user.facebookID = [result valueForKey:@"id"];
-                         
-                         g_var.profileImg = imgData;
-                         
-                         [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
-                             // Success, do something
-                             [userDefaults setObject:user.email forKey:@"email"];
-                             [userDefaults setObject:COMMON_PWD forKey:@"pwd"];
-                             [userDefaults synchronize];
-                             
-                             [QBRequest logInWithUserEmail:user.email password:COMMON_PWD successBlock:^(QBResponse *response, QBUUser *user) {
-                                 // Success, do something
-                                 user.password = COMMON_PWD;
-                                 [g_center initCenter:user];
-                                 [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-                                     [g_var saveFile:g_var.profileImg uid:blob.ID];
-                                     QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
-                                     updateParameters.blobID = blob.ID;
-                                     [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
-                                         [SVProgressHUD dismiss];
-                                         [self performSegueWithIdentifier:@"segue-register" sender:nil];
-                                     } errorBlock:^(QBResponse *response) {
-                                         NSLog(@"error: %@", response.error);
-                                     }];
-                                 } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
-                                     // handle progress
-                                     NSLog(@"profile status err");
-                                 } errorBlock:^(QBResponse *response) {
-                                     NSLog(@"error: %@", response.error);
-                                 }];
-                                 
-                                 //[self performSegueWithIdentifier:@"segue-register" sender:nil];
-                             } errorBlock:^(QBResponse *response) {
-                                 // error handling
-                                 NSLog(@"error: %@", response.error);
-                                 [SVProgressHUD dismiss];
-                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                 [alertView show];
-                             }];
-                         } errorBlock:^(QBResponse *response) {
-                             // error handling
-                             [QBRequest logInWithUserEmail:user.email password:COMMON_PWD successBlock:^(QBResponse *response, QBUUser *user) {
-                                 // Success, do something
-                                 user.password = COMMON_PWD;
-                                 [g_center initCenter:user];
-                                 [SVProgressHUD dismiss];
-                                 [self performSegueWithIdentifier:@"segue-register" sender:nil];
-                             } errorBlock:^(QBResponse *response) {
-                                 // error handling
-                                 NSLog(@"error: %@", response.error);
-                                 [SVProgressHUD dismiss];
-                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Login Failed!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                 [alertView show];
-                             }];
-                         }];
-                     }
-                 }];
-             }
-//             [QBRequest logInWithSocialProvider:@"facebook" accessToken:[[FBSDKAccessToken currentAccessToken] tokenString] accessTokenSecret:nil successBlock:^(QBResponse *response, QBUUser *user) {
-//                 [self performSegueWithIdentifier:@"segue-register" sender:nil];
-//             } errorBlock:^(QBResponse *response) {
-//                 NSLog(@"Response error1: %@", response.error);
-//                 //[self performSegueWithIdentifier:@"segue-register" sender:nil];
-//             }];
-         }
-     }];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {

@@ -178,7 +178,7 @@
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-bg" id="oM8-vi-1va">
                                                                 <rect key="frame" x="38" y="55" width="243" height="160"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                                         <integer key="value" value="6"/>
@@ -186,24 +186,6 @@
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </imageView>
-                                                            <button opaque="NO" tag="52" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lWi-cI-KBo">
-                                                                <rect key="frame" x="38" y="180" width="122" height="35"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                <state key="normal" title="Cancel"/>
-                                                                <connections>
-                                                                    <action selector="onNudgedClose:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GJz-4e-Rc8"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" tag="51" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7h2-F1-EQw">
-                                                                <rect key="frame" x="159" y="180" width="122" height="35"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                                <state key="normal" title="Send"/>
-                                                                <connections>
-                                                                    <action selector="onNudgedResponse:" destination="BYZ-38-t0r" eventType="touchUpInside" id="96I-IX-ai4"/>
-                                                                </connections>
-                                                            </button>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You've been nudged" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HBh-Eg-eOn">
                                                                 <rect key="frame" x="87" y="78" width="143" height="21"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -218,22 +200,50 @@
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <view contentMode="scaleToFill" id="Ud2-nI-eSr">
-                                                                <rect key="frame" x="38" y="180" width="243" height="1"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <color key="backgroundColor" white="0.66666666669999997" alpha="0.75097355769999996" colorSpace="calibratedWhite"/>
-                                                            </view>
-                                                            <view contentMode="scaleToFill" id="oYl-W7-A1l">
-                                                                <rect key="frame" x="159" y="180" width="1" height="35"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <view contentMode="scaleToFill" id="hzz-LO-kmN">
+                                                                <rect key="frame" x="38" y="180" width="243" height="35"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                <subviews>
+                                                                    <view contentMode="scaleToFill" id="Ud2-nI-eSr">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="243" height="1"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <color key="backgroundColor" white="0.66666666669999997" alpha="0.75097355769999996" colorSpace="calibratedWhite"/>
+                                                                    </view>
+                                                                    <view contentMode="scaleToFill" id="oYl-W7-A1l">
+                                                                        <rect key="frame" x="121" y="0.0" width="1" height="35"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                                    </view>
+                                                                    <button opaque="NO" tag="52" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lWi-cI-KBo">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="122" height="35"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                        <state key="normal" title="Cancel"/>
+                                                                        <connections>
+                                                                            <action selector="onNudgedClose:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GJz-4e-Rc8"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <button opaque="NO" tag="51" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7h2-F1-EQw">
+                                                                        <rect key="frame" x="121" y="0.0" width="122" height="35"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                        <state key="normal" title="Send"/>
+                                                                        <connections>
+                                                                            <action selector="onNudgedResponse:" destination="BYZ-38-t0r" eventType="touchUpInside" id="96I-IX-ai4"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             </view>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="W3Z-Vx-4QP">
                                                                 <rect key="frame" x="241" y="145" width="31" height="26"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <state key="normal" image="menu-attach"/>
+                                                                <connections>
+                                                                    <action selector="onNudgedPic:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WfG-Xw-aqS"/>
+                                                                </connections>
                                                             </button>
-                                                            <view contentMode="scaleToFill" id="5Vr-x8-75J">
+                                                            <view tag="30" contentMode="scaleToFill" id="5Vr-x8-75J">
                                                                 <rect key="frame" x="48" y="145" width="188" height="27"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
@@ -250,6 +260,10 @@
                                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </textField>
+                                                                    <imageView userInteractionEnabled="NO" tag="31" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="hau-N7-duW">
+                                                                        <rect key="frame" x="7" y="21" width="173" height="0.0"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    </imageView>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.66666666669999997" alpha="0.81560283690000002" colorSpace="calibratedWhite"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -1998,7 +2012,7 @@ Nudgebuddies Pty Ltd</string>
                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view hidden="YES" contentMode="scaleToFill" id="Bs4-mq-OrH">
+                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" id="Bs4-mq-OrH">
                                                 <rect key="frame" x="0.0" y="119" width="101" height="102"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
@@ -2282,7 +2296,7 @@ in the search box above.</string>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.83385817309999999" colorSpace="calibratedRGB"/>
                                             </view>
-                                            <view contentMode="scaleToFill" id="grF-pj-lye">
+                                            <view hidden="YES" contentMode="scaleToFill" id="grF-pj-lye">
                                                 <rect key="frame" x="15" y="59" width="290" height="387"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
@@ -2404,6 +2418,23 @@ in the search box above.</string>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
+                                            <view contentMode="scaleToFill" id="i7G-Jc-iQB">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <subviews>
+                                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="40" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="IZR-6v-Aqq">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </scrollView>
+                                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" currentPage="1" id="6hT-Vv-gZx">
+                                                        <rect key="frame" x="140" y="50" width="39" height="37"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <color key="currentPageIndicatorTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </pageControl>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
@@ -2486,6 +2517,9 @@ in the search box above.</string>
                         <outlet property="streamResponseTxt" destination="vV6-De-nOK" id="2bf-Yh-7f5"/>
                         <outlet property="streamTableContainer" destination="RCu-yQ-JD5" id="Enl-Tn-t4F"/>
                         <outlet property="streamView" destination="grF-pj-lye" id="ab7-li-i9X"/>
+                        <outlet property="tutPageCtrl" destination="6hT-Vv-gZx" id="wJp-M8-Z9w"/>
+                        <outlet property="tutScrollView" destination="IZR-6v-Aqq" id="0x2-zh-Kz0"/>
+                        <outlet property="tutView" destination="i7G-Jc-iQB" id="jXd-2X-2DW"/>
                         <outlet property="uname" destination="GiA-xg-k4d" id="bbv-nv-T1U"/>
                         <outlet property="vGroupAcknowledgeTxt" destination="SaE-M6-0MT" id="fi9-SU-nIe"/>
                         <outlet property="vGroupContactScr" destination="FMi-8U-PDU" id="Vni-T7-a50"/>
@@ -2501,7 +2535,7 @@ in the search box above.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="900" y="460"/>
+            <point key="canvasLocation" x="908" y="414"/>
         </scene>
         <!--Setting Controller-->
         <scene sceneID="bs6-Wo-ePM">
@@ -4030,7 +4064,7 @@ squeaking doors</string>
         <scene sceneID="h3u-7K-9tE">
             <objects>
                 <tableViewController storyboardIdentifier="menuCtrl" id="xX9-Tw-DkU" customClass="MenuController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="36" sectionHeaderHeight="28" sectionFooterHeight="28" id="zhF-9B-X7D">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="36" sectionHeaderHeight="28" sectionFooterHeight="28" id="zhF-9B-X7D">
                         <rect key="frame" x="0.0" y="0.0" width="252" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4155,7 +4189,7 @@ squeaking doors</string>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-nbg" id="vyx-g9-S7x">
                                             <rect key="frame" x="0.0" y="0.0" width="252" height="100"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </imageView>
                                         <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7rJ-CL-0Rb">
                                             <rect key="frame" x="10" y="2" width="39" height="35"/>
@@ -4177,7 +4211,7 @@ squeaking doors</string>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" image="icon-nudge-rumble"/>
                                         </button>
-                                        <button opaque="NO" tag="52" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WJK-OL-0A9">
+                                        <button opaque="NO" tag="53" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WJK-OL-0A9">
                                             <rect key="frame" x="202" y="37" width="41" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" image="menu-attach">
@@ -4197,12 +4231,12 @@ squeaking doors</string>
                                                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                             </userDefinedRuntimeAttributes>
                                         </button>
-                                        <view contentMode="scaleToFill" id="h4D-4M-gde">
+                                        <view tag="55" contentMode="scaleToFill" id="h4D-4M-gde">
                                             <rect key="frame" x="10" y="39" width="186" height="54"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" text="You there? Gimme a call" textAlignment="natural" minimumFontSize="17" id="jT9-ql-ikb">
-                                                    <rect key="frame" x="3" y="4" width="180" height="50"/>
+                                                    <rect key="frame" x="3" y="7" width="180" height="45"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -4214,6 +4248,10 @@ squeaking doors</string>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </textField>
+                                                <imageView userInteractionEnabled="NO" tag="54" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="HVd-cA-wVQ">
+                                                    <rect key="frame" x="8" y="29" width="172" height="1"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.66666666669999997" alpha="0.81560283690000002" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>

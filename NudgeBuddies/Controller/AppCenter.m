@@ -942,7 +942,7 @@
 - (void)isBlock:(Nudger *)receiver success:(void (^)(BOOL))success {
     
     if (receiver.type == NTGroup) {
-        success(YES);
+        success(NO);
         return;
     }
     

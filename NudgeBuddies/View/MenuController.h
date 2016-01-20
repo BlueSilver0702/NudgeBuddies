@@ -14,6 +14,7 @@
 
 - (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger;
 - (void)onMenuNudged:(Nudger *)nudger;
+- (void)onMenuUpdated:(CGFloat)contentHeight;
 
 @end
 

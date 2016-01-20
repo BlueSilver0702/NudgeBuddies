@@ -91,7 +91,7 @@ typedef NS_ENUM(NSInteger, DisplayType) {
 
 @interface Global : NSObject
 
-@property (nonatomic, retain) NSData *profileImg;
+@property (nonatomic, retain) NSDictionary *profileImg;
 
 // App Settings
 @property (nonatomic) BOOL sRemoveNudgeCount;

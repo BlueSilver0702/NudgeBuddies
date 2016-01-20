@@ -55,14 +55,41 @@
     [QBRequest logInWithUserEmail:email.text password:passwd.text successBlock:^(QBResponse *response, QBUUser *user) {
         // Success
         user.password = passwd.text;
-        [g_center initCenter:user];
-        [SVProgressHUD dismiss];
-        if (uncheckBtn.hidden == YES) {
-            [userDefaults setObject:email.text forKey:@"email"];
-            [userDefaults setObject:passwd.text forKey:@"pwd"];
-            [userDefaults synchronize];
+        if (g_var.profileImg && [[g_var.profileImg objectForKey:@"ID"] integerValue] == user.ID) {
+            [QBRequest TUploadFile:[g_var.profileImg objectForKey:@"file"] fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+                [g_var saveFile:[g_var.profileImg objectForKey:@"file"] uid:blob.ID];
+                user.blobID = blob.ID;
+                [g_center initCenter:user];
+                QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
+                updateParameters.blobID = blob.ID;
+                [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {
+                    [SVProgressHUD dismiss];
+                    if (uncheckBtn.hidden == YES) {
+                        [userDefaults setObject:email.text forKey:@"email"];
+                        [userDefaults setObject:passwd.text forKey:@"pwd"];
+                        [userDefaults synchronize];
+                    }
+                    g_var.profileImg = nil;
+                    [self performSegueWithIdentifier:@"segue-norm" sender:nil];
+                } errorBlock:^(QBResponse *response) {
+                    NSLog(@"error: %@", response.error);
+                }];
+            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
+                // handle progress
+                NSLog(@"profile status err");
+            } errorBlock:^(QBResponse *response) {
+                NSLog(@"error: %@", response.error);
+            }];
+        } else {
+            [g_center initCenter:user];
+            [SVProgressHUD dismiss];
+            if (uncheckBtn.hidden == YES) {
+                [userDefaults setObject:email.text forKey:@"email"];
+                [userDefaults setObject:passwd.text forKey:@"pwd"];
+                [userDefaults synchronize];
+            }
+            [self performSegueWithIdentifier:@"segue-norm" sender:nil];
         }
-        [self performSegueWithIdentifier:@"segue-norm" sender:nil];
     } errorBlock:^(QBResponse *response) {
         // error handling
         NSLog(@"error: %@", response.error);
@@ -115,8 +142,6 @@
                          user.email = [result valueForKey:@"email"];
                          user.facebookID = [result valueForKey:@"id"];
                          
-                         g_var.profileImg = imgData;
-                         
                          [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
                              // Success, do something
                              [userDefaults setObject:user.email forKey:@"email"];
@@ -135,8 +160,8 @@
                                      [userDefaults setBool:YES forKey:@"remember"];
                                      [userDefaults synchronize];
                                  } else {
-                                     [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-                                         [g_var saveFile:g_var.profileImg uid:blob.ID];
+                                     [QBRequest TUploadFile:imgData fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+                                         [g_var saveFile:imgData uid:blob.ID];
                                          QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
                                          updateParameters.blobID = blob.ID;
                                          [QBRequest updateCurrentUser:updateParameters successBlock:^(QBResponse *response, QBUUser *user) {

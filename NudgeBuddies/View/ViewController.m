@@ -114,6 +114,8 @@
     IBOutlet UILabel *nudgedLab;
     IBOutlet UITextField *nudgedTxt;
     Nudger *nudgedNudger;
+    BOOL nudgedAttached;
+    BOOL nudgedInvalid;
     
     // N profile page
     IBOutlet UIView *nProfileView;
@@ -154,6 +156,10 @@
     NSInteger startTag;
     
     IBOutlet UITextField *startDropText;
+    
+    IBOutlet UIView *tutView;
+    IBOutlet UIScrollView *tutScrollView;
+    IBOutlet UIPageControl *tutPageCtrl;
     
     // Info module
     IBOutlet UIView *infoView;
@@ -260,7 +266,24 @@
     nProfileView.hidden = YES;
     
     // **********  start module  ************
-    startView.hidden = YES;
+//    startView.hidden = YES;
+    tutView.hidden = YES;
+    CGSize tutSize = tutView.frame.size;
+    [tutScrollView setContentSize:CGSizeMake(tutSize.width*5, tutSize.height)];
+    UIImageView *tut1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
+    [tut1 setImage:[UIImage imageNamed:@"tut-1"]];
+    [tutScrollView addSubview:tut1];
+    UIImageView *tut2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
+    [tut2 setImage:[UIImage imageNamed:@"tut-2"]];
+    [tutScrollView addSubview:tut2];
+    UIImageView *tut3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
+    [tut3 setImage:[UIImage imageNamed:@"tut-3"]];
+    [tutScrollView addSubview:tut3];
+    UIImageView *tut4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
+    [tut4 setImage:[UIImage imageNamed:@"tut-4"]];
+    [tutScrollView addSubview:tut4];
+    
+    tutScrollView.delegate = self;
     
     // **********  info module  ************
     infoView.hidden = YES;
@@ -924,6 +947,35 @@
     return menu;
 }
 
+- (void)onMenuUpdated:(CGFloat)contentHeight {
+    UIImageView *triImg = (UIImageView *)[menuView viewWithTag:100];
+    
+    CGFloat offset = contentHeight-menuView.frame.size.height+15;
+    if (triImg.frame.origin.y < 20) {
+        [menuView setFrame:CGRectMake(menuView.frame.origin.x, menuView.frame.origin.y, menuView.frame.size.width, contentHeight+15)];
+        
+        CGRect menuRect = menuView.frame;
+        if (menuRect.origin.y + menuRect.size.height > 568) {
+            [menuView setFrame:CGRectMake(menuRect.origin.x, 558-menuRect.size.height, menuRect.size.width, menuRect.size.height)];
+        }
+    } else {
+        [menuView setFrame:CGRectMake(menuView.frame.origin.x, menuView.frame.origin.y-offset, menuView.frame.size.width, contentHeight+15)];
+        [triImg setFrame:CGRectMake(triImg.frame.origin.x, contentHeight, triImg.frame.size.width, triImg.frame.size.height)];
+        CGRect menuRect = menuView.frame;
+        if (menuRect.origin.y < 0) {
+            [menuView setFrame:CGRectMake(menuRect.origin.x, 10, menuRect.size.width, menuRect.size.height)];
+        }
+    }
+    
+    [menuCtrl.view setFrame:CGRectMake(menuCtrl.view.frame.origin.x, menuCtrl.view.frame.origin.y, menuCtrl.view.frame.size.width, contentHeight)];
+    NSLog(@"menuCtrl ############  %@ \n viewController::::%@", menuCtrl.view, self.view);
+    menuCtrl.view.layer.cornerRadius = 10.0;
+//    menuCtrl.view.layer.masksToBounds = YES;
+    
+
+    NSLog(@"menuCtrl ############  %@ \n viewController::::%@", menuCtrl.view, self.view);
+}
+
 #pragma mark - profile
 ////////////////////////////////////// --------- edit profile ----------- ////////////////////////////////////////
 - (IBAction)onPhoto:(id)sender {
@@ -935,7 +987,6 @@
         UIGraphicsEndImageContext();
         [profileBtn setBackgroundImage:newImage forState:UIControlStateNormal];
         profileImgData = UIImageJPEGRepresentation(newImage, 1.0f);
-        g_var.profileImg = profileImgData;
         profilePictureUpdate = YES;
     } failure:^(NSError *error) {
         [self error:err_later];
@@ -945,8 +996,8 @@
 - (IBAction)onProfileSave:(id)sender {
     [SVProgressHUD show];
     if (profilePictureUpdate) {
-        [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-            [g_var saveFile:g_var.profileImg uid:blob.ID];
+        [QBRequest TUploadFile:profileImgData fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+            [g_var saveFile:profileImgData uid:blob.ID];
             QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
             updateParameters.blobID = blob.ID;
             updateParameters.oldPassword = currentUser.password;
@@ -1159,9 +1210,20 @@
 /////////////////////////////////////// --------- Nudged Page ----------- ///////////////////////////////////////
 - (void)onNudgedOpen:(Nudger *)nudger message:(NSString *)msg {
     [self hide:VTNudged];
+    
+    nudgedInvalid = YES;
     nudgedNudger = nudger;
     [nudgedLab setText:msg];
     [nudgedTxt setText:nudger.defaultReply];
+    
+    UIView *container2 = [nudgedView viewWithTag:30];
+    UIImageView *imageView = (UIImageView *)[nudgedView viewWithTag:31];
+    [nudgedView setFrame:CGRectMake(nudgedView.frame.origin.x, nudgedView.frame.origin.y, nudgedView.frame.size.width, 215)];
+    [imageView setImage:nil];
+    [imageView setFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, 0)];
+    [container2 setFrame:CGRectMake(container2.frame.origin.x, container2.frame.origin.y, container2.frame.size.width, 27)];
+    
+    [nudgedTxt addTarget:self action:@selector(onNudgedEdit) forControlEvents:UIControlEventEditingDidBegin];
     [UIView transitionWithView:nudgedView duration:0.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         nudgedView.hidden = NO;
     } completion:^(BOOL success) {
@@ -1171,12 +1233,19 @@
     [self performSelector:@selector(removeNudged) withObject:nil afterDelay:5];
 }
 
+- (void)onNudgedEdit {
+    nudgedInvalid = NO;
+}
+
 - (void)removeNudged {
-    [self onNudgedClose:nil];
-    [self display:DTNil];
+    if (nudgedInvalid) {
+        [self onNudgedClose:nil];
+        [self display:DTNil];
+    }
 }
 
 - (IBAction)onNudgedClose:(id)sender {
+    nudgedInvalid = NO;
     [UIView transitionWithView:nudgedView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         nudgedView.hidden = YES;
     } completion:nil];
@@ -1184,8 +1253,56 @@
 }
 
 - (IBAction)onNudgedResponse:(id)sender {
-    [self onMenuNudged:nudgedNudger message:nudgedTxt.text];
-    [self onNudgedClose:nil];
+//    [self onMenuNudged:nudgedNudger message:nudgedTxt.text];
+    [SVProgressHUD show];
+    if (nudgedAttached) {
+        UIImageView *imageView = (UIImageView *)[nudgedView viewWithTag:31];
+        NSData *imageData = UIImageJPEGRepresentation(imageView.image, 1.0f);
+        
+        [g_center sendMessage:nudgedNudger txt:nudgedTxt.text attachment:imageData success:^(QBChatMessage *success) {
+            [SVProgressHUD dismiss];
+            [self onNudgedClose:nil];
+        }];
+    } else {
+        [g_center sendMessage:nudgedNudger txt:nudgedTxt.text success:^(QBChatMessage *success) {
+            [SVProgressHUD dismiss];
+            [self onNudgedClose:nil];
+        }];
+    }
+}
+
+- (IBAction)onNudgedPic:(id)sender {
+    [iPHStream imagePickerInView:self WithSuccess:^(UIImage *image) {
+        nudgedAttached = YES;
+        
+        CGFloat imgSize = 120.0;
+
+        UIView *container2 = [nudgedView viewWithTag:30];
+        UIImageView *imageView = (UIImageView *)[nudgedView viewWithTag:31];
+        
+        float actualHeight = image.size.height;
+        float actualWidth = image.size.width;
+        float imgRatio = actualWidth/actualHeight;
+        
+        actualHeight = imgSize;
+        actualWidth = imgSize*imgRatio;
+
+        if (actualWidth > 173) actualWidth = 173.0;
+        CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
+        UIGraphicsBeginImageContext(rect.size);
+        [image drawInRect:rect];
+        UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        [imageView setFrame:CGRectMake(container2.frame.size.width - actualWidth - 8, imageView.frame.origin.y, actualWidth, imgSize)];
+        [imageView setImage:img];
+        
+        [container2 setFrame:CGRectMake(container2.frame.origin.x, container2.frame.origin.y, container2.frame.size.width, actualHeight + 30)];
+        
+        [nudgedView setFrame:CGRectMake(nudgedView.frame.origin.x, nudgedView.frame.origin.y, nudgedView.frame.size.width, 215+actualHeight)];
+    } failure:^(NSError *error) {
+        [self error:err_later];
+    }];
 }
 
 #pragma mark - Select Group
@@ -1330,11 +1447,19 @@
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
+    if (scrollView.tag == 40) {
+        NSLog(@"");
+    } else {
+        gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
+    if (scrollView.tag == 40) {
+        NSLog(@"");
+    } else {
+        gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
+    }
 }
 
 #pragma mark - Add Group

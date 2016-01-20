@@ -308,8 +308,8 @@ static NSString * const kIAPFailAlertShown = @"IAPFailAlertShown";
 - (IBAction)onProfileSave:(id)sender {
     [SVProgressHUD show];
     if (profilePictureUpdate) {
-        [QBRequest TUploadFile:g_var.profileImg fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
-            [g_var saveFile:g_var.profileImg uid:blob.ID];
+        [QBRequest TUploadFile:profileImgData fileName:@"profile.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *blob) {
+            [g_var saveFile:profileImgData uid:blob.ID];
             QBUpdateUserParameters *updateParameters = [QBUpdateUserParameters new];
             updateParameters.blobID = blob.ID;
             updateParameters.oldPassword = g_center.currentUser.password;
@@ -382,7 +382,6 @@ static NSString * const kIAPFailAlertShown = @"IAPFailAlertShown";
         UIGraphicsEndImageContext();
         [profileBtn setBackgroundImage:newImage forState:UIControlStateNormal];
         profileImgData = UIImageJPEGRepresentation(newImage, 1.0f);
-        g_var.profileImg = profileImgData;
         profilePictureUpdate = YES;
     } failure:^(NSError *error) {
         //[self error:err_later];

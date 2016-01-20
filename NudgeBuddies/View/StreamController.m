@@ -171,6 +171,9 @@
             }];
         }
         [attachImg setFrame:CGRectMake(attachImg.frame.origin.x, msgLab.frame.origin.y+msgLab.frame.size.height+8, attachImg.frame.size.width, 150.0)];
+    } else {
+        [attachImg setFrame:CGRectMake(attachImg.frame.origin.x, msgLab.frame.origin.y+msgLab.frame.size.height+8, attachImg.frame.size.width, 0.0)];
+        [attachImg setImage:nil];
     }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
