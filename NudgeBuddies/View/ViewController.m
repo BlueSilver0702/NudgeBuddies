@@ -160,6 +160,10 @@
     IBOutlet UIView *tutView;
     IBOutlet UIScrollView *tutScrollView;
     IBOutlet UIPageControl *tutPageCtrl;
+    IBOutlet UIImageView *tutImg1;
+    IBOutlet UIImageView *tutImg2;
+    IBOutlet UIImageView *tutImg3;
+    IBOutlet UIImageView *tutImg4;
     
     // Info module
     IBOutlet UIView *infoView;
@@ -266,22 +270,16 @@
     nProfileView.hidden = YES;
     
     // **********  start module  ************
-//    startView.hidden = YES;
+    startView.hidden = YES;
     tutView.hidden = YES;
     CGSize tutSize = tutView.frame.size;
     [tutScrollView setContentSize:CGSizeMake(tutSize.width*5, tutSize.height)];
-    UIImageView *tut1 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
-    [tut1 setImage:[UIImage imageNamed:@"tut-1"]];
-    [tutScrollView addSubview:tut1];
-    UIImageView *tut2 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
-    [tut2 setImage:[UIImage imageNamed:@"tut-2"]];
-    [tutScrollView addSubview:tut2];
-    UIImageView *tut3 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
-    [tut3 setImage:[UIImage imageNamed:@"tut-3"]];
-    [tutScrollView addSubview:tut3];
-    UIImageView *tut4 = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tutSize.width, tutSize.height)];
-    [tut4 setImage:[UIImage imageNamed:@"tut-4"]];
-    [tutScrollView addSubview:tut4];
+    [tutImg1 setAlpha:1.0];
+    [tutImg2 setAlpha:0.0];
+    [tutImg3 setAlpha:0.0];
+    [tutImg4 setAlpha:0.0];
+    
+    tutPageCtrl.currentPage = 0;
     
     tutScrollView.delegate = self;
     
@@ -361,7 +359,9 @@
         [initControlView setFrame:CGRectMake(0, 525, initControlView.frame.size.width, initControlView.frame.size.height)];
     } completion:^(BOOL finished) {
         if (g_center.currentNudger.defaultNudge == nil) {
-            [self onStartOpen];
+            tutView.hidden = NO;
+        } else {
+            [self performSelector:@selector(showAD:) withObject:nil afterDelay:3.0];
         }
     }];
 
@@ -394,7 +394,9 @@
 - (void)onceLoadedContactList {
 
     [SVProgressHUD dismiss];
-    [self display:DTNil];
+    if (g_center.currentNudger.defaultNudge != nil) {
+        [self display:DTNil];
+    }
     
     // **********  favorite module  ************
     motionManager = [CMMotionManager new];
@@ -425,7 +427,9 @@
 
 - (void)onceLoadedGroupList {
     [SVProgressHUD dismiss];
-    [self display:DTNil];
+    if (g_center.currentNudger.defaultNudge != nil) {
+        [self display:DTNil];
+    }
 }
 
 - (void)onceAddedContact:(Nudger *)nudger {
@@ -570,6 +574,7 @@
     }
 
     // favorite list
+    favoArr = (NSMutableArray *)[self sortFav:favoArr];
     for (Nudger *nudger in favoArr) {
         NudgeButton *nudgeBtn = [NudgeButton new];
         [self addChildViewController:nudgeBtn];
@@ -667,6 +672,19 @@
     return retArr;
 }
 
+- (NSMutableArray *)sortFav:(NSMutableArray *)sourceArr {
+    NSMutableArray *retArr;
+    retArr = (NSMutableArray *)[sourceArr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        Nudger *nuObj1 = (Nudger *)obj1;
+        Nudger *nuObj2 = (Nudger *)obj2;
+        if (nuObj1.favCount == nuObj2.favCount) return NSOrderedSame;
+        else if (nuObj1.favCount > nuObj2.favCount) return NSOrderedAscending;
+        else if (nuObj1.favCount < nuObj2.favCount) return NSOrderedDescending;
+        else return NSOrderedSame;
+    }];
+    return retArr;
+}
+
 - (void)onceErr {
     [self error:err_later];
 }
@@ -683,9 +701,14 @@
 
 - (void)onSendNudge:(Nudger *)nudger frame:(CGRect)rect {
 
-    [self onMenuNudged:nudger];
-//    nudger.favCount += 30;
-//    [self display];
+    if (nudger.unreadMsg > 0) {
+        [self onMenuClose];
+        menuCtrl.isOpen = NO;
+        streamNudger = nudger;
+        [self onStreamOpen:nil];
+    } else {
+        [self onMenuNudged:nudger];
+    }
     
 }
 
@@ -755,11 +778,7 @@
 }
 
 - (void)onMenuClicked:(MenuReturn)menuReturn nudger:(Nudger *)nudger{
-    [self onMenuClose];
-    menuCtrl.isOpen = NO;
-    streamNudger = nudger;
-    [self onStreamOpen:nil];
-    return;
+
     /////////
     if (menuReturn == MRNudge) {
         NSLog(@"MRNudge");
@@ -1446,19 +1465,61 @@
     }
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+//- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+//    if (scrollView.tag == 40) {
+//        NSLog(@"");
+//    } else {
+//        gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
+//    }
+//}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.tag == 40) {
-        NSLog(@"");
+        int scrOffset = scrollView.contentOffset.x;
+        int scrWidth = scrollView.frame.size.width;
+        int page = scrOffset / scrollView.frame.size.width;
+        int pageOffset = scrOffset % scrWidth;
+        float preVal = (scrWidth-pageOffset) / (float)scrWidth;
+        float nxtVal = pageOffset / (float)scrWidth;
+        NSLog(@"offset %f:%f", preVal, nxtVal);
+        tutPageCtrl.currentPage = page;
+        if (page == 0) {
+            [tutImg1 setAlpha:preVal];
+            [tutImg2 setAlpha:nxtVal];
+            [tutImg3 setAlpha:0];
+            [tutImg4 setAlpha:0];
+        } else if (page == 1) {
+            [tutImg2 setAlpha:preVal];
+            [tutImg3 setAlpha:nxtVal];
+            [tutImg1 setAlpha:0];
+            [tutImg4 setAlpha:0];
+        } else if (page == 2) {
+            [tutImg3 setAlpha:preVal];
+            [tutImg4 setAlpha:nxtVal];
+            [tutImg1 setAlpha:0];
+            [tutImg2 setAlpha:0];
+        } else if (page == 3) {
+            [tutImg4 setAlpha:preVal];
+            [tutImg2 setAlpha:0];
+            [tutImg3 setAlpha:0];
+            [tutImg1 setAlpha:0];
+        }
     } else {
         gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if (scrollView.tag == 40) {
-        NSLog(@"");
-    } else {
-        gSelectPageCtrl.currentPage = scrollView.contentOffset.x/scrollView.frame.size.width;
+        int scrOffset = scrollView.contentOffset.x;
+        int scrWidth = scrollView.frame.size.width;
+        int page = scrOffset / scrWidth;
+        
+        NSLog(@"scroll did scrolled on page: # %d", page);
+        if (page == 4) {
+            [tutView setHidden: YES];
+            [self performSelector:@selector(onStartOpen) withObject:nil afterDelay:1.0];
+        }
     }
 }
 
@@ -2006,6 +2067,10 @@
         [UIApplication sharedApplication].applicationIconBadgeNumber = unreadCount;
         for (Nudger *nudger in g_center.notificationArray) {
             nudger.unreadMsg = [[dialogs valueForKey:nudger.dialogID] integerValue];
+            if (nudger.unreadMsg == 0) {
+                nudger.isNew = NO;
+                nudger.shouldAnimate = NO;
+            }
         }
         [self display:DTNil];
     }];
@@ -2123,10 +2188,10 @@
 #pragma mark - Start
 ///////////////////////////////// --------- Add Start View ----------- /////////////////////////////////////////////
 - (void)onStartOpen {
+    [self display:DTNil];
     [UIView transitionWithView:self.view duration:1.0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         startView.hidden = NO;
     } completion:nil];
-
     [self setAcademies:alertSoundArr textField:startDropText];
 }
 
@@ -2134,12 +2199,11 @@
     [UIView transitionWithView:self.view duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         startView.hidden = YES;
     } completion:nil];
+    [self performSelector:@selector(showAD:) withObject:nil afterDelay:3.0];
 }
 
 - (IBAction)onStartSave:(id)sender {
-    [UIView transitionWithView:self.view duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        startView.hidden = YES;
-    } completion:nil];
+    [self onStartClose:nil];
     if (startTag == 1) {
         g_center.currentNudger.response = RTNudge;
     } else if (startTag == 2) {
@@ -2299,7 +2363,7 @@
 - (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
     NSString *str = IAP1;
     if (![g_var loadLocalBool:str]) {
-        gBannerView.hidden = NO;
+//        gBannerView.hidden = NO;
     }
 }
 

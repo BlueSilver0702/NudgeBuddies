@@ -856,6 +856,9 @@
 
 - (void)chatRoomDidReceiveMessage:(QB_NONNULL QBChatMessage *)message fromDialogID:(QB_NONNULL NSString *)dialogID {
 
+    if (message.senderID == currentUser.ID) {
+        return;
+    }
      NSMutableDictionary *extendedRequest = @{@"_id" : dialogID}.mutableCopy;
     
     QBResponsePage *page = [QBResponsePage responsePageWithLimit:1 skip:0];

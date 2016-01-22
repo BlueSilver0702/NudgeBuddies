@@ -879,11 +879,6 @@
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             </scrollView>
-                                                            <view contentMode="scaleToFill" id="4sN-TH-WdO" customClass="GADBannerView">
-                                                                <rect key="frame" x="-15" y="405" width="320" height="50"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                            </view>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <userDefinedRuntimeAttributes>
@@ -2422,6 +2417,22 @@ in the search box above.</string>
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tut-1" id="irZ-us-fbI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tut-2" id="6fv-dQ-jph">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tut-3" id="Aeo-0j-m5s">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tut-4" id="RVj-yL-YMN">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    </imageView>
                                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="40" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="IZR-6v-Aqq">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2433,6 +2444,11 @@ in the search box above.</string>
                                                         <color key="currentPageIndicatorTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     </pageControl>
                                                 </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" id="4sN-TH-WdO" customClass="GADBannerView">
+                                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
                                         </subviews>
@@ -2517,6 +2533,10 @@ in the search box above.</string>
                         <outlet property="streamResponseTxt" destination="vV6-De-nOK" id="2bf-Yh-7f5"/>
                         <outlet property="streamTableContainer" destination="RCu-yQ-JD5" id="Enl-Tn-t4F"/>
                         <outlet property="streamView" destination="grF-pj-lye" id="ab7-li-i9X"/>
+                        <outlet property="tutImg1" destination="irZ-us-fbI" id="k4X-Cb-zrg"/>
+                        <outlet property="tutImg2" destination="6fv-dQ-jph" id="aeL-F7-FG7"/>
+                        <outlet property="tutImg3" destination="Aeo-0j-m5s" id="HJK-5H-SED"/>
+                        <outlet property="tutImg4" destination="RVj-yL-YMN" id="X6g-gU-6kZ"/>
                         <outlet property="tutPageCtrl" destination="6hT-Vv-gZx" id="wJp-M8-Z9w"/>
                         <outlet property="tutScrollView" destination="IZR-6v-Aqq" id="0x2-zh-Kz0"/>
                         <outlet property="tutView" destination="i7G-Jc-iQB" id="jXd-2X-2DW"/>
@@ -5052,6 +5072,10 @@ you your password.</string>
         <image name="start-1" width="44" height="43"/>
         <image name="start-2" width="44" height="43"/>
         <image name="start-3" width="44" height="43"/>
+        <image name="tut-1" width="320" height="568"/>
+        <image name="tut-2" width="320" height="568"/>
+        <image name="tut-3" width="320" height="568"/>
+        <image name="tut-4" width="320" height="568"/>
         <image name="user-1" width="129" height="152"/>
         <image name="user-2" width="99" height="118"/>
         <image name="user-3" width="59" height="62"/>

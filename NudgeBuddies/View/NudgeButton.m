@@ -112,28 +112,28 @@
     NSLog(@"Long Press");
     [imgBtn invalidTime];
     [self.delegate onNudgeClicked:userInfo frame:CGRectMake(self.view.frame.origin.x+imgBtn.frame.origin.x, self.view.frame.origin.y+imgBtn.frame.origin.y, imgBtn.frame.size.width,imgBtn.frame.size.height)];
-    [noti1Img.layer removeAllAnimations];
-    [noti2Img.layer removeAllAnimations];
-    noti1Img.alpha = 0.0f;
-    noti2Img.alpha = 0.0f;
-    isAnimating = NO;
+//    [noti1Img.layer removeAllAnimations];
+//    [noti2Img.layer removeAllAnimations];
+//    noti1Img.alpha = 0.0f;
+//    noti2Img.alpha = 0.0f;
+//    isAnimating = NO;
     isLong = YES;
 }
 
 - (IBAction)onNudgeSelected:(id)sender {
     if (userInfo.status == NSInvited && !isLong) {
         [self longPress];
-        userInfo.isNew = NO;
+//        userInfo.isNew = NO;
         userInfo.shouldAnimate = NO;
         NSLog(@"shortTouch");
         return;
     }
     
-    [noti1Img.layer removeAllAnimations];
-    [noti2Img.layer removeAllAnimations];
-    noti1Img.alpha = 0.0f;
-    noti2Img.alpha = 0.0f;
-    isAnimating = NO;
+//    [noti1Img.layer removeAllAnimations];
+//    [noti2Img.layer removeAllAnimations];
+//    noti1Img.alpha = 0.0f;
+//    noti2Img.alpha = 0.0f;
+//    isAnimating = NO;
     
     if (isLong) {
         isLong = NO;
