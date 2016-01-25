@@ -836,6 +836,7 @@
         [self onMenuClose];
         menuCtrl.isOpen = NO;
 
+        NSLog(@"MRAdd func ###############");
         if (nudger.type == NTGroup) {
             [SVProgressHUD show];
             nudger.accept = YES;
@@ -847,6 +848,7 @@
             }];
         } else {
             [g_center addBuddy:nudger success:^(BOOL success){
+                NSLog(@"addBuddy func ###############");
                 if (!success) {
                     [SVProgressHUD showErrorWithStatus:err_later];
                 } else {
@@ -1265,9 +1267,12 @@
 
 - (IBAction)onNudgedClose:(id)sender {
     nudgedInvalid = NO;
+    [nudgedTxt resignFirstResponder];
     [UIView transitionWithView:nudgedView duration:0.1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         nudgedView.hidden = YES;
-    } completion:nil];
+    } completion:^(BOOL success){
+        [self display:DTNil];
+    }];
     
 }
 
@@ -1291,6 +1296,7 @@
 }
 
 - (IBAction)onNudgedPic:(id)sender {
+    [self onNudgedEdit];
     [iPHStream imagePickerInView:self WithSuccess:^(UIImage *image) {
         nudgedAttached = YES;
         
