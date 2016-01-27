@@ -1452,13 +1452,6 @@
 
         [QBRequest updateDialog:updateDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
 
-            QBChatMessage *inviteMessage = [self createChatNotificationForGroupChat:dialog];
-            inviteMessage.recipientID = gSelectNudger.user.ID;
-            
-            [[QBChat instance] sendSystemMessage:inviteMessage completion:^(NSError * _Nullable error) {
-                [SVProgressHUD dismiss];
-                [self onGroupSelectClose:nil];
-            }];
         } errorBlock:^(QBResponse *response) {
             [self error:err_later];
         }];
@@ -1609,81 +1602,12 @@
 - (IBAction)onGroupSave:(id)sender {
     
     [self onGroupClose:nil];
-    [SVProgressHUD show];
 
-    QBChatDialog *chatDialog = [[QBChatDialog alloc] initWithDialogID:nil type:QBChatDialogTypeGroup];
-    chatDialog.name = groupNameTxt.text;
-
-    NSMutableArray *contactIDs = [NSMutableArray new];
-    for (Nudger *nudger in groupContacts) {
-        [contactIDs addObject:[NSNumber numberWithInteger:nudger.user.ID]];
-    }
-    chatDialog.occupantIDs = (NSArray *)contactIDs;
-    
-    [QBRequest createDialog:chatDialog successBlock:^(QBResponse *response, QBChatDialog *createdDialog) {
-        openGroup.defaultNudge = groupNudgeTxt.text;
-        openGroup.defaultReply = groupAcknowledgeTxt.text;
-        openGroup.isFavorite = groupFavBtn.hidden?NO:YES;
-        QBCOCustomObject *object = [QBCOCustomObject customObject];
-        object.className = @"NudgerBuddy"; // your Class name
-        [object.fields setObject:createdDialog.ID forKey:@"_parent_id"];
-        [object.fields setObject:openGroup.defaultNudge forKey:@"NudgeTxt"];
-        [object.fields setObject:openGroup.defaultReply forKey:@"AcknowledgeTxt"];
-        [object.fields setObject:[NSNumber numberWithBool:openGroup.isFavorite] forKey:@"Favorite"];
-        [object.fields setObject:[NSNumber numberWithInteger:openGroup.favCount] forKey:@"FavCount"];
-        [object.fields setObject:[NSNumber numberWithInteger:openGroup.response] forKey:@"NudgerType"];
-        [object.fields setObject:[NSNumber numberWithBool:openGroup.silent] forKey:@"Silent"];
-        [object.fields setObject:[NSNumber numberWithBool:openGroup.block] forKey:@"Block"];
-        [object.fields setObject:[NSNumber numberWithBool:YES] forKey:@"Accept"];
-        [object.fields setObject:[NSNumber numberWithInteger:downPicker.selectedIndex] forKey:@"Alert"];
-        Group *nGroup = [Group new];
-        nGroup.gID = createdDialog.ID;
-        nGroup.gName = groupNameTxt.text;
-        nGroup.gUsers = contactIDs;
-        openGroup.group = nGroup;
-        if (groupPicUpdate) {
-            [QBRequest TUploadFile:groupPicData fileName:@"group.jpg" contentType:@"image/jpeg" isPublic:NO successBlock:^(QBResponse *response, QBCBlob *uploadedBlob) {
-                NSUInteger uploadedFileID = uploadedBlob.ID;
-                nGroup.gBlobID = uploadedFileID;
-                createdDialog.photo = [NSString stringWithFormat:@"%lu", uploadedFileID];
-                openGroup.group.gBlobID = uploadedFileID;
-                [g_var saveFile:groupPicData uid:uploadedFileID];
-                [QBRequest updateDialog:createdDialog successBlock:^(QBResponse *responce, QBChatDialog *dialog) {
-                    [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                        [SVProgressHUD dismiss];
-                        [self onGroupClose:nil];
-                        openGroup.isNew = NO;
-                        openGroup.shouldAnimate = NO;
-                        openGroup.alertSound = downPicker.selectedIndex;
-                        [g_center add:openGroup];
-                        [self sendGroupInvite:createdDialog];
-                    } errorBlock:^(QBResponse *response) {
-                        [SVProgressHUD dismiss];
-                        [self error:err_later];
-                    }];
-                } errorBlock:^(QBResponse *response) {
-                    [self error:err_later];
-                }];
-            } statusBlock:^(QBRequest *request, QBRequestStatus *status) {
-            } errorBlock:^(QBResponse *response) {
-                [self error:err_later];
-            }];
-        } else {
-            [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-                [SVProgressHUD dismiss];
                 [self onGroupClose:nil];
                 openGroup.isNew = NO;
                 openGroup.shouldAnimate = NO;
                 openGroup.alertSound = downPicker.selectedIndex;
                 [g_center add:openGroup];
-                [self sendGroupInvite:createdDialog];
-            } errorBlock:^(QBResponse *response) {
-                [self error:err_later];
-            }];
-        }
-    } errorBlock:^(QBResponse *response) {
-        [self error:err_later];
-    }];
 }
 
 - (void) sendGroupInvite:(QBChatDialog *)dialog {
@@ -1945,55 +1869,10 @@
 
     [SVProgressHUD show];
     
-    if (openNP.metaID != nil) {
-        QBCOCustomObject *object = [QBCOCustomObject customObject];
-        object.className = @"NudgerBuddy"; // your Class name
-        object.ID = openNP.metaID;
-        NSString *parentID;
-        if (openNP.type == NTGroup) parentID = openNP.group.gID;
-        else parentID = [NSString stringWithFormat:@"%lu",openNP.user.ID];
-        [object.fields setObject:parentID forKey:@"_parent_id"];
-        [object.fields setObject:openNP.defaultNudge forKey:@"NudgeTxt"];
-        [object.fields setObject:openNP.defaultReply forKey:@"AcknowledgeTxt"];
-        [object.fields setObject:[NSNumber numberWithBool:openNP.isFavorite] forKey:@"Favorite"];
-        [object.fields setObject:[NSNumber numberWithInteger:openNP.favCount] forKey:@"FavCount"];
-        [object.fields setObject:[NSNumber numberWithInteger:openNP.response] forKey:@"NudgerType"];
-        [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
-        [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
-        [object.fields setObject:[NSNumber numberWithInteger:openNP.alertSound] forKey:@"Alert"];
-        
-        [QBRequest updateObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
             [SVProgressHUD dismiss];
             [self onNPClose:nil];
             [self display:DTNil];
-        } errorBlock:^(QBResponse *response) {
-            [self error:err_later];
-        }];
-    } else {
-        QBCOCustomObject *object = [QBCOCustomObject customObject];
-        object.className = @"NudgerBuddy"; // your Class name
-        NSString *parentID;
-        if (openNP.type == NTGroup) parentID = openNP.group.gID;
-        else parentID = [NSString stringWithFormat:@"%lu",openNP.user.ID];
-        [object.fields setObject:parentID forKey:@"_parent_id"];
-        [object.fields setObject:openNP.defaultNudge forKey:@"NudgeTxt"];
-        [object.fields setObject:openNP.defaultReply forKey:@"AcknowledgeTxt"];
-        [object.fields setObject:[NSNumber numberWithBool:openNP.isFavorite] forKey:@"Favorite"];
-        [object.fields setObject:[NSNumber numberWithInteger:openNP.favCount] forKey:@"FavCount"];
-        [object.fields setObject:[NSNumber numberWithInteger:openNP.response] forKey:@"NudgerType"];
-        [object.fields setObject:[NSNumber numberWithBool:openNP.silent] forKey:@"Silent"];
-        [object.fields setObject:[NSNumber numberWithBool:openNP.block] forKey:@"Block"];
-        [object.fields setObject:[NSNumber numberWithInteger:openNP.alertSound] forKey:@"Alert"];
         
-        [QBRequest createObject:object successBlock:^(QBResponse *response, QBCOCustomObject *object) {
-            [SVProgressHUD dismiss];
-            [self onNPClose:nil];
-            [self display:DTNil];
-            openNP.metaID = object.ID;
-        } errorBlock:^(QBResponse *response) {
-            [self error:err_later];
-        }];
-    }
     //    return;
 }
 
