@@ -167,6 +167,7 @@
 
 - (void)removeFav {
     [favBtn removeFromSuperview];
+    [nameLab setHidden:YES];
 }
 
 - (void)removeNudgeCount {

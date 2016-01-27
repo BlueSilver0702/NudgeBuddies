@@ -59,8 +59,9 @@
     [QBRequest usersWithIDs:userIDs page:[QBGeneralResponsePage responsePageWithCurrentPage:1 perPage:100] successBlock:^(QBResponse *response, QBGeneralResponsePage *page, NSArray *users) {
         for (QBUUser *user in users) {
             Nudger *newUser = [[Nudger alloc] initWithUser:user];
-            [contactsArray addObject:newUser];
-            [notificationArray addObject:newUser];
+//            [contactsArray addObject:newUser];
+            [self addContact:newUser];
+            [self add:newUser];
         }
         
         [self loadGroups];
@@ -211,7 +212,8 @@
             newUser.status = NSInvited;
             newUser.isNew = YES;
             newUser.shouldAnimate = NO;
-            [notificationArray addObject:newUser];
+//            [notificationArray addObject:newUser];
+            [self add:newUser];
         }
         [self.delegate onceLoadedContactList];
     } errorBlock:^(QBResponse *response) {
@@ -331,7 +333,9 @@
 - (void) addBuddy:(Nudger *)buddy success:(void (^)(BOOL))success {
     [SVProgressHUD showWithStatus:@"Please wait.."];
     [[QBChat instance] confirmAddContactRequest:buddy.user.ID completion:^(NSError * _Nullable error) {
-        [self.contactsArray addObject:buddy];
+        NSLog(@"confirm Add Request func ###############");
+//        [self.contactsArray addObject:buddy];
+        [self addContact:buddy];
         buddy.status = NSFriend;
         buddy.isNew = NO;
         buddy.shouldAnimate = NO;
@@ -397,22 +401,49 @@
     
     BOOL isFound = NO;
 
+    NSLog(@"add func init: %@ ###############", user.user.login);
     for (int i=0; i<self.notificationArray.count; i++) {
         Nudger *nudger = [self.notificationArray objectAtIndex:i];
-        if ([nudger isEqual:user]) {
-            [self.notificationArray removeObjectAtIndex:i];
-            [self.notificationArray addObject:nudger];
-            nudger.shouldAnimate = user.shouldAnimate;
-            nudger.isNew = user.isNew;
+        if (nudger.user.ID == user.user.ID) {
+            nudger.alertSound = user.alertSound;
+            nudger.alarmCount = user.alarmCount;
+            nudger.block = user.block;
+            nudger.silent = user.silent;
+            nudger.autoNudge = user.autoNudge;
             isFound = YES;
             break;
         }
     }
     if (!isFound) {
         [self.notificationArray addObject:user];
+        NSLog(@"add func:not found %lu ###############", self.notificationArray.count);
+    } else {
+        NSLog(@"add func:found %lu ###############", self.notificationArray.count);
     }
+    
     [self.delegate onceAddedContact:user];
     
+}
+
+- (void)addContact:(Nudger *)user {
+    
+    BOOL isFound = NO;
+    
+    for (int i=0; i<self.contactsArray.count; i++) {
+        Nudger *nudger = [self.contactsArray objectAtIndex:i];
+        if (nudger.user.ID == user.user.ID) {
+            nudger.alertSound = user.alertSound;
+            nudger.alarmCount = user.alarmCount;
+            nudger.block = user.block;
+            nudger.silent = user.silent;
+            nudger.autoNudge = user.autoNudge;
+            isFound = YES;
+            break;
+        }
+    }
+    if (!isFound) {
+        [self.contactsArray addObject:user];
+    }
 }
 
 #pragma mark - Update Contact Module
